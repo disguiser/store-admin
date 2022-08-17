@@ -1,0 +1,16 @@
+@mixin themeSwitch {
+  [data-theme="dark"] {
+    $vxe-table-header-background-color: #414141;
+    $vxe-table-body-background-color: #18181c;
+    $vxe-table-footer-background-color: #18181c;
+    $vxe-font-color: #b8b8b9;
+  }
+}
+[data-theme="dark"] {
+  $vxe-table-header-background-color: #414141 !important;
+  $vxe-table-body-background-color: #18181c !important;
+  $vxe-table-footer-background-color: #18181c !important;
+  $vxe-font-color: #b8b8b9 !important;
+}
+@include themeSwitch();
+@import 'vxe-table/styles/index.scss';

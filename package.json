@@ -1,0 +1,51 @@
+{
+  "name": "store-admin-ts",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vue-tsc --noEmit && vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ui5/webcomponents": "^1.6.0",
+    "ag-grid-community": "^28.1.0",
+    "ag-grid-vue3": "^28.1.0",
+    "axios": "^0.25.0",
+    "element-plus": "^2.2.11",
+    "js-cookie": "^3.0.1",
+    "normalize.css": "^8.0.1",
+    "nprogress": "0.2.0",
+    "path-browserify": "^1.0.1",
+    "path-to-regexp": "2.4.0",
+    "pinia": "^2.0.11",
+    "pinia-plugin-persist": "^1.0.0",
+    "qrcode": "^1.4.4",
+    "uuid": "^8.3.2",
+    "vue": "^3.2.25",
+    "vue-image-crop-upload": "^3.0.3",
+    "vue-router": "^4.0.12",
+    "vxe-table": "^4.3.0-beta.3",
+    "xe-utils": "^3.5.6"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.2",
+    "@types/node": "^18.0.0",
+    "@vicons/antd": "^0.12.0",
+    "@vicons/fluent": "^0.12.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vicons/material": "^0.12.0",
+    "@vicons/utils": "^0.1.4",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue-jsx": "^2.0.0",
+    "fast-glob": "^3.2.11",
+    "naive-ui": "^2.32.0",
+    "sass": "^1.53.0",
+    "typescript": "^4.7.4",
+    "vfonts": "^0.0.3",
+    "vite": "^3.0.0",
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
+    "vue-tsc": "^0.34.7"
+  }
+}
