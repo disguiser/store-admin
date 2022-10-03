@@ -5,6 +5,8 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 
+import { createHtmlPlugin } from 'vite-plugin-html'
+
 // https://vitejs.dev/config/
 export default ({ mode }) => {
   return defineConfig({
@@ -48,6 +50,9 @@ export default ({ mode }) => {
             isCustomElement: tag => tag.startsWith('ui5-')
           }
         }
+      }),
+      createHtmlPlugin({
+        minify: true,
       }),
       vueSetupExtend(),
       createSvgIconsPlugin({

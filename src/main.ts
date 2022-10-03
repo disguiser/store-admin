@@ -7,26 +7,31 @@ import '@/permission'
 app.use(router)
 
 import { createPinia } from 'pinia'
-import piniaPersist from 'pinia-plugin-persist'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 const pinia = createPinia()
-pinia.use(piniaPersist)
+pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'virtual:svg-icons-register'
-app.use(ElementPlus)
-
-import naive from 'naive-ui'
-app.use(naive)
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+app.use(ElementPlus,  {
+  locale: zhCn
+})
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 
 import SvgIcon from '@/components/SvgIcon.vue'
 app.component('SvgIcon', SvgIcon)
 
-import "@ui5/webcomponents/dist/Input";
-app.config.compilerOptions.isCustomElement = tag => tag.startsWith('ui5-')
+// import "@ui5/webcomponents/dist/Input";
+// app.config.compilerOptions.isCustomElement = tag => tag.startsWith('ui5-')
 
 import 'xe-utils'
 import VXETable from 'vxe-table'
@@ -35,10 +40,9 @@ app.use(VXETable)
 
 import '@/styles/index.scss' // global css
 
-app.directive('focus', {
-  mounted(el) {
-    el.querySelector('.n-input__input-el').focus()
-  }
+import * as directives from './directive/index'
+Object.keys(directives).forEach((key: string) => {
+  app.directive(key, directives[key])
 })
 
 import MyInput from '@/components/MyInput.vue'

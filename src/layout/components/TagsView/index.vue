@@ -13,7 +13,10 @@
         @contextmenu.prevent="openMenu(tag,$event)"
       >
         {{ tag.title }}
-        <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+        <!-- <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" /> -->
+        <el-icon v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)">
+          <Close />
+        </el-icon>
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
@@ -128,7 +131,7 @@ export default {
       })
     },
     refreshSelectedTag(view) {
-      this.tagsViewStore.delCachedView().then(() => {
+      this.tagsViewStore.delCachedView(view).then(() => {
         const { fullPath } = view
         this.$nextTick(() => {
           this.$router.replace({
@@ -138,7 +141,7 @@ export default {
       })
     },
     closeSelectedTag(view) {
-      this.tagsViewStore.delView.then(({ visitedViews }) => {
+      this.tagsViewStore.delView(view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
           this.toLastView(visitedViews, view)
         }
@@ -151,7 +154,7 @@ export default {
       })
     },
     closeAllTags(view) {
-      this.tagsViewStore.delAllViews.then(({ visitedViews }) => {
+      this.tagsViewStore.delAllViews().then(({ visitedViews }) => {
         if (this.affixTags.some(tag => tag.path === view.path)) {
           return
         }
@@ -175,11 +178,10 @@ export default {
     },
     openMenu(tag, e) {
       const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
+      // const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
       const offsetWidth = this.$el.offsetWidth // container width
       const maxLeft = offsetWidth - menuMinWidth // left boundary
-      const left = e.clientX - offsetLeft + 15 // 15: margin right
-
+      const left = e.clientX // 15: margin right
       if (left > maxLeft) {
         this.left = maxLeft
       } else {
@@ -274,7 +276,7 @@ export default {
     .el-icon-close {
       width: 16px;
       height: 16px;
-      vertical-align: 2px;
+      vertical-align: -1px;
       border-radius: 50%;
       text-align: center;
       transition: all .3s cubic-bezier(.645, .045, .355, 1);

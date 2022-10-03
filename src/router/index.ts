@@ -3,20 +3,9 @@ import {
   createWebHashHistory,
   RouteRecordRaw,
 } from 'vue-router'
-import {
-  DocumentOutline as AboutIcon,
-  Home as HomeIcon
-} from '@vicons/ionicons5'
-import {
-  DashboardOutlined as DashboardIcon
-} from '@vicons/antd'
-import {
-  HouseOutlined
-} from '@vicons/material'
 
 /* Layout */
 import Layout from '@/layout/index.vue'
-import { Component, markRaw } from 'vue'
 
 // import nestedRouter from './modules/nested'
 
@@ -77,7 +66,7 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    meta: { title: '总览', icon: markRaw(DashboardIcon), affix: true },
+    meta: { title: '总览', icon: 'ant-design:dashboard-outlined', affix: true },
     children: [
       {
         path: 'dashboard',
@@ -100,11 +89,11 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/test',
-    component: () => import('@/components/Test.vue'),
-    hidden: true
-  }
+  // {
+  //   path: '/test',
+  //   component: () => import('@/components/Test.vue'),
+  //   hidden: true
+  // }
 ]
 
 /**
@@ -112,112 +101,113 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  // {
+  //   path: '/vxetable',
+  //   component: Layout,
+  //   meta: { title: 'vxe-table', icon: markRaw(HomeIcon), roles: ['Admin', 'Boss'] },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'VXETable',
+  //       component: () => import('@/views/VXETable.vue'),
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/AG-Grid',
+  //   component: Layout,
+  //   meta: { title: 'AG-Grid', icon: markRaw(AboutIcon), roles: ['Admin', 'Boss'] },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'AGGrid',
+  //       component: () => import('@/views/AGGrid.vue'),
+  //     }
+  //   ]
+  // },
   {
-    path: '/vxetable',
+    path: '/stock',
     component: Layout,
-    meta: { title: 'vxe-table', icon: markRaw(HomeIcon), roles: ['Admin', 'Boss'] },
+    redirect: '/stock/dept',
+    meta: { title: '门店库存', icon: 'clarity:store-line', roles: ['Admin', 'Boss', 'Waiter'] },
     children: [
       {
-        path: '',
-        name: 'VXETable',
-        component: () => import('@/views/VXETable.vue'),
+        path: 'dept',
+        component: () => import('@/views/dept-list/index.vue'),
+        name: 'DeptList',
+      },
+      {
+        path: 'goods/:id',
+        component: () => import('@/views/goods-stock/index.vue'),
+        name: 'GoodStock',
+        meta: { title: '库存明细', noCache: true, activeMenu: '/stock/dept', roles: ['Admin', 'Boss', 'Waiter'] },
+        hidden: true
       }
     ]
   },
   {
-    path: '/AG-Grid',
+    path: '/goods-list',
     component: Layout,
-    meta: { title: 'AG-Grid', icon: markRaw(AboutIcon), roles: ['Admin', 'Boss'] },
+    meta: { title: '商品管理', icon: 'ep:goods', roles: ['Admin', 'Boss'] },
     children: [
       {
         path: '',
-        name: 'AGGrid',
-        component: () => import('@/views/AGGrid.vue'),
+        component: () => import('@/views/goods-list/index.vue'),
+        name: 'GoodsList',
       }
     ]
   },
-  // {
-  //   path: '/stock',
-  //   component: Layout,
-  //   redirect: '/stock/dept',
-  //   meta: { title: '门店库存', icon: markRaw(HouseOutlined), roles: ['Admin', 'Boss', 'Waiter'] },
-  //   children: [
-  //     {
-  //       path: 'dept',
-  //       component: () => import('@/views/dept-list/index.js'),
-  //       name: 'DeptList',
-  //     },
-  //     {
-  //       path: 'goods/:id',
-  //       component: () => import('@/views/goods-stock/index.vue'),
-  //       name: 'GoodStock',
-  //       meta: { title: '库存明细', noCache: true, activeMenu: '/stock/dept', roles: ['Admin', 'Boss', 'Waiter'] },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/goods-list',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'goods-list',
-  //       component: () => import('@/views/goods-list/index'),
-  //       name: 'GoodsList',
-  //       meta: { title: '商品管理', icon: 'tab', roles: ['Admin', 'Boss'] }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/wholesale',
-  //   component: Layout,
-  //   meta: { title: '批发', icon: 'tab', roles: ['Admin', 'Waiter', 'Boss'] },
-  //   children: [
-  //     {
-  //       path: 'list',
-  //       component: () => import('@/views/order/wholesale/index'),
-  //       name: 'Order',
-  //       meta: { title: '订单', roles: ['Admin', 'Waiter', 'Boss'] }
-  //     },
-  //     {
-  //       path: 'customer-list',
-  //       component: () => import('@/views/customer-list/index'),
-  //       name: 'CustomerList',
-  //       meta: { title: '客户', roles: ['Admin', 'Waiter', 'Boss'] }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/wholesale',
+    component: Layout,
+    meta: { title: '批发', icon: 'clarity:factory-line', roles: ['Admin', 'Waiter', 'Boss'] },
+    redirect: '/wholesale/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/order/wholesale/index.vue'),
+        name: 'Order',
+        meta: { title: '订单', roles: ['Admin', 'Waiter', 'Boss'] }
+      },
+      {
+        path: 'customer-list',
+        component: () => import('@/views/customer-list/index.vue'),
+        name: 'CustomerList',
+        meta: { title: '客户', roles: ['Admin', 'Waiter', 'Boss'] }
+      }
+    ]
+  },
   // {
   //   path: '/wholesale/print',
   //   component: () => import('@/views/order/wholesale/Print'),
   //   meta: { title: '订货单打印', activeMenu: '/order/wholesale/print', roles: ['Admin', 'Waiter'] },
   //   hidden: true
   // },
-  // {
-  //   path: '/retail',
-  //   component: Layout,
-  //   meta: { title: '零售', icon: 'tab', roles: ['Admin', 'Waiter', 'Boss'] },
-  //   children: [
-  //     {
-  //       path: 'test',
-  //       component: () => import('@/views/order/retail/BarcodeTable'),
-  //       name: 'Sell',
-  //       meta: { title: '测试扫码', roles: ['Admin'] }
-  //     },
-  //     {
-  //       path: 'list',
-  //       component: () => import('@/views/order/retail/index'),
-  //       name: 'Sell',
-  //       meta: { title: '零售', roles: ['Admin', 'Waiter', 'Boss'] }
-  //     },
-  //     {
-  //       path: '/vip-list',
-  //       component: () => import('@/views/vip-list/index'),
-  //       name: 'VipList',
-  //       meta: { title: '会员列表', roles: ['Admin'] }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/retail',
+    component: Layout,
+    meta: { title: '零售', icon: 'tab', roles: ['Admin', 'Waiter', 'Boss'] },
+    children: [
+      {
+        path: 'test',
+        component: () => import('@/views/order/retail/BarcodeTable.vue'),
+        name: 'Sell',
+        meta: { title: '测试扫码', roles: ['Admin'] }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/order/retail/index.vue'),
+        name: 'Sell',
+        meta: { title: '零售', roles: ['Admin', 'Waiter', 'Boss'] }
+      },
+      {
+        path: '/vip-list',
+        component: () => import('@/views/vip-list/index.vue'),
+        name: 'VipList',
+        meta: { title: '会员列表', roles: ['Admin'] }
+      }
+    ]
+  },
   // {
   //   path: '/retail/print',
   //   component: () => import('@/views/order/retail/Print'),
@@ -236,42 +226,42 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  // {
-  //   path: '/size-group-list',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/size-group-list/index'),
-  //       name: 'SizeGroupList',
-  //       meta: { title: '尺码组table视图', icon: 'tab', roles: ['Admin'] }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/user-list',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/user-list/index'),
-  //       name: 'UserList',
-  //       meta: { title: '员工管理', icon: 'tab', roles: ['Admin'] }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/dict-list',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/dict-list/index'),
-  //       name: 'DictList',
-  //       meta: { title: '字典表', icon: 'tab', roles: ['Admin', 'Boss'] }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/size-group-list',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/size-group-list/index.vue'),
+        name: 'SizeGroupList',
+        meta: { title: '尺码组table视图', icon: 'tab', roles: ['Admin'] }
+      }
+    ]
+  },
+  {
+    path: '/user-list',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/user-list/index.vue'),
+        name: 'UserList',
+        meta: { title: '员工管理', icon: 'tab', roles: ['Admin'] }
+      }
+    ]
+  },
+  {
+    path: '/dict-list',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dict-list/index.vue'),
+        name: 'DictList',
+        meta: { title: '字典表', icon: 'tab', roles: ['Admin', 'Boss'] }
+      }
+    ]
+  },
   // {
   //   path: '/print',
   //   component: Layout,
@@ -312,12 +302,14 @@ const router = createRouter({
 
 export default router
 
-type meta = {
+type Meta = {
   title: string,
-  icon: Component,
+  icon: string,
   roles: string[]
 }
 
 export type MyRouteRecordRaw = RouteRecordRaw & {
-  hidden?: boolean
+  hidden?: boolean,
+  meta: Meta,
+  children: MyRouteRecordRaw[]
 }

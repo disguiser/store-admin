@@ -10,6 +10,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
+    "strictNullChecks": false,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
@@ -17,7 +18,7 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "types": ["vite-plugin-svg-icons/client", "naive-ui/volar"]
+    "types": ["vite-plugin-svg-icons/client", "naive-ui/volar", "element-plus/global"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["node_modules", "dist"],

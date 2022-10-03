@@ -1,7 +1,7 @@
 <template>
-  <n-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container" @wheel.native.prevent="handleScroll">
+  <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container" @wheel.native.prevent="handleScroll">
     <slot />
-  </n-scrollbar>
+  </el-scrollbar>
 </template>
 
 <script>

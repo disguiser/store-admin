@@ -1,8 +1,6 @@
-import { ComponentObjectPropsOptions } from "vue"
-
-export function useSelectable() {
+export function useSelectable(defineEmits: any) {
   const emit = defineEmits(['rowSelection', 'singleChoose', 'multiChoose', 'chooseAll'])
-  const props: ComponentObjectPropsOptions = {
+  const props = {
     singleSelect: {
       type: Boolean,
       default: false

@@ -1,11 +1,13 @@
 import { findAll } from '@/api/sizeGroup'
+import { IDictItem } from '@/model/Dict'
+import { ISizeGroup } from '@/model/SizeGroup'
 import { defineStore } from 'pinia'
 
 export const useSizeGroupStore = defineStore({
   id: 'sizeGroup',
   state: () => {
     return {
-      sizeGroup: new Array(),
+      sizeGroup: [] as ISizeGroup[],
     }
   },
   actions: {
@@ -16,10 +18,13 @@ export const useSizeGroupStore = defineStore({
   },
   getters: {
     sizeGroupObj: (state) => {
-      return state.sizeGroup.reduce((a, b) => {
-        a[b.id] = b.data
+      return state.sizeGroup.reduce((a: Record<string, IDictItem[]>, b) => {
+        a[b.id!.toString()] = b.data
         return a
       }, {})
     }
+  },
+  persist: {
+    enabled: true
   }
 })

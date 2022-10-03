@@ -6,13 +6,13 @@ import { usePermissionStore } from '@/store/permission'
 import { useVersionStore } from '@/store/version'
 
 type StateType = {
-  token: string | undefined,
-  userId: string | undefined,
-  userName: string | undefined,
-  accountName: string | undefined,
+  token?: string,
+  userId?: string,
+  userName?: string,
+  accountName?: string,
   avatar: string,
   roles: string[],
-  deptId: string | undefined
+  deptId?: string
 }
 
 export const useUserStore = defineStore('user', {
@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
       userName: undefined,
       accountName: undefined,
       avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-      roles: new Array<string>(),
+      roles: [],
       deptId: undefined
     } as StateType
   },
@@ -49,12 +49,12 @@ export const useUserStore = defineStore('user', {
       })
     },
     async doLogin(data: any) {
-      const permissionStore = usePermissionStore()
+      // const permissionStore = usePermissionStore()
       if (data) {
         // generate accessible routes map based on role
-        const accessRoutes = await permissionStore.generateRoutes(data.roles)
+        // const accessRoutes = await permissionStore.generateRoutes(data.roles)
         // dynamically add accessible routes
-        router.addRoute(accessRoutes as any)
+        // router.addRoute(accessRoutes as any)
         this.token = data.token
         setToken(data.token)
         this.userId = data.userId
@@ -91,6 +91,7 @@ export const useUserStore = defineStore('user', {
       this.roles = []
       versionStore.clear()
       sessionStorage.clear()
+      location.reload() // 为了重新实例化pania 避免bug
     },
     updateName(name: string) {
       this.accountName = name

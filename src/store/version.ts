@@ -12,18 +12,19 @@ export const useVersionStore = defineStore('version', {
   },
   actions: {
     async checkVersion() {
+      console.log('checkVersion')
       const sizeGroupStore = useSizeGroupStore()
       const deptStore = useDeptStore()
       const dictStore = useDictStore()
 
       let arr = []
-      let res = await getVersions()
-      let _versionObj = res.data.reduce((a: any, b: any) => {
+      const res = await getVersions()
+      const _versionObj = res.data.reduce((a: any, b: any) => {
         a[b.name] = b.v
         return a
       }, {})
       if (this.versionObj) {
-        let needUpdate = res.data.map((e: any) => {
+        const needUpdate = res.data.map((e: any) => {
           if (this.versionObj && this.versionObj[e.name] !== e.v) {
             return e.name
           }

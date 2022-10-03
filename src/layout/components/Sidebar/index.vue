@@ -1,59 +1,52 @@
 <template>
-  <n-menu :options="menuOptions" />
+  <el-scrollbar>
+    <el-menu
+      class="sidebar-menu"
+      :collapse="!appStore.sidebar"
+      router
+    >
+      <template v-for="route in permissionStore.routes.filter(e => !e.hidden)">
+        <el-sub-menu
+          v-if="route.children?.length && route.children.filter((e: MyRouteRecordRaw) => !e.hidden).length > 1"
+          :index="route.path"
+        >
+          <template #title>
+            <el-icon>
+              <Icon :icon="route.meta.icon" />
+            </el-icon>
+            {{ route.meta.title }}
+          </template>
+          <el-menu-item
+            v-for="child in route.children"
+            :index="`${route.path}/${child.path}`"
+          >
+            {{ child.meta?.title }}
+          </el-menu-item>
+        </el-sub-menu>
+        <el-menu-item v-else :index="route.path">
+          <template #title>
+            <el-icon>
+              <Icon :icon="route.meta.icon" />
+            </el-icon>
+            <span>{{ route.meta?.title }}</span>
+          </template>
+        </el-menu-item>
+      </template>
+    </el-menu>
+  </el-scrollbar>
 </template>
-<script>
-export default {
-  name: "Sidebar"
-}
-</script>
-<script setup>
-import { h } from 'vue'
-import { NIcon } from 'naive-ui'
-import { RouterLink } from 'vue-router'
+<script lang="ts" setup name="Sidebar">
 import { usePermissionStore } from '@/store/permission'
-
-function renderIcon (icon) {
-  return () => h(NIcon, null, { default: () => h(icon) })
-}
+import { Icon } from '@iconify/vue';
+import { useAppStore } from '@/store/app'
+import { MyRouteRecordRaw } from '@/router';
+const appStore = useAppStore()
 
 const permissionStore = usePermissionStore()
-const menuOptions = permissionStore.routes.filter(e => !e.hidden).map(e => {
-  if (e.children && e.children.length > 1) {
-    return {
-      label: e.meta.title,
-      key: e.path,
-      icon: renderIcon(e.meta.icon),
-      children: e.children.filter(child => !child.hidden).map(child => {
-        return {
-          label: () => h(
-            RouterLink,
-            {
-              to: {
-                path: `${e.path}${child.path}`
-              }
-            },
-            { default: () => child.meta.title }
-          ),
-          key: `${e.path}${child.path}`,
-          icon: renderIcon(child.meta.icon),
-        }
-      })
-    }
-  } else {
-    return {
-      label: () =>
-        h(
-          RouterLink,
-          {
-            to: {
-              path: e.path
-            }
-          },
-          { default: () => e.meta.title }
-        ),
-      key: e.path,
-      icon: renderIcon(e.meta.icon)
-    }
-  }
-})
 </script>
+<style>
+.sidebar-menu {
+  width: 200px;
+  min-height: 100vh;
+}
+</style>

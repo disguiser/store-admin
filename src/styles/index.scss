@@ -4,7 +4,6 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
-@import './vxe-table.scss';
 
 body {
   height: 100%;
@@ -173,7 +172,7 @@ div:focus {
 }
 
 .filter-container {
-  padding: 10px;
+  padding: 10px 0;
 
   .filter-item {
     display: inline-block;

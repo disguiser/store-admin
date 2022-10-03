@@ -1,7 +1,8 @@
 <template>
   <div class="navbar">
+    <!-- <hamburger :is-active="appStore.sidebar" style="float: left;height: 100%;line-height: 46px;cursor: pointer;" @toggleClick="appStore.toggleSideBar" /> -->
+    <el-button text :icon="appStore.sidebar?'Fold':'Expand'" style="float: left;height: 100%;font-size: large;" @click="appStore.toggleSideBar"></el-button>
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-
     <div class="right-menu">
       <ngiht-shift />
       <account-btn />
@@ -13,6 +14,9 @@
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import NgihtShift from './NgihtShift.vue'
 import AccountBtn from './AccountBtn.vue'
+import Hamburger from '@/components/Hamburger/index.vue'
+import { useAppStore } from '@/store/app';
+const appStore = useAppStore()
 </script>
 
 <style lang="scss" scoped>

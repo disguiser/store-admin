@@ -1,27 +1,52 @@
 <template>
-  <n-layout has-sider>
-    <n-layout-sider
-      bordered
-      show-trigger
-      collapse-mode="width"
-      :collapsed-width="64"
-      :width="240"
-      :native-scrollbar="false"
-    >
+  <div class="container">
+    <div class="left">
       <sidebar />
-    </n-layout-sider>
-    <n-layout>
-      <div :class="{hasTagsView:true}" class="main-container">
-        <div>
-          <navbar />
-          <tags-view />
-        </div>
+    </div>
+    <div class="right" :style="{ 'margin-left': marginLeft + 'px' }">
+      <div class="header">
+        <navbar />
+        <tags-view />
+      </div>
+      <div class="main">
         <app-main />
       </div>
-    </n-layout>
-  </n-layout>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts" name="Layout">
+import { useAppStore } from '@/store/app';
+import { ref, watchEffect } from 'vue';
 import { AppMain, Navbar, Sidebar, TagsView } from './components'
+import { useVersionStore } from '@/store/version';
+const appStore = useAppStore()
+const marginLeft = ref(0)
+watchEffect(() => {
+  if (appStore.sidebar) {
+    marginLeft.value = 200
+  } else {
+    marginLeft.value = 65
+  }
+})
+
+const versionStore = useVersionStore()
+await versionStore.checkVersion()
 </script>
+<style lang="scss" scoped>
+  .container {
+    width: 100%;
+    height: 100%;
+    .left {
+      position: fixed;
+    }
+    .right {
+      margin-left: 200px;
+      display: flex;
+      flex-direction: column;
+      .main {
+        flex: 1;
+      }
+    }
+  }
+</style>

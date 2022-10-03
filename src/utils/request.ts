@@ -46,19 +46,13 @@ service.interceptors.response.use(
     // 4001:非法的token; 4000:token不存在;  4001:Token 过期了;
     const res = error.response
     if (res) {
-      if (res.status === 401 || res.status === 402) {
+      if (res.status === 401 || res.status === 402 || res.status === 403) {
         const userStore = useUserStore()
         userStore.logout()
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      } else if (res.status === 409) {
-        ElMessage({
-          message: 'Someone may updated this data,please refresh before submit',
-          type: 'error',
-          duration: 5000
-        })
       } else {
+        // console.log(res)
         ElMessage({
-          message: res.data.message,
+          message: res.data.msg,
           type: 'error'
         })
       }

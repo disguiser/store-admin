@@ -1,50 +1,44 @@
 <template>
-  <n-form
+  <el-form
     ref="formRef"
     :model="loginForm"
     :rules="rules"
     label-placement="left"
   >
-    <n-form-item path="accountName">
-      <my-input
-        v-model="loginForm.accountName"
+    <el-form-item prop="accountName">
+      <el-input
+        v-model.trim="loginForm.accountName"
         v-focus
-        trim
         placeholder="用户名"
       />
-    </n-form-item>
-    <n-form-item path="password">
-      <n-tooltip :show="capsTooltip" placement="right">
-        <template #trigger>
-          <my-input
-            v-model="loginForm.password"
-            trim
-            placeholder="密码"
-            type="password"
-            @keyup="checkCapslock"
-            @keyup.enter="handleLogin"
-          />
-        </template>
-        <span>大小写锁定已打开</span>
-      </n-tooltip>
-    </n-form-item>
-  </n-form>
-  <n-button type="primary" block strong @click="handleLogin">
+    </el-form-item>
+    <el-form-item prop="password">
+      <el-tooltip :visible="capsTooltip" content="大小写锁定已打开" placement="right">
+        <el-input
+          v-model.trim="loginForm.password"
+          placeholder="密码"
+          :type="passwordType"
+          @keyup="checkCapslock"
+          @keyup.enter="handleLogin(formRef)"
+        >
+          <template #append>
+            <el-button :icon="passwordType === 'password' ? 'View' : 'Hide'" @click="showPwd">
+              <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
+            </el-button>
+          </template>
+        </el-input>
+      </el-tooltip>
+    </el-form-item>
+  </el-form>
+  <el-button type="primary" style="width:100%" @click="handleLogin(formRef)">
     登录
-  </n-button>
-    <!-- <ui5-button>Hello UI5 Web Components</ui5-button> -->
+  </el-button>
 </template>
 
 <script setup lang="ts">
 import { nextTick, reactive, ref } from 'vue';
 import { useUserStore } from '@/store/user'
-import {
-  FormInst,
-  FormItemRule,
-  useMessage,
-  FormRules
-} from 'naive-ui'
-const message = useMessage()
+import { FormInstance, FormRules } from 'element-plus';
 
 const userStore = useUserStore()
 
@@ -85,26 +79,22 @@ function showPwd() {
 }
 
 const emit = defineEmits(['handleLogin'])
-function handleLogin1() {
-  emit('handleLogin')
-}
-const formRef = ref<FormInst | null>(null)
-function handleLogin(e: MouseEvent | KeyboardEvent) {
-  e.preventDefault()
-  formRef.value?.validate(async errors => {
-    if (!errors) {
+const formRef = ref<FormInstance | null>(null)
+async function handleLogin(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  formEl.validate(async (valid, fields) => {
+    if (valid) {
       loading.value = true
       try {
         await userStore.login(loginForm)
         emit('handleLogin')
-      } catch (error) {
+      } catch (error: any) {
         console.error(error.message)
       } finally {
         loading.value = false
       }
     } else {
-      console.log(errors)
-      // message.error('Invalid')
+      console.log('error submit!', fields)
     }
   })
 }

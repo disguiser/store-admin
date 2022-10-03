@@ -1,9 +1,9 @@
 <template>
-  <n-input
-    :value="props.modelValue"
+  <el-input
+    :modelValue="props.modelValue"
     :type="props.type"
     :placeholder="props.placeholder"
-    @update-value="handleUpdateValue"
+    @update:modelValue="handleUpdateValue"
     @change="handleChange"
   />
 </template>

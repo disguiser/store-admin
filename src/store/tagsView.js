@@ -26,7 +26,6 @@ export const useTagsViewStore = defineStore('tagsView', {
         this.cachedViews.push(view.name)
       }
     },
-  
     delView(view) {
       return new Promise(resolve => {
         // dispatch('delVisitedView', view)
@@ -42,6 +41,8 @@ export const useTagsViewStore = defineStore('tagsView', {
     delVisitedView(view) {
       return new Promise(resolve => {
         for (const [i, v] of this.visitedViews.entries()) {
+          console.log(v.path)
+          console.log(view.path)
           if (v.path === view.path) {
             this.visitedViews.splice(i, 1)
             break
@@ -95,12 +96,12 @@ export const useTagsViewStore = defineStore('tagsView', {
       })
     },
   
-    delAllViews(view) {
+    delAllViews() {
       return new Promise(resolve => {
         // dispatch('delAllVisitedViews', view)
         // dispatch('delAllCachedViews', view)
-        this.delAllVisitedViews(view)
-        this.delAllCachedViews(view)
+        this.delAllVisitedViews()
+        this.delAllCachedViews()
         resolve({
           visitedViews: [...this.visitedViews],
           cachedViews: [...this.cachedViews]

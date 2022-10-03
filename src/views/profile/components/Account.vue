@@ -1,39 +1,34 @@
 <template>
-  <n-form
+  <el-form
+    v-loading="loading"
     ref="formRef"
     :model="temp"
-    status-icon
     :rules="rules"
     label-placement="left"
   >
-    <n-form-item label="登录名" path="accountName">
+    <el-form-item label="登录名" prop="accountName">
       <my-input v-model="temp.accountName" trim />
-    </n-form-item>
-    <n-form-item label="旧密码" path="oldPassword">
+    </el-form-item>
+    <el-form-item label="旧密码" prop="oldPassword">
       <my-input v-model="temp.oldPassword" type="password" trim />
-    </n-form-item>
-    <n-form-item label="新密码" path="newPassword">
+    </el-form-item>
+    <el-form-item label="新密码" prop="newPassword">
       <my-input v-model="temp.newPassword" type="password" trim />
-    </n-form-item>
-    <n-form-item label="再次输入" path="newPassword2">
+    </el-form-item>
+    <el-form-item label="再次输入" prop="newPassword2">
       <my-input v-model="temp.newPassword2" type="password" trim />
-    </n-form-item>
-    <n-form-item>
-      <n-button type="primary" @click="submit">更新</n-button>
-    </n-form-item>
-  </n-form>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submit(formRef)">更新</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script setup lang="ts">
 import { checkUnique } from '@/api/user'
 import { useUserStore } from '@/store/user'
 import { ref } from 'vue'
-import {
-  FormRules,
-  FormInst,
-  FormItemRule,
-useMessage
-} from 'naive-ui'
+import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
 type TempType = {
   id: string | undefined,
@@ -43,7 +38,7 @@ type TempType = {
   newPassword: string | undefined,
   newPassword2: string | undefined
 }
-const formRef = ref<FormInst | null>(null)
+const formRef = ref<FormInstance | null>(null)
 
 const temp = ref<TempType>({
   id: undefined,
@@ -53,63 +48,73 @@ const temp = ref<TempType>({
   newPassword: undefined,
   newPassword2: undefined
 })
+
+const loading = ref(false)
 const userStore = useUserStore()
 temp.value.accountName = userStore.accountName
 temp.value.id = userStore.userId
 const rules: FormRules = {
   accountName: [{
-    validator: (rule: FormItemRule, value: string) => {
+    validator: (rule: any, value: string, callback: any) => {
       if (!value) {
-        return new Error('未填写')
+        callback(new Error('未填写'))
       }
       if (value !== userStore.accountName) {
         checkUnique(value).then(res => {
           if (!res.data) {
-            return new Error('用户名已存在')
+            callback(new Error('用户名已存在'))
           }
         })
       }
-      return true
+      callback()
     },
     trigger: 'blur'
   }],
   newPassword: [{
-    validator: (rule: FormItemRule, value) => {
+    validator: (rule: any, value, callback: any) => {
       if (!value) {
-        return new Error('请输入新密码')
+        callback(new Error('请输入新密码'))
       } else {
         if (temp.value.oldPassword) {
-          console.log('===')
-          formRef.value?.restoreValidation()
+          formRef.value?.clearValidate()
         }
-        return true
+        callback()
       }
     },
     trigger: 'blur'
   }],
   newPassword2: [{
-    validator: (rule: FormItemRule, value) => {
+    validator: (rule: any, value, callback: any) => {
       if (!value) {
-        return new Error('请再次输入密码')
+        callback(new Error('请再次输入密码'))
       } else if (value !== temp.value.newPassword) {
-        return new Error('两次输入密码不一致!')
+        callback(new Error('两次输入密码不一致!'))
       } else {
-        return true
+        callback()
       }
     },
     trigger: 'blur'
   }],
   oldPassword: [{ required: true, message: '未填写', trigger: 'blur' }]
 }
-const message = useMessage()
-function submit() {
-  formRef.value?.validate(async errors => {
-    if (!errors) {
-      userStore.update(temp)
-      temp.value.oldPassword = ''
-      temp.value.newPassword = ''
-      temp.value.newPassword2 = ''
-      message.success('用户信息更新成功!')
+async function submit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      loading.value = true
+      try {
+        await userStore.update(temp.value)
+        temp.value.oldPassword = ''
+        temp.value.newPassword = ''
+        temp.value.newPassword2 = ''
+        ElMessage.success('用户信息更新成功!')
+      } catch (error: any) {
+        console.error(error.message)
+      } finally {
+        loading.value = false
+      }
+    } else {
+      console.log('error submit!', fields)
     }
   })
 }

@@ -9,10 +9,12 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <% if (VITE_ENV === 'prod') { %>
     <script src="https://unpkg.com/vue@3.2.37/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/vue-router@4.0.12/dist/vue-router.global.prod.js"></script>
     <script src="https://unpkg.com/axios@0.25.0/dist/axios.min.js"></script>
     <script src="https://unpkg.com/element-plus"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+    <% } %>
   </body>
 </html>

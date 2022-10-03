@@ -1,15 +1,15 @@
 <template>
   <div class="page-container">
-    <n-grid x-gap="20" cols="3">
-      <n-grid-item span="1">
+    <el-row :gutter="20">
+      <el-col :span="8">
         <user-card />
-      </n-grid-item>
-      <n-grid-item span="2">
-        <n-card title="账号信息">
+      </el-col>
+      <el-col :span="16">
+        <el-card header="账号信息">
           <account />
-        </n-card>
-      </n-grid-item>
-    </n-grid>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

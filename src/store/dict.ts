@@ -1,14 +1,22 @@
 import { findAll as findAllDict } from '@/api/dict'
 import { findAll as findAllSize } from '@/api/size'
+import { IDict, IDictItem } from '@/model/Dict'
 import { defineStore } from 'pinia'
 
 type DictObj = {}
 
+type Size = {
+  id: number,
+  itemName: string
+}
 export const useDictStore = defineStore('dict', {
   state: () => {
     return {
-      dict: new Array(),
-      size: new Array(),
+      dict: [],
+      sizes: [],
+    } as {
+      dict: IDict[],
+      sizes: Size[]
     }
   },
   actions: {
@@ -18,10 +26,7 @@ export const useDictStore = defineStore('dict', {
     },
     async fetchSize() {
       const res = await findAllSize({})
-      // res.data.forEach(e => {
-      //   e.checked = false
-      // })
-      this.size = res.data
+      this.sizes = res.data
     }
   },
   getters: {
@@ -29,17 +34,29 @@ export const useDictStore = defineStore('dict', {
       return state.dict.reduce((a, b) => {
         a[b.dictName] = b.data
         return a
-      }, {} as Record<string, Record<string, string>[]>)
+      }, {} as Record<string, IDictItem[]>)
     },
     sizeObj: (state) => {
-      return state.size.reduce((a, b) => {
+      return state.sizes.reduce((a, b) => {
         a[b.id] = b.itemName
         return a
-      })
+      }, {} as Record<string, string>)
     },
-    colorObj() {
-      return (this.dictObj as any)['颜色'].reduce((a: any, b: any) => {
+    colorArr(): IDictItem[] {
+      return (this.dictObj as Record<string, IDictItem[]>)['颜色']
+    },
+    colorObj():  {
+      return this.colorArr.reduce((a: any, b: any) => {
         a[b.id] = b.itemName
+        return a
+      }, {})
+    },
+    roleArr() {
+      return (this.dictObj as any)['权限']
+    },
+    roleObj() {
+      return this.roleArr.reduce((a: any, b: any) => {
+        a[b.itemCode] = b.itemName
         return a
       }, {})
     }

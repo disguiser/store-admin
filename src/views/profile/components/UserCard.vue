@@ -1,9 +1,5 @@
 <template>
-  <n-card style="margin-bottom:20px;">
-    <div slot="header" class="clearfix">
-      <span>关于我</span>
-    </div>
-
+  <el-card header="关于我" style="margin-bottom:20px;">
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="userStore.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
@@ -26,7 +22,7 @@
         @crop-upload-fail="cropUploadFail"
       />
     </div>
-  </n-card>
+  </el-card>
 </template>
 
 <script setup>
@@ -34,7 +30,7 @@ import PanThumb from '@/components/PanThumb/index.vue'
 import AvatarUpload from 'vue-image-crop-upload'
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
-import { useMessage } from 'naive-ui';
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 const show = ref(false)
@@ -43,14 +39,13 @@ const headers = {
   Authorization: 'Bearer ' + userStore.token
 }
 
-const message = useMessage()
 async function cropUploadSuccess(jsonData, field) {
-  message.success('上传成功')
+  ElMessage.success('上传成功')
   await userStore.setAvatar(jsonData.result)
   show.value = false
 }
 function cropUploadFail(status, field) {
-  message.error('上传失败')
+  ElMessage.error('上传失败')
   console.log(status)
   console.log('field: ' + field)
 }

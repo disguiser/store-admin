@@ -26,7 +26,7 @@ export function update(data: any) {
   })
 }
 
-export function remove(id: string) {
+export function remove(id: number) {
   return request({
     url: `${preUrl}/delete/${id}`,
     method: 'delete'
