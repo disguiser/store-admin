@@ -1,6 +1,13 @@
 <template>
-  <div>
-    
+  <div v-loading="loading">
+    <stock
+      :list="list"
+      :goods-id="goodsId"
+      :dept-id="deptId"
+      :size-group="sizeGroup"
+      @refresh="refresh"
+      @stockUpdated="stockUpdated"
+    />
   </div>
 </template>
 
@@ -15,11 +22,22 @@ const { goodsId, deptId } = defineProps<{
   deptId: number,
   sizeGroup: number
 }>()
-const res = await findStock({ goodsId, deptId })
-const list = ref<IStock>(res.data)
-const emits = defineEmits(['stockUpdated'])
-function stockUpdated(list) {
-  emit('stockUpdated', list)
+const list = ref<IStock[]>()
+const loading = ref(false)
+async function getList() {
+  loading.value = true
+  const { data } = await findStock({ goodsId, deptId })
+  list.value = data
+  loading.value = false
+}
+getList()
+const emit = defineEmits(['stockUpdated'])
+async function refresh() {
+  await getList()
+  emit('stockUpdated', list.value)
+}
+function stockUpdated() {
+  emit('stockUpdated', list.value)
 }
 </script>
 

@@ -26,14 +26,6 @@ export function create(data: any) {
   })
 }
 
-export function update(data: any) {
-  return request({
-    url: `${preUrl}/update/${data.id}`,
-    method: 'patch',
-    data
-  })
-}
-
 export function remove(id: number) {
   return request({
     url: `${preUrl}/delete/${id}`,

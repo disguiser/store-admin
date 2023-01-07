@@ -7,6 +7,8 @@
   >
     <el-form-item prop="accountName">
       <el-input
+        name="accountName"
+        data-test="accountname"
         v-model.trim="loginForm.accountName"
         v-focus
         placeholder="用户名"
@@ -15,6 +17,8 @@
     <el-form-item prop="password">
       <el-tooltip :visible="capsTooltip" content="大小写锁定已打开" placement="right">
         <el-input
+          name="password"
+          data-test="password"
           v-model.trim="loginForm.password"
           placeholder="密码"
           :type="passwordType"
@@ -30,7 +34,7 @@
       </el-tooltip>
     </el-form-item>
   </el-form>
-  <el-button type="primary" style="width:100%" @click="handleLogin(formRef)">
+  <el-button name="submit" :loading="loading" data-test="login-submit" type="primary" style="width:100%" @click="handleLogin(formRef, $event)">
     登录
   </el-button>
 </template>
@@ -80,7 +84,8 @@ function showPwd() {
 
 const emit = defineEmits(['handleLogin'])
 const formRef = ref<FormInstance | null>(null)
-async function handleLogin(formEl: FormInstance | undefined) {
+async function handleLogin(formEl: FormInstance | undefined, event: Event) {
+  if (event) event.preventDefault()
   if (!formEl) return
   formEl.validate(async (valid, fields) => {
     if (valid) {

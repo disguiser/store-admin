@@ -1,18 +1,18 @@
 <template>
-  <div ref="main" v-loading="loading" class="app-container">
+  <div ref="mainRef" v-loading="loading" class="app-container">
     <template v-if="!loading">
       <h3 style="margin: 0;font-weight:normal;margin-bottom: 10px">益谦服饰-出货单</h3>
       <div class="head" style="margin-bottom: 10px;text-align:left;">
         <span>接收方名称：{{ order.name }}</span>
         <span style="margin-left: 10px">手机号：{{ order.mobile }}</span>
-        <span style="margin-left: 10px">地址：{{ order.address | addressFilter }}{{ order.addressDetail }}</span>
+        <span style="margin-left: 10px">地址：{{ addressFilter(order.address) }}{{ order.addressDetail }}</span>
       </div>
       <table>
         <tr>
           <td>款号</td>
           <td>品名</td>
           <td>颜色</td>
-          <td v-for="s in sizes" :key="s.itemCode" style="white-space:break-spaces;">{{ s.itemName | sizeFilter }}</td>
+          <td v-for="s in sizes" :key="s.id" style="white-space:break-spaces;">{{ sizeFilter(s.itemName) }}</td>
           <td>小计</td>
           <td>单价</td>
           <td>金额合计</td>
@@ -20,8 +20,8 @@
         <tr v-for="(e, i) in list" :key="i">
           <td>{{ e.preSku }}</td>
           <td>{{ e.name }}</td>
-          <td>{{ colorObj[e.color] }}</td>
-          <td v-for="s in sizes" :key="s.itemCode">{{ e[s.itemCode] }}</td>
+          <td>{{ colorMap.get(e.color) }}</td>
+          <td v-for="s in sizes" :key="s.id">{{ e[s.id] }}</td>
           <td>{{ e.subtotal }}</td>
           <td>{{ e.salePrice }}</td>
           <td>{{ e.subtotal * e.salePrice }}</td>
@@ -38,7 +38,7 @@
         </div>
         <div class="head-foot">
           <span>联系方式: 18553108836</span>
-          <span>下单时间:{{ order.orderTime | timeFilter }}</span>
+          <span>下单时间:{{ parseTime(order.orderTime) }}</span>
         </div>
         <div v-if="debt" class="head-foot">
           <span class="debt">欠款：{{ debt }}</span>
@@ -52,76 +52,88 @@
   </div>
 </template>
 
-<script>
-import orderPrint from '../orderPrint'
+<script setup lang="ts">
 import { getDetailByOrderId } from '@/api/order'
 import { findOne } from '@/api/customer'
-export default {
-  filters: {
-    sizeFilter(val) {
-      if (val) {
-        // console.log(val)
-        return val.split('/').join('\n')
-      } else {
-        return ''
-      }
-    }
-  },
-  mixins: [orderPrint],
-  data() {
-    return {
-      sizes: [],
-      debt: null
-    }
-  },
-  async mounted() {
-    let {
-      data: { debt }
-    } = await findOne(this.order.buyer)
-    this.debt = debt
-  },
-  methods: {
-    async dealData() {
-      this.loading = true
-      let res = await getDetailByOrderId(this.order.id)
-      let list = res.data.items
-      let preSku = {}
-      let sizes = []
-      for (let e of list) {
-        if (!preSku[e.preSku]) {
-          preSku[e.preSku] = {}
-        }
-        if (!preSku[e.preSku][e.color]) {
-          preSku[e.preSku][e.color] = {}
-          preSku[e.preSku][e.color]['name'] = e.name
-          preSku[e.preSku][e.color]['preSku'] = e.preSku
-          preSku[e.preSku][e.color]['color'] = e.color
-          preSku[e.preSku][e.color]['salePrice'] = e.salePrice
-          preSku[e.preSku][e.color]['subtotal'] = 0
-        }
-        preSku[e.preSku][e.color][e.size] = e.amount
-        preSku[e.preSku][e.color]['subtotal'] += e.amount
+import { nextTick, onMounted, ref } from 'vue';
+import { useOrderPrint } from '../useOrderPrint';
+import { addressFilter } from '@/utils';
+import { parseTime } from '@/utils';
+const {
+  sizeMap,
+  colorMap,
+  userName,
+  loading,
+  order
+} = useOrderPrint()
+const debt = ref(false)
 
-        if (!sizes.includes(e.size)) {
-          sizes.push(e.size)
-        }
-      }
-      this.list = Object.values(preSku).flatMap(e => Object.values(e))
-      this.sizes = sizes.map(e => {
-        return {
-          itemCode: e,
-          itemName: this.sizeObj[e]
-        }
-      }).sort((a, b) => {
-        if (a.itemName > b.itemName) {
-          return 1
-        } else {
-          return -1
-        }
-      })
-      this.loading = false
+onMounted(async() => {
+  let {
+    data
+  } = await findOne(order.value.buyer)
+  debt.value = data.debt
+})
+
+const mainRef = ref()
+function print() {
+  mainRef.value.classList.add('print')
+  nextTick(() => {
+    window.print()
+    mainRef.value.classList.remove('print')
+  })
+}
+
+function sizeFilter(val: string) {
+  if (val) {
+    // console.log(val)
+    return val.split('/').join('\n')
+  } else {
+    return ''
+  }
+}
+
+const list = ref()
+const sizes = ref()
+dealData()
+async function dealData() {
+  loading.value = true
+  const { data } = await getDetailByOrderId(order.value.id)
+  const preSku: any = {}
+  const _sizes: any = []
+  for (let e of data.items) {
+    if (!preSku[e.preSku]) {
+      preSku[e.preSku] = {}
+    }
+    if (!preSku[e.preSku][e.color]) {
+      preSku[e.preSku][e.color] = {}
+      preSku[e.preSku][e.color]['name'] = e.name
+      preSku[e.preSku][e.color]['preSku'] = e.preSku
+      preSku[e.preSku][e.color]['color'] = e.color
+      preSku[e.preSku][e.color]['salePrice'] = e.salePrice
+      preSku[e.preSku][e.color]['subtotal'] = 0
+    }
+    preSku[e.preSku][e.color][e.size] = e.amount
+    preSku[e.preSku][e.color]['subtotal'] += e.amount
+
+    if (!_sizes.includes(e.size)) {
+      _sizes.push(e.size)
     }
   }
+  list.value = Object.values(preSku).flatMap(e => Object.values(e))
+  sizes.value = _sizes.map((e: any) => {
+    return {
+      id: e,
+      itemName: sizeMap.get(e)
+    }
+  }).sort((a: any, b: any) => {
+    if (a.itemName > b.itemName) {
+      return 1
+    } else {
+      return -1
+    }
+  })
+  loading.value = false
 }
 </script>
 
@@ -141,6 +153,7 @@ table {
   // display: flex;
   // flex-direction: column;
   // align-content: center;
+  padding: 20px;
   font-size: 10pt;
   width: 20cm;
   text-align: center;

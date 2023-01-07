@@ -1,14 +1,12 @@
-import { IDictItem } from "./Dict"
-
 export interface ISizeGroup {
   id?: number
   name: string
-  data: IDictItem[]
+  data: number[]
 }
 export class SizeGroup implements ISizeGroup {
   id: number
   name: string
-  data: IDictItem[]
+  data: number[]
   constructor(data?: ISizeGroup) {
     if (data) {
       this.id = data.id

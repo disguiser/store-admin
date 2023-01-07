@@ -23,7 +23,7 @@
               <el-option
                 v-for="item in e.colorOptions"
                 :key="item.color"
-                :label="colorObj[item.color]"
+                :label="colorMap.get(item.color)"
                 :value="item.color"
               />
             </el-select>
@@ -33,7 +33,7 @@
               <el-option
                 v-for="item in e.sizeOptions"
                 :key="item.size"
-                :label="sizeObj[item.size]"
+                :label="sizeMap.get(item.size)"
                 :value="item.size"
               />
             </el-select>
@@ -69,9 +69,9 @@ import RemoteSku from './RemoteSku.vue'
 import CountUp from 'vue-countup-v3'
 import { IOrder, IOrderGoods, OrderGoods } from '@/model/Order';
 import { useDictStore } from '@/store/dict';
-import { MessageBox } from '@element-plus/icons-vue';
 import { IStock } from '@/model/Stock';
 import { useUserStore } from '@/store/user';
+import { ElMessageBox } from 'element-plus';
 // import BarcodeScan from '@/components/BarcodeScan.vue'
 
 type _IOrderGoods = IOrderGoods & {
@@ -88,7 +88,7 @@ const props = defineProps<{
 
 const temp = props.temp as _IOrder
 
-const { sizeObj, colorObj } = useDictStore()
+const { sizeMap, colorMap } = useDictStore()
 const { deptId } = useUserStore()
 
 async function scaned({ sku, color, size }: _IOrderGoods) {
@@ -138,11 +138,8 @@ function sumTotal(item: _IOrderGoods) {
     temp.totalMoney = totalMoney
   }
 }
-type SkuChangeData = {
-  goodsId: number,
-  sku: string
-}
-async function skuChange({ goodsId, sku }: SkuChangeData, i: number) {
+async function skuChange($event: any, i: number) {
+  const { goodsId, sku } = $event
   temp.goodsList[i].salePrice = 0
   temp.goodsList[i].color = 0
   temp.goodsList[i].size = 0
@@ -196,7 +193,7 @@ function amountChange(e: _IOrderGoods) {
     setTimeout(() => {
       e.amount = e.currentStock
     }, 100)
-    MessageBox.alert('数量不能大于库存!')
+    ElMessageBox.alert('数量不能大于库存!')
   }
 }
 </script>

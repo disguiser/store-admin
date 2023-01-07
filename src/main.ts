@@ -40,10 +40,12 @@ app.use(VXETable)
 
 import '@/styles/index.scss' // global css
 
-import * as directives from './directive/index'
-Object.keys(directives).forEach((key: string) => {
-  app.directive(key, directives[key])
-})
+// import * as directives from './directive/index'
+// Object.keys(directives).forEach((key: string) => {
+//   app.directive(key, directives[key])
+// })
+import { focus } from './directive/index'
+app.directive('focus', focus)
 
 import MyInput from '@/components/MyInput.vue'
 app.component('my-input', MyInput)

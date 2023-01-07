@@ -1,8 +1,9 @@
+import { IStock } from '@/model/Stock'
 import request from '@/utils/request'
 
 let preUrl = '/stock'
 
-export function list(query: any) {
+export function list(query: Partial<IStock>) {
   return request({
     url: `${preUrl}/list`,
     method: 'get',
@@ -10,10 +11,18 @@ export function list(query: any) {
   })
 }
 
-export function create(data: any) {
+export function multiCreate(data: IStock[]) {
   return request({
-    url: `${preUrl}/create`,
-    method: 'put',
+    url: `${preUrl}/multi`,
+    method: 'post',
+    data
+  })
+}
+
+export function create(data: IStock) {
+  return request({
+    url: `${preUrl}/single`,
+    method: 'post',
     data
   })
 }

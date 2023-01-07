@@ -1,10 +1,10 @@
 <template>
-  <div class="page-container">
-    <div class="filter-container">
-      <el-button v-if="!singleSelect" class="filter-item" style="margin-left: 10px;" type="primary" icon="Edit" @click="handleCreate">
+  <table-container>
+    <template #filter-container>
+      <el-button v-if="!singleSelect" class="filter-item" type="primary" icon="Edit" @click="handleCreate">
         添加
       </el-button>
-    </div>
+    </template>
     <el-table
       :data="list"
       v-loading="listLoading"
@@ -12,8 +12,8 @@
       :highlight-current-row="props.singleSelect"
       @current-change="handleSingleSelect"
     >
-      <el-table-column prop="name" />
-      <el-table-column label="操作" width="200">
+      <el-table-column prop="name" label="门店" align="center" />
+      <el-table-column v-if="!props.singleSelect" align="center" label="操作" width="200">
         <template #default="{row, $index}">
           <div>
             <template v-if="row.edit">
@@ -32,10 +32,11 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>
+  </table-container>
 </template>
 
 <script setup lang="ts">
+import TableContainer from '@/components/TableContainer.vue'
 import { findAll, create, update, remove } from '@/api/dept'
 import { useUserStore } from '@/store/user';
 import { ElMessage, ElNotification } from 'element-plus'
@@ -108,11 +109,11 @@ async function confirmEdit(row: IDept) {
     listLoading.value = true
     let func, message
     if (row.id) {
-      func = update(temp)
+      func = update(temp.value)
       message = 'Update success'
     } else {
       func = new Promise((resolve, reject) => {
-        create(temp).then(res => {
+        create(temp.value).then(res => {
           row.id = res.data
           resolve(null)
         }).catch(err => {

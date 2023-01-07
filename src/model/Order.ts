@@ -24,6 +24,52 @@ export class OrderGoods implements IOrderGoods {
   subtotalMoney: number = 0
   colorOptions: any[] = []
   sizeOptions: any[] = []
+  constructor(data?: IOrderGoods) {
+    if (data) {
+      const {
+        sku,
+        preSku,
+        name,
+        color,
+        size,
+        amount,
+        salePrice,
+        subtotalMoney,
+        colorOptions,
+        sizeOptions
+      } = data
+      if (sku) {
+        this.sku = sku
+      }
+      if (preSku) {
+        this.preSku = preSku
+      }
+      if (name) {
+        this.name = name
+      }
+      if (color) {
+        this.color = color
+      }
+      if (size) {
+        this.size = size
+      }
+      if (amount) {
+        this.amount = amount
+      }
+      if (salePrice) {
+        this.salePrice = salePrice
+      }
+      if (subtotalMoney) {
+        this.subtotalMoney = subtotalMoney
+      }
+      if (colorOptions) {
+        this.colorOptions = colorOptions
+      }
+      if (sizeOptions) {
+        this.sizeOptions = sizeOptions
+      }
+    }
+  }
 }
 
 export interface IOrder extends Pick<
@@ -45,7 +91,7 @@ export class Order implements IOrder {
   id?: number | undefined
   total: number = 0
   totalMoney: number = 0
-  orderTime?: Date | undefined
+  orderTime?: Date
   buyer: number = 0
   goodsList: IOrderGoods[] = []
   deptId: number = 0
@@ -62,18 +108,59 @@ export class Order implements IOrder {
   ) {
     this.category = category
     if (data) {
-      this.id = data.id
-      this.total
-      this.totalMoney = data.totalMoney
-      this.orderTime = data.orderTime
-      this.buyer = data.buyer
-      this.goodsList = data.goodsList
-      this.deptId = data.deptId
-      this.deptName = data.deptName
-      this.name = data.name
-      this.mobile = data.mobile
-      this.address = data.address
-      this.addressDetail = data.addressDetail
+      const {
+        id,
+        total,
+        totalMoney,
+        orderTime,
+        buyer,
+        goodsList,
+        deptId,
+        deptName,
+        name,
+        mobile,
+        address,
+        addressDetail
+      } = data
+      if (id) {
+        this.id = id
+      }
+      if (total) {
+        this.total = total
+      }
+      if (totalMoney) {
+        this.totalMoney = totalMoney
+      }
+      if (orderTime) {
+        this.totalMoney = totalMoney
+      }
+      if (orderTime) {
+        this.orderTime = orderTime
+      }
+      if (buyer) {
+        this.buyer = buyer
+      }
+      if (goodsList) {
+        this.goodsList = goodsList.map(e => new OrderGoods(e))
+      }
+      if (deptId) {
+        this.deptId = deptId
+      }
+      if (deptName) {
+        this.deptName = deptName
+      }
+      if (name) {
+        this.name = name
+      }
+      if (mobile) {
+        this.mobile = mobile
+      }
+      if (address) {
+        this.address = address
+      }
+      if (addressDetail) {
+        this.addressDetail = addressDetail
+      }
     }
   }
 }
@@ -86,4 +173,20 @@ export enum CategoryEnum {
 export enum PaymentStatusEnum {
   square = 1,
   debt = 0
+}
+
+export type OrderWithDetail = {
+  sku: string,
+  name: string,
+  color: number,
+  size: number,
+  amount: number,
+  salePrice: number,
+  subtotalMoney: number,
+  discount: number,
+  customerName: string,
+  customerAddress: string[]
+  addressDetail: string,
+  customerMoblie: string,
+  userName: string
 }

@@ -1,9 +1,9 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
+  <table-container>
+    <template #filter-container>
       <el-input v-model="listQuery.userName" clearable placeholder="用户名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
       <el-select v-model="listQuery.roles" multiple placeholder="角色" clearable class="filter-item">
-        <el-option v-for="(item, i) in dictStore.roleArr" :key="i" :label="item.itemName" :value="item.itemCode" />
+        <el-option v-for="(item, i) in dictStore.roleList" :key="i" :label="item.itemName" :value="item.itemCode" />
       </el-select>
       <el-button class="filter-item" type="primary" icon="Search" @click="handleFilter()">
         搜索
@@ -11,8 +11,7 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="Edit" @click="handleCreate()">
         添加
       </el-button>
-    </div>
-
+    </template>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -25,12 +24,12 @@
       <el-table-column label="登录名称" prop="accountName" align="center" />
       <el-table-column label="角色" prop="role" align="center">
         <template #default="{row}">
-          <span>{{ row.roles.map((e: string) => dictStore.roleObj[e]).join(',') }}</span>
+          <span>{{ row.roles.map((e: string) => dictStore.roleMap.get(e)).join(',') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="门店" align="center">
         <template #default="{row}">
-          <span>{{ deptStore.deptObj[row.deptId] }}</span>
+          <span>{{ deptStore.deptMap.get(row.deptId) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
@@ -54,42 +53,43 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <el-dialog :title="dialogStatus" :visible.sync="infoDialogVisible" :close-on-click-modal="false">
-      <el-form ref="dataForm" :rules="rules" status-icon label-position="left" label-width="150px" :model="temp">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="temp.userName" />
-        </el-form-item>
-        <el-form-item label="登录名称" prop="accountName">
-          <el-input v-model="temp.accountName" />
-        </el-form-item>
-        <el-form-item label="角色" prop="roles">
-          <el-select v-model="temp.roles" multiple placeholder="角色" clearable>
-            <el-option v-for="(item, i) in dictStore.roleArr" :key="i" :label="item.itemName" :value="item.itemCode" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="门店" prop="deptId">
-          <el-select v-model="temp.deptId">
-            <el-option v-for="(item, i) in deptStore.dept" :key="i" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="infoDialogVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" :loading="btnLoading" @click="dialogStatus==='create'?createData():updateData()">
-          确认
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
+    <template #footer>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    </template>
+  </table-container>
+  <el-dialog :title="dialogStatus" v-model="infoDialogVisible" :close-on-click-modal="false" append-to-body>
+    <el-form ref="dataForm" :rules="rules" status-icon label-position="left" label-width="150px" :model="temp">
+      <el-form-item label="用户名" prop="userName">
+        <el-input v-model="temp.userName" />
+      </el-form-item>
+      <el-form-item label="登录名称" prop="accountName">
+        <el-input v-model="temp.accountName" />
+      </el-form-item>
+      <el-form-item label="角色" prop="roles">
+        <el-select v-model="temp.roles" multiple placeholder="角色" clearable>
+          <el-option v-for="(item, i) in dictStore.roleList" :key="i" :label="item.itemName" :value="item.itemCode" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="门店" prop="deptId">
+        <el-select v-model="temp.deptId">
+          <el-option v-for="(item, i) in deptStore.dept" :key="i" :label="item.name" :value="item.id" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="infoDialogVisible = false">
+        取消
+      </el-button>
+      <el-button type="primary" :loading="btnLoading" @click="dialogStatus==='新建'?createData():updateData()">
+        确认
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup name="UserList">
 import { findByPage, update, create, checkUnique } from '@/api/user'
+import TableContainer from '@/components/TableContainer.vue'
 import Pagination from '@/components/Pagination/index.vue'
 import { reactive, ref } from 'vue';
 import { IUser, User, UserStatus } from '@/model/User'
@@ -255,5 +255,7 @@ function updateData() {
 </script>
 
 <style lang="scss" scoped>
-
+.filter-item {
+  margin: 0 10px 0 0;
+}
 </style>

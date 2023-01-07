@@ -1,67 +1,76 @@
 import { findAll as findAllDict } from '@/api/dict'
 import { findAll as findAllSize } from '@/api/size'
-import { IDict, IDictItem } from '@/model/Dict'
+import { findAll as findAllColor } from '@/api/color'
+import { IDict, IDictItem, Dict } from '@/model/Dict'
 import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
-type DictObj = {}
+export const useDictStore = defineStore(Dict.name, () => {
+  const dict = ref<IDict[]>([])
+  const sizeList = ref<IDictItem[]>([])
+  const colorList = ref<IDictItem[]>([])
 
-type Size = {
-  id: number,
-  itemName: string
-}
-export const useDictStore = defineStore('dict', {
-  state: () => {
-    return {
-      dict: [],
-      sizes: [],
-    } as {
-      dict: IDict[],
-      sizes: Size[]
-    }
-  },
-  actions: {
-    async fetchDict() {
-      const res = await findAllDict({})
-      this.dict = res.data
-    },
-    async fetchSize() {
-      const res = await findAllSize({})
-      this.sizes = res.data
-    }
-  },
-  getters: {
-    dictObj(state) {
-      return state.dict.reduce((a, b) => {
-        a[b.dictName] = b.data
-        return a
-      }, {} as Record<string, IDictItem[]>)
-    },
-    sizeObj: (state) => {
-      return state.sizes.reduce((a, b) => {
-        a[b.id] = b.itemName
-        return a
-      }, {} as Record<string, string>)
-    },
-    colorArr(): IDictItem[] {
-      return (this.dictObj as Record<string, IDictItem[]>)['颜色']
-    },
-    colorObj():  {
-      return this.colorArr.reduce((a: any, b: any) => {
-        a[b.id] = b.itemName
-        return a
-      }, {})
-    },
-    roleArr() {
-      return (this.dictObj as any)['权限']
-    },
-    roleObj() {
-      return this.roleArr.reduce((a: any, b: any) => {
-        a[b.itemCode] = b.itemName
-        return a
-      }, {})
-    }
-  },
-  persist: {
-    enabled: true,
+  const dictMap = computed(() => {
+    return dict.value.reduce((a, b) => {
+      a.set(b.dictName, b.data)
+      return a
+    }, new Map<string, IDictItem[]>())
+  })
+  const sizeMap = computed(() => {
+    return sizeList.value.reduce((a, b) => {
+      a.set(b.id, b.itemName)
+      return a
+    }, new Map<number, string>())
+  })
+  const colorMap = computed(() =>  {
+    return colorList.value.reduce((a, b) => {
+      a.set(b.id, b.itemName)
+      return a
+    }, new Map<number, string>())
+  })
+  const roleList = computed(() => {
+    return dictMap.value.get('权限')
+  })
+  const roleMap = computed(() => {
+    return roleList.value.reduce((a, b) => {
+      a.set(b.itemCode, b.itemName)
+      return a
+    }, new Map<string, string>())
+  })
+  const fabricList = computed(() => {
+    return dictMap.value.get('面料')
+  })
+  const levelList = computed(() => {
+    return dictMap.value.get('等级')
+  })
+
+  async function fetchDict() {
+    const res = await findAllDict({})
+    dict.value = res.data
   }
+  async function fetchSize() {
+    const res = await findAllSize({})
+    sizeList.value = res.data
+  }
+  async function fetchColor() {
+    const res = await findAllColor({})
+    colorList.value = res.data
+  }
+  return {
+    dict,
+    sizeList,
+    dictMap,
+    sizeMap,
+    colorList,
+    colorMap,
+    roleList,
+    roleMap,
+    fabricList,
+    levelList,
+    fetchDict,
+    fetchSize,
+    fetchColor
+  }
+}, {
+  persist: true
 })

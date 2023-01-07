@@ -2,6 +2,21 @@ export enum UserStatus {
   Enabled = 'Enabled',
   Disabled = 'Disabled'
 }
+
+export type PasswordLoginInfo = {
+  accountName: string,
+  password: string
+}
+
+export type AccountInfo = {
+  id: string | undefined,
+  userName: string | undefined,
+  accountName: string | undefined,
+  oldPassword: string | undefined,
+  newPassword: string | undefined,
+  newPassword2: string | undefined
+}
+
 export interface IUser {
   id?: number
   userName: string

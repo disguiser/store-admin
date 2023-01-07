@@ -4,7 +4,7 @@ let preUrl = '/customer'
 
 export function findByPage(query: any) {
   return request({
-    url: `${preUrl}/findByPage`,
+    url: `${preUrl}/page`,
     method: 'get',
     params: query
   })
@@ -12,14 +12,14 @@ export function findByPage(query: any) {
 
 export function findOne(id: number) {
   return request({
-    url: `${preUrl}/findOne/${id}`,
+    url: `${preUrl}/${id}`,
     method: 'get'
   })
 }
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
+    url: `${preUrl}`,
     method: 'post',
     data
   })
@@ -27,7 +27,7 @@ export function create(data: any) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update/${data.id}`,
+    url: `${preUrl}/${data.id}`,
     method: 'patch',
     data
   })
@@ -35,15 +35,9 @@ export function update(data: any) {
 
 export function remove(ids: number[]) {
   return request({
-    url: `${preUrl}/delete`,
+    url: `${preUrl}`,
     method: 'delete',
     data: ids
   })
 }
 
-export function debt(id: string) {
-  return request({
-    url: `${preUrl}/debt/${id}`,
-    method: 'get'
-  })
-}

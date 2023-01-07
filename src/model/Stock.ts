@@ -1,7 +1,7 @@
 export interface IStock {
   id?: number
-  color: string
-  size: string
+  color: number
+  size: number
   goodsId: number
   deptId: number
   currentStock: number
@@ -9,14 +9,18 @@ export interface IStock {
 }
 
 export class Stock implements IStock {
-  color: string = ''
-  size: string = ''
-  goodsId: number = 0
-  deptId: number = 0
+  id: number
+  color: number
+  size: number
+  goodsId: number
+  deptId: number
   currentStock: number = 0
   constructor(data?: Partial<IStock>) {
     if (data) {
-      const { color, size, goodsId, deptId, currentStock } = data
+      const { id, color, size, goodsId, deptId, currentStock } = data
+      if (id) {
+        this.id = id
+      }
       if (color) {
         this.color = color
       }

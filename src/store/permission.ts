@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { MyRouteRecordRaw, asyncRoutes, constantRoutes } from '@/router'
+import { MyRouteRecordRaw, asyncRoutes, constantRoutes, RouteChild } from '@/router'
 /**
  * Use meta.roles to determine if the current user has permission
  * @param roles
  * @param route
  */
- function hasPermission(roles: string[], route: MyRouteRecordRaw) {
+ function hasPermission(roles: string[], route: MyRouteRecordRaw | RouteChild) {
   if (roles && route.meta && route.meta.roles) {
     return (route.meta.roles as string[]).some(e => roles.includes(e))
   } else {
@@ -22,12 +22,17 @@ import { MyRouteRecordRaw, asyncRoutes, constantRoutes } from '@/router'
   const res: MyRouteRecordRaw[] = []
 
   routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
-      if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+    if (hasPermission(roles, route)) {
+      if (route.children) {
+        const children: RouteChild[] = []
+        route.children.forEach((child: RouteChild) => {
+          if (hasPermission(roles, child)) {
+            children.push(child)
+          }
+        })
+        route.children = children
       }
-      res.push(tmp)
+      res.push(route)
     }
   })
 

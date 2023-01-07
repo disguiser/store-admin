@@ -25,11 +25,11 @@ export default ({ mode }) => {
         '@': resolve(__dirname, 'src')
       }
     },
+    build: {
+      sourcemap: true
+    },
     // esbuild: { loader: ['.js', '.jsx' ] },
     css: {
-      modules: {
-        scopeBehaviour: 'global',
-      },
       preprocessorOptions: {
         scss: {
           /*

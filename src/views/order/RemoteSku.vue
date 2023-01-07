@@ -1,13 +1,13 @@
 <template>
   <el-select
-    :value="value"
+    :value="props.modelValue"
     filterable
     remote
     default-first-option
     :remote-method="remoteSku"
     :loading="loading"
     placeholder="货号"
-    @input="handleInput"
+    @update:modelValue="handleInput"
   >
     <el-option
       v-for="item in skuOptions"
@@ -21,50 +21,44 @@
   </el-select>
 </template>
 
-<script>
+<script setup lang="ts">
 import { findByPage as findGoods } from '@/api/goods'
+import { IGoods } from '@/model/Goods';
+import { ref } from 'vue'
 
-export default {
-  props: {
-    value: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      loading: false,
-      skuOptions: []
-    }
-  },
-  computed: {
-  },
-  methods: {
-    handleInput(sku) {
-      let choosen = this.skuOptions.filter(e => e.sku === sku)
-      this.$emit('change', { goodsId: choosen[0].id, salePrice: choosen[0].salePrice, sku: choosen[0].sku })
-      this.$emit('input', choosen[0].preSku)
-    },
-    remoteSku(query) {
-      if (query !== '') {
-        this.loading = true
-        findGoods({
-          preSku: query
-        }).then(res => {
-          this.loading = false
-          this.skuOptions = res.data.items.map(e => {
-            return {
-              id: e.id,
-              sku: e.sku,
-              preSku: e.preSku,
-              salePrice: e.salePrice
-            }
-          })
-        }).catch(err => {
-          console.error(err)
-          this.loading = false
-        })
-      }
+const loading = ref(false)
+const skuOptions = ref<IGoods[]>([])
+
+const props = defineProps<{
+  modelValue: string
+}>()
+
+const emits = defineEmits(['change', 'update:modelValue'])
+
+function handleInput(sku: string) {
+  let choosen = skuOptions.value.find(e => e.sku === sku)
+  emits('change', { goodsId: choosen.id, salePrice: choosen.salePrice, sku: choosen.sku })
+  emits('update:modelValue', choosen.preSku)
+}
+async function remoteSku(query: string) {
+  if (query !== '') {
+    loading.value = true
+    try {
+      const res = await findGoods({
+        preSku: query
+      })
+      skuOptions.value = res.data.items.map((e: IGoods) => {
+        return {
+          id: e.id,
+          sku: e.sku,
+          preSku: e.preSku,
+          salePrice: e.salePrice
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
     }
   }
 }

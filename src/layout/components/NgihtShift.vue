@@ -3,8 +3,5 @@
 </template>
 
 <script setup lang="ts" name="NightShift">
-import { useDark, useToggle } from '@vueuse/core'
-
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+import { isDark, toggleDark } from '@/hooks/useMyDark'
 </script>

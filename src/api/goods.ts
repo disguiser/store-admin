@@ -34,7 +34,7 @@ export function findStockBySku(sku: string) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
+    url: `${preUrl}`,
     method: 'post',
     data
   })
@@ -42,15 +42,15 @@ export function create(data: any) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update/${data.id}`,
+    url: `${preUrl}/${data.id}`,
     method: 'patch',
     data
   })
 }
 
-export function remove(id: number) {
+export function remove(id: number, deptId?: number) {
   return request({
-    url: `${preUrl}/delete/${id}`,
+    url: `${preUrl}/${id}${deptId?'/'+deptId:''}`,
     method: 'delete'
   })
 }

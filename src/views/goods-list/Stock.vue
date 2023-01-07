@@ -1,99 +1,162 @@
 <template>
   <el-table
-    :key="key"
     :data="list"
     style="width: 100%"
   >
     <el-table-column label="颜色" prop="color" sortable>
       <template #default="{row}">
-        <template v-if="row.edit">
-          <!-- <el-autocomplete
-            v-model.trim="temp.color"
-            size="small"
-            :fetch-suggestions="(queryString, callback) => { querySearch(queryString, callback, e.list) }"
-            placeholder="请输入颜色"
-          /> -->
-          <el-select
-            v-model="temp.color"
-            size="small"
-          >
-            <el-option
-              v-for="e in dictStore.dictObj['颜色']"
-              :key="e.id"
-              :value="e.id"
-              :label="e.itemName"
-            />
-          </el-select>
-        </template>
+        <!-- <el-autocomplete
+          v-model.trim="temp.color"
+          size="small"
+          :fetch-suggestions="(queryString, callback) => { querySearch(queryString, callback, e.list) }"
+          placeholder="请输入颜色"
+        /> -->
+        <el-select
+          v-if="row.edit"
+          v-model="temp.color"
+          size="small"
+          data-test="color"
+          placeholder="颜色"
+        >
+          <el-option
+            v-for="e in dictStore.dictMap.get('颜色')"
+            :key="e.id"
+            :value="e.id"
+            :label="e.itemName"
+            data-test="colorOptions"
+          />
+        </el-select>
         <span v-else>
-          {{ dictStore.colorObj[row.color] }}
-          <el-button type="warning" size="small" :disabled="btnDisabled" icon="CopyDocument" @click="handleCreate({ color: row.color })" />
+          {{ dictStore.colorMap.get(row.color) }}
+          <el-button type="warning" size="small" :disabled="btnDisabled" icon="CopyDocument" @click="handleCreate(row.color)" />
         </span>
       </template>
     </el-table-column>
     <el-table-column label="尺码" prop="size" sortable>
       <template #default="{row}">
-        <template v-if="row.edit">
-          <el-select v-model="temp.size" size="small" placeholder="尺码">
-            <el-option
-              v-for="item in sizeGroupStore.sizeGroupObj[sizeGroup.toString()]"
-              :key="item.id"
-              :value="item.id"
-              :label="item.itemName"
-            />
-          </el-select>
-        </template>
-        <span v-else>{{ dictStore.sizeObj[row.size] }}</span>
+        <el-select
+          v-if="row.edit"
+          v-model="temp.size"
+          size="small"
+          placeholder="尺码"
+          data-test="size"
+        >
+          <el-option
+            v-for="item in sizeGroupStore.sizeGroupMap.get(sizeGroup)"
+            :key="item"
+            :value="item"
+            :label="dictStore.sizeMap.get(item)"
+            data-test="sizeOptions"
+          />
+        </el-select>
+        <span v-else>{{ dictStore.sizeMap.get(row.size) }}</span>
       </template>
     </el-table-column>
     <el-table-column label="库存数量" prop="currentStock" sortable>
       <template #default="{row}">
-        <template v-if="row.edit">
-          <el-input-number v-model="temp.currentStock" size="small" :min="0" :step="1" />
-        </template>
+        <el-input-number
+          v-if="row.edit"
+          v-model="temp.currentStock"
+          size="small"
+          :min="0"
+          :step="1"
+          data-test="currentStock"
+        ></el-input-number>
         <span v-else>{{ row.currentStock }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+    <el-table-column v-if="useCheckPermission(['Admin', 'boss'])" label="操作" align="center" class-name="small-padding fixed-width">
       <template #header>
-        <el-button v-loading="btnLoading" :disabled="btnDisabled" type="success" size="small" icon="el-icon-plus" @click="handleCreate({})">
+        <el-button
+          v-loading="btnLoading"
+          :disabled="btnDisabled"
+          type="success"
+          size="small"
+          icon="CirclePlusFilled"
+          @click="multiCreateDialog = true"
+        >
+          批量新增
+        </el-button>
+        <el-button
+          data-test="newStock-btn"
+          v-loading="btnLoading"
+          :disabled="btnDisabled"
+          size="small"
+          icon="Plus"
+          @click="handleCreate(null)"
+        >
           新增
         </el-button>
       </template>
       <template #default="{row, $index}">
         <div v-show="!row.edit">
-          <el-button v-loading="btnLoading" type="primary" size="small" :disabled="btnDisabled" @click="handleUpdate(row)">
+          <el-button
+            data-test="editStock-btn"
+            v-loading="btnLoading"
+            type="primary"
+            size="small"
+            :disabled="btnDisabled"
+            @click="handleUpdate(row)"
+          >
             编辑
           </el-button>
           <!-- <el-button v-loading="btnLoading" size="small" @click="handlePrint(row)">
             打印
           </el-button> -->
-          <el-button v-loading="btnLoading" type="danger" size="small" :disabled="btnDisabled" @click="handleRemove(row.id, $index)">
+          <el-button
+            data-test="delStock-btn"
+            v-loading="btnLoading"
+            type="danger"
+            size="small"
+            :disabled="btnDisabled"
+            @click="handleRemove(row.id, $index)"
+          >
             删除
           </el-button>
         </div>
         <div v-show="row.edit">
-          <el-button v-loading="btnLoading" type="primary" size="small" @click="createOrUpdate(row)">
+          <el-button
+            data-test="confirm-btn"
+            v-loading="btnLoading"
+            type="primary"
+            size="small"
+            @click="createOrUpdate(row, $index)"
+          >
             确认
           </el-button>
-          <el-button v-loading="btnLoading" type="warning" size="small" @click="handleCancel(row)">
+          <el-button
+            data-test="cancel-btn"
+            v-loading="btnLoading"
+            type="warning"
+            size="small"
+            @click="handleCancel(row)"
+          >
             取消
           </el-button>
         </div>
       </template>
     </el-table-column>
   </el-table>
+  <el-dialog v-model="multiCreateDialog" append-to-body>
+    <MultiCreateStock
+      :goods-id="props.goodsId"
+      :dept-id="props.deptId"
+      :size-group="props.sizeGroup"
+      @refresh="refresh"
+    />
+  </el-dialog>
 </template>
 
-<script setup lang="ts">
-import { create, remove, update } from '@/api/stock'
+<script setup lang="ts" name="Stock">
+import { create, remove, update } from '@/api/stock';
+import { useCheckPermission } from '@/hooks/useCheckPermission';
 import { IStock, Stock } from '@/model/Stock';
 import { useDictStore } from '@/store/dict';
 import { useSizeGroupStore } from '@/store/sizeGroup';
-import { MessageBox } from '@element-plus/icons-vue';
-import { ElMessage, ElNotification } from 'element-plus';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { ref } from 'vue';
+import MultiCreateStock from './MultiCreateStock.vue';
 
 const props = defineProps<{
   list: IStock[],
@@ -101,24 +164,23 @@ const props = defineProps<{
   deptId: number,
   sizeGroup: number
 }>()
-const key = ref(0)
-const temp = ref<IStock>(new Stock())
+const temp = ref<IStock>()
 const btnLoading = ref(false)
 const btnDisabled = ref(false)
-function handleCreate({ color = '' }) {
+const emit = defineEmits(['stockUpdated', 'refresh'])
+function handleCreate(color: number) {
   resetTemp(color)
   btnDisabled.value = true
-  key.value++
   props.list.unshift({
-    color: '',
-    size: '',
-    currentStock: 0,
+    color: null,
+    size: null,
+    currentStock: 1,
     goodsId: props.goodsId,
     deptId: props.deptId,
     edit: true
   })
 }
-async function createOrUpdate(row: IStock) {
+async function createOrUpdate(row: IStock, index: number) {
   if (!temp.value.color || !temp.value.size) {
     ElMessage({
       message: '请填写完整',
@@ -137,9 +199,6 @@ async function createOrUpdate(row: IStock) {
   try {
     if (row.id) {
       await update(temp.value)
-      // this.$nextTick(() => {
-      //   this.$emit('stockUpdated', this.list)
-      // })
     } else {
       let res = await create(temp.value)
       row.id = res.data
@@ -149,7 +208,8 @@ async function createOrUpdate(row: IStock) {
     row.currentStock = temp.value.currentStock
     row.edit = false
     btnDisabled.value = false
-    key.value++
+    emit('stockUpdated')
+    // key.value++
   } catch (error) {
     console.error(error)
     throw error
@@ -158,7 +218,7 @@ async function createOrUpdate(row: IStock) {
   }
 }
 function handleRemove(id: number, index: number) {
-  MessageBox.confirm('确定删除?', 'Warning', {
+  ElMessageBox.confirm('确定删除?', 'Warning', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
@@ -170,13 +230,13 @@ function handleRemove(id: number, index: number) {
       type: 'success'
     })
     props.list.splice(index, 1)
+    emit('stockUpdated')
   })
 }
 function handleUpdate(row: IStock) {
   row.edit = !row.edit
   btnDisabled.value = true
-  key.value++
-  temp.value = Object.assign({}, row)
+  temp.value = new Stock(row)
 }
 function handleCancel(row: IStock) {
   if (!row.id) {
@@ -185,7 +245,6 @@ function handleCancel(row: IStock) {
     row.edit = false
   }
   btnDisabled.value = false
-  key.value++
 }
 // querySearch(queryString, cb, list) {
 //   let set = new Set()
@@ -200,17 +259,22 @@ function handleCancel(row: IStock) {
 //   }, [])
 //   cb(results)
 // },
-function resetTemp(color: string) {
+function resetTemp(color: number) {
   temp.value = new Stock({
     color,
-    size: '',
     goodsId: props.goodsId,
     deptId: props.deptId,
-    currentStock: 0
+    currentStock: 1
   })
 }
 const dictStore = useDictStore()
 const sizeGroupStore = useSizeGroupStore()
+const multiCreateDialog = ref(false)
+
+function refresh() {
+  emit('refresh')
+  multiCreateDialog.value = false
+}
 </script>
 
 <style>

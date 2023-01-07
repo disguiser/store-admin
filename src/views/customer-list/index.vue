@@ -1,6 +1,6 @@
 <template>
-  <div class="page-container">
-    <div class="filter-container">
+  <table-container>
+    <template #filter-container>
       <!-- <el-input v-model="listQuery.name" clearable placeholder="" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
       <el-button class="filter-item" type="primary" icon="Search" @click="handleFilter">
         搜索
@@ -8,23 +8,22 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="Edit" @click="handleCreate">
         添加
       </el-button>
-    </div>
-
+    </template>
     <el-table
       v-loading="listLoading"
       :data="list"
       border
       fit
-      style="width: 100%;"
       @sort-change="sortChange"
     >
       <el-table-column type="expand">
         <template #default="{row}">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <!-- <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="详细地址">
               <span>{{ row.addressDetail }}</span>
             </el-form-item>
-          </el-form>
+          </el-form> -->
+          <bill :customer-id="row.id" @debt-change="debtChange(row)" />
         </template>
       </el-table-column>
       <el-table-column label="姓名" prop="name" align="center" sortable />
@@ -37,10 +36,10 @@
       <el-table-column label="欠款" prop="debt" align="center" />
       <el-table-column label="录入时间" prop="createTime" align="center" sortable>
         <template #default="{row}">
-          <span>{{ parseTime(row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
         </template>
       </el-table-column>
-
+  
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template #default="{row, $index}">
           <el-button type="primary" size="small" @click="handleUpdate(row, $index)">
@@ -52,59 +51,62 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <el-dialog :title="dialogStatus" v-model="infoDialogVisible" :close-on-click-modal="false">
-      <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="temp">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" v-focus />
-        </el-form-item>
-        <el-form-item label="手机号码" prop="mobile">
-          <el-input v-model="temp.mobile" />
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-cascader
-            v-model="temp.address"
-            style="width: 100%"
-            :options="addressOptions"
-            :props="{ checkStrictly: true, expandTrigger: 'hover', label: 'name', value: 'code' }"
-          />
-        </el-form-item>
-        <el-form-item label="地址详情" prop="addressDetail">
-          <el-input v-model="temp.addressDetail" />
-        </el-form-item>
-        <el-form-item v-if="dialogStatus === 'update'" label="欠款" prop="debt">
-          <el-input v-model.number="temp.debt" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="infoDialogVisible = false">
-          取消
+    <template #footer>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    </template>
+  </table-container>
+  <el-dialog :title="dialogStatus" v-model="infoDialogVisible" :close-on-click-modal="false" append-to-body>
+    <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="temp">
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="temp.name" v-focus />
+      </el-form-item>
+      <el-form-item label="手机号码" prop="mobile">
+        <el-input v-model="temp.mobile" />
+      </el-form-item>
+      <el-form-item label="地址" prop="address">
+        <el-cascader
+          v-model="temp.address"
+          style="width: 100%"
+          :options="addressOptions"
+          :props="{ checkStrictly: true, expandTrigger: 'hover', label: 'name', value: 'code' }"
+        />
+      </el-form-item>
+      <el-form-item label="地址详情" prop="addressDetail">
+        <el-input v-model="temp.addressDetail" />
+      </el-form-item>
+      <el-form-item v-if="dialogStatus === 'update'" label="欠款" prop="debt">
+        <el-input v-model="temp.debt" type="number" />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="infoDialogVisible = false">
+        取消
+      </el-button>
+      <template v-if="dialogStatus==='新建'">
+        <el-button type="primary" :loading="btnLoading" @click="createData(formRef)">
+          确认
         </el-button>
-        <template v-if="dialogStatus==='新建'">
-          <el-button type="primary" :loading="btnLoading" @click="createData(formRef)">
-            确认
-          </el-button>
-        </template>
-        <template v-else>
-          <el-button type="primary" :loading="btnLoading" @click="updateData(formRef)">
-            确认
-          </el-button>
-        </template>
-      </div>
-    </el-dialog>
-  </div>
+      </template>
+      <template v-else>
+        <el-button type="primary" :loading="btnLoading" @click="updateData(formRef)">
+          确认
+        </el-button>
+      </template>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { findByPage, update, create, remove } from '@/api/customer'
+import TableContainer from '@/components/TableContainer.vue'
+import { findByPage, findOne, update, create, remove } from '@/api/customer'
 import Pagination from '@/components/Pagination/index.vue'
 import { addressOptions } from '@/utils/locations'
 import { reactive, ref } from 'vue';
-import { addressFilter, parseTime } from '@/utils/index'
+import { addressFilter } from '@/utils/index'
+import dayjs from 'dayjs'
 import { Customer, ICustomer } from '@/model/Customer'
 import { ElMessageBox, ElNotification, FormInstance, FormRules } from 'element-plus';
+import Bill from './Bill.vue'
 
 const list = ref<ICustomer[]>(null)
 const total = ref(0)
@@ -243,6 +245,10 @@ function handleRemove(row: ICustomer, index: number) {
       btnLoading.value = false
     }
   })
+}
+async function debtChange(row: ICustomer) {
+  const { data } = await findOne(row.id)
+  row.debt = data.debt
 }
 </script>
 

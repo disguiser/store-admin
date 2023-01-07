@@ -1,46 +1,22 @@
 import { findAll } from '@/api/dept'
 import { defineStore } from 'pinia'
-import { Dept } from '@/model/Dept'
+import { Dept, IDept } from '@/model/Dept'
 import { computed, ref } from 'vue'
-// export const useDeptStore = defineStore({
-//   id: 'dept',
-//   state: () => {
-//     return {
-//       dept: new Array(),
-//     }
-//   },
-//   actions: {
-//     async fetchList() {
-//       const res = await findAll({})
-//       this.dept = res.data
-//     }
-//   },
-//   getters: {
-//     deptObj: (state) => {
-//       return state.dept.reduce((a, b) => {
-//         a[b.id] = b.name
-//         return a
-//       }, {})
-//     }
-//   },
-//   persist: true
-// })
 
 export const useDeptStore = defineStore(Dept.name, () => {
-  const dept = ref([])
-  const deptObj = computed(() => {
+  const dept = ref<IDept[]>([])
+  const deptMap = computed(() => {
     return dept.value.reduce((a, b) => {
-      a[b.id] = b.name
+      a.set(b.id, b.name)
       return a
-    }, {})
+    }, new Map<number, string>())
   })
   async function fetchList() {
     const res = await findAll({})
     dept.value = res.data
   }
 
-  const persist = true
-  return { dept, deptObj, fetchList, persist }
+  return { dept, deptMap, fetchList }
 }, {
   persist: true,
 })

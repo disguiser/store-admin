@@ -1,304 +1,252 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.name" clearable placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="listQuery.phone" clearable placeholder="手机号码" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+  <table-container>
+    <template #filter-container>
+      <el-input v-model="listQuery.name" clearable placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+      <el-input v-model="listQuery.phone" clearable placeholder="手机号码" style="width: 200px;" class="filter-item" @keyup.enter="handleFilter" />
+      <el-button class="filter-item" type="primary" icon="Search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="Edit" @click="handleCreate(formRef)">
         添加
       </el-button>
-    </div>
-
+    </template>
     <el-table
-      :key="key"
       v-loading="listLoading"
       :data="list"
       border
       fit
-      style="width: 100%;"
+      style="width: 100%"
       @sort-change="sortChange"
     >
       <el-table-column label="姓名" prop="name" align="center" />
-      <el-table-column label="手机号码" prop="phone" align="center" width="110" />
+      <el-table-column label="手机号码" prop="phone" align="center" width="115" />
       <el-table-column label="生日" prop="birthday" align="center" width="100" />
       <el-table-column label="当前余额" prop="balance" align="center" />
       <el-table-column label="生日折扣(%)" prop="birthDiscount" align="center" width="80" />
       <el-table-column label="终身折扣(%)" prop="vipDiscount" align="center" width="80" />
       <el-table-column label="注册时间" prop="createTime" align="center" width="140">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        <template #default="{row}">
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
-        <template slot-scope="{row, $index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+  
+      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
+        <template #default="{row, $index}">
+          <el-button type="primary" size="small" @click="handleUpdate(row, $index, formRef)">
             编辑
           </el-button>
-          <el-button size="mini" type="danger" @click="handleRemove(row, $index)">
+          <el-button size="small" type="danger" @click="handleRemove(row, $index)">
             删除
           </el-button>
-          <el-button size="mini" @click="handleShowCharge(row)">
+          <el-button size="small" @click="handleShowCharge(row)">
             充值
           </el-button>
-          <el-button size="mini" @click="handleShowConsume(row)">
+          <el-button size="small" @click="handleShowConsume(row)">
             消费
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="infoDialogVisible" :close-on-click-modal="false">
-      <el-form ref="dataForm" :rules="rules" label-position="right" label-width="100px" :model="temp">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" v-focus />
-        </el-form-item>
-        <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="temp.phone" />
-        </el-form-item>
-        <el-form-item label="生日" prop="birthday">
-          <el-date-picker v-model="temp.birthday" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" />
-        </el-form-item>
-        <el-form-item label="生日折扣(%)" prop="birthDiscount">
-          <el-slider v-model="temp.birthDiscount" :step="5" show-stops show-input />
-        </el-form-item>
-        <el-form-item label="终身折扣(%)" prop="vipDiscount">
-          <el-slider v-model="temp.vipDiscount" :step="5" show-stops show-input />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="infoDialogVisible = false">
-          取消
+    <template #footer>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    </template>
+  </table-container>
+  <el-dialog
+    :title="dialogStatus"
+    v-model="infoDialogVisible"
+    :close-on-click-modal="false"
+    append-to-body
+  >
+    <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="temp">
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="temp.name" v-focus />
+      </el-form-item>
+      <el-form-item label="手机号码" prop="phone">
+        <el-input v-model="temp.phone" />
+      </el-form-item>
+      <el-form-item label="生日" prop="birthday">
+        <el-date-picker v-model="temp.birthday" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" />
+      </el-form-item>
+      <el-form-item label="生日折扣(%)" prop="birthDiscount">
+        <el-slider v-model="temp.birthDiscount" :step="5" show-stops show-input />
+      </el-form-item>
+      <el-form-item label="终身折扣(%)" prop="vipDiscount">
+        <el-slider v-model="temp.vipDiscount" :step="5" show-stops show-input />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="infoDialogVisible = false">
+        取消
+      </el-button>
+      <template v-if="dialogStatus==='create'">
+        <el-button type="primary" :loading="btnLoading" @click="createData(formRef)">
+          确认
         </el-button>
-        <template v-if="dialogStatus==='create'">
-          <el-button type="primary" :loading="btnLoading" @click="createData()">
-            确认
-          </el-button>
-        </template>
-        <template v-else>
-          <el-button type="primary" :loading="btnLoading" @click="updateData()">
-            确认
-          </el-button>
-        </template>
-      </div>
-    </el-dialog>
+      </template>
+      <template v-else>
+        <el-button type="primary" :loading="btnLoading" @click="updateData(formRef)">
+          确认
+        </el-button>
+      </template>
+    </div>
+  </el-dialog>
 
-    <el-dialog title="充值详情" :visible.sync="chargeDialogVisible" :close-on-click-modal="false">
-      <charge-record-list v-if="chargeDialogVisible" :vip-id="currentVipId" @refresh="refresh" />
-    </el-dialog>
+  <el-dialog title="充值详情" v-model="chargeDialogVisible" :close-on-click-modal="false" append-to-body>
+    <charge-record-list v-if="chargeDialogVisible" :vip-id="currentVipId" @refresh="getList" />
+  </el-dialog>
 
-    <el-dialog title="消费详情" :visible.sync="consumeDialogVisible" :close-on-click-modal="false">
-      <consume-record-list v-if="consumeDialogVisible" :vip-id="currentVipId" @refresh="refresh" />
-    </el-dialog>
-  </div>
+  <el-dialog title="消费详情" v-model="consumeDialogVisible" :close-on-click-modal="false" append-to-body>
+    <consume-record-list v-if="consumeDialogVisible" :vip-id="currentVipId" @refresh="getList" />
+  </el-dialog>
 </template>
 
-<script>
-import { findByPage, update, create, remove } from '@/api/vip'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-// import { mapGetters } from 'vuex'
-import ChargeRecordList from '@/views/charge-record-list'
-import ConsumeRecordList from '@/views/consume-record-list'
-// import { parseTime } from '@/utils'
+<script setup lang="ts" name="VipList">
+import TableContainer from '@/components/TableContainer.vue'
+import { create, findByPage, remove, update } from '@/api/vip';
+import Pagination from '@/components/Pagination/index.vue'; // secondary package based on el-pagination
+import { IVip, Vip } from '@/model/Vip';
+import dayjs from 'dayjs';
+import ChargeRecordList from '@/views/charge-record-list/index.vue';
+import ConsumeRecordList from '@/views/consume-record-list/index.vue';
+import { ElMessageBox, ElNotification, FormInstance, FormRules } from 'element-plus';
+import { reactive, ref } from 'vue';
 
-export default {
-  name: 'VipList',
-  components: { Pagination, ChargeRecordList, ConsumeRecordList },
-  directives: { focus },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        Enabled: 'success',
-        Disabled: 'info'
-      }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      list: null,
-      key: 0,
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        name: undefined,
-        phone: undefined,
-        sort: undefined
-      },
-      temp: null,
-      infoDialogVisible: false,
-      chargeDialogVisible: false,
-      consumeDialogVisible: false,
-      currentVipId: '',
-      btnLoading: false,
-      dialogStatus: '',
-      textMap: {
-        update: '编辑',
-        create: '新建'
-      },
-      rules: {
-        name: [{ required: true, message: '必输项', trigger: 'blur' }],
-        phone: [
-          { required: true, message: '必输项', trigger: 'blur' },
-          { type: 'string', pattern: /^(13[0-9]|14[5-9]|15[0-3,5-9]|16[2,5,6,7]|17[0-8]|18[0-9]|19[1,3,5,8,9])\d{8}$/, message: '格式错误', trigger: 'blur' }
-        ],
-        birthday: [{ required: true, message: '必输项', trigger: 'blur' }],
-        birthDiscount: [{ required: true, message: '必输项', trigger: 'blur' }],
-        vipDiscount: [{ required: true, message: '必输项', trigger: 'blur' }]
-      }
-    }
-  },
-  computed: {},
-  created() {
-    this.resetTemp()
-    this.getList()
-  },
-  methods: {
-    getList() {
-      this.listLoading = true
-      findByPage(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
-    },
-    refresh() {
-      this.getList()
-    },
-    handleModifyStatus(row, status) {
-      let _row = Object.assign({}, row)
-      // let _row = _.cloneDeep(row)
-      _row.status = status
-      update(_row).then(() => {
-        this.$message({
-          message: '操作成功',
-          type: 'success'
-        })
-        row.status = status
-      })
-    },
-    sortChange(data) {
-      const { prop, order } = data
-      if (order === 'ascending') {
-        this.listQuery.sort = prop
-      } else if (order === 'descending') {
-        this.listQuery.sort = '-' + prop
-      } else {
-        this.listQuery.sort = ''
-      }
-      this.handleFilter()
-    },
-    resetTemp() {
-      this.temp = {
-        name: '',
-        phone: '',
-        birthday: '',
-        certNo: '',
-        birthDiscount: 70,
-        vipDiscount: 90
-      }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.infoDialogVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.btnLoading = true
-          create(this.temp).then(res => {
-            this.temp.id = res.data
-            this.temp.balance = 0
-            this.temp.createTime = new Date()
-            this.list.unshift(this.temp)
-            this.infoDialogVisible = false
-            this.btnLoading = false
-            this.$notify({
-              title: '成功',
-              message: '新建成功',
-              type: 'success',
-              duration: 2000
-            })
-          }).catch(err => {
-            console.error(err)
-            this.btnLoading = false
-          })
-        }
-      })
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.infoDialogVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.btnLoading = true
-          // update(this.temp).then(() => {
-          //   for (const v of this.list) {
-          //     if (v.id === vip.id) {
-          //       const index = this.list.indexOf(v)
-          //       this.list.splice(index, 1, vip)
-          //       this.key ++
-          //       break
-          //     }
-          //   }
-          //   this.infoDialogVisible = false
-          //   this.btnLoading = false
-          //   this.$notify({
-          //     title: '成功',
-          //     message: '更新成功',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          // })
-        }
-      })
-    },
-    handleRemove(row, index) {
-      this.$confirm('确定删除?', 'Warning', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        remove([row.id]).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.list.splice(index, 1)
-        })
-      })
-    },
-    handleShowCharge(vip) {
-      this.currentVipId = vip.id
-      this.chargeDialogVisible = true
-    },
-    handleShowConsume(vip) {
-      this.currentVipId = vip.id
-      this.consumeDialogVisible = true
-    }
+  const list = ref<IVip[]>([])
+  const total = ref<number>(0)
+  const listLoading = ref(true)
+  const listQuery = reactive({
+    page: 1,
+    limit: 20,
+    name: undefined,
+    phone: undefined,
+    sort: undefined
+  })
+  const temp = ref<IVip>(new Vip())
+  const tempIndex = ref<number>()
+  const infoDialogVisible = ref(false)
+  const chargeDialogVisible = ref(false)
+  const consumeDialogVisible = ref(false)
+  const currentVipId = ref()
+  const btnLoading = ref(false)
+  const dialogStatus = ref('')
+  const rules: FormRules = {
+    name: [{ required: true, message: '必输项', trigger: 'blur' }],
+    phone: [
+      { required: true, message: '必输项', trigger: 'blur' },
+      { type: 'string', pattern: /^(13[0-9]|14[5-9]|15[0-3,5-9]|16[2,5,6,7]|17[0-8]|18[0-9]|19[1,3,5,8,9])\d{8}$/, message: '格式错误', trigger: 'blur' }
+    ],
+    birthday: [{ required: true, message: '必输项', trigger: 'blur' }],
+    birthDiscount: [{ required: true, message: '必输项', trigger: 'blur' }],
+    vipDiscount: [{ required: true, message: '必输项', trigger: 'blur' }]
   }
+  const formRef = ref<FormInstance>()
+  // const { proxy } = getCurrentInstance();
+  // const getNewData =  () => {
+  //   proxy.$refs['uploadRef'].clearImg();
+  // }
+  getList()
+  async function getList() {
+    listLoading.value = true
+    const response = await findByPage(listQuery)
+    list.value = response.data.items
+    total.value = response.data.total
+    listLoading.value = false
+  }
+  function handleFilter() {
+    listQuery.page = 1
+    getList()
+  }
+  function sortChange(data: any) {
+    const { prop, order } = data
+    if (order === 'ascending') {
+      listQuery.sort = prop
+    } else if (order === 'descending') {
+      listQuery.sort = '-' + prop
+    } else {
+      listQuery.sort = ''
+    }
+    handleFilter()
+  }
+  function handleCreate(formEl: FormInstance) {
+    // console.log('handleCreate')
+    temp.value = new Vip()
+    dialogStatus.value = '新建'
+    infoDialogVisible.value = true
+    // console.log(formRef)
+    formEl?.resetFields()
+  }
+  function createData(formEl: FormInstance) {
+    formEl.validate(async (valid) => {
+    if (valid) {
+      btnLoading.value = true
+      try {
+        const res = await create(temp.value)
+        temp.value.id = res.data
+        temp.value.balance = 0
+        temp.value.createTime = new Date()
+        list.value.unshift(temp.value)
+        infoDialogVisible.value = false
+        btnLoading.value = false
+        ElNotification({
+          title: '成功',
+          message: '新建成功',
+          type: 'success',
+          duration: 2000
+        })
+      } catch (error) {
+        console.error(error)
+        btnLoading.value = false
+      }
+    }
+  })
+}
+function handleUpdate(row: IVip, index: number, formEl: FormInstance) {
+  temp.value = new Vip(row)
+  tempIndex.value = index
+  dialogStatus.value = '更新'
+  infoDialogVisible.value = true
+  formEl?.resetFields()
+}
+function updateData(formEl: FormInstance) {
+  formEl.validate(async(valid) => {
+    if (valid) {
+      btnLoading.value = true
+      await update(temp.value)
+      list.value.splice(tempIndex.value, 1, temp.value)
+      infoDialogVisible.value = false
+      btnLoading.value = false
+      ElNotification({
+        title: '成功',
+        message: '更新成功',
+        type: 'success',
+        duration: 2000
+      })
+    }
+  })
+}
+function handleRemove(row: IVip, index: number) {
+  ElMessageBox.confirm('确定删除?', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    await remove([row.id])
+    ElNotification({
+      title: '成功',
+      message: '删除成功',
+      type: 'success',
+      duration: 2000
+    })
+    list.value.splice(index, 1)
+  })
+}
+function handleShowCharge(vip: IVip) {
+  currentVipId.value = vip.id
+  chargeDialogVisible.value = true
+}
+function handleShowConsume(vip: IVip) {
+  currentVipId.value = vip.id
+  consumeDialogVisible.value = true
 }
 </script>
 

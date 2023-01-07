@@ -1,0 +1,15 @@
+.tag {
+  border: 1px solid black;
+  border-radius: 10px;
+  position: relative;
+  user-select: none;
+  overflow: hidden;
+  .item {
+    white-space: nowrap;
+    position: absolute;
+    border: 3px dashed white;
+  }
+  .highlight {
+    border-color: black;
+  }
+}

@@ -18,6 +18,7 @@ service.interceptors.request.use(
     if (userStore.token) {
       config.headers['Authorization'] = 'Bearer ' + userStore.token
     }
+    // config.data = unref(config.data)
     return config
   },
   error => {

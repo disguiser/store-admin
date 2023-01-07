@@ -2,7 +2,7 @@
   <section class="app-main">
     <router-view :key="key" v-slot="{Component}">
       <keep-alive :include="cachedViews">
-        <component :is="Component" />
+        <component :is="Component" :key="key" />
       </keep-alive>
     </router-view>
   </section>
@@ -28,12 +28,6 @@ const key = computed(() => route.path)
   overflow: auto;
 }
 
-.hasTagsView {
-  .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    height: calc(100vh - 84px);
-  }
-}
 </style>
 
 <style lang="scss">

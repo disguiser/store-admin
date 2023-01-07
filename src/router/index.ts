@@ -35,6 +35,7 @@ import Layout from '@/layout/index.vue'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
 export const constantRoutes = [
   {
     path: '/redirect',
@@ -57,11 +58,11 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404.vue'),
     hidden: true
   },
-  {
-    path: '/401',
-    component: () => import('@/views/error-page/401.vue'),
-    hidden: true
-  },
+  // {
+  //   path: '/401',
+  //   component: () => import('@/views/error-page/401.vue'),
+  //   hidden: true
+  // },
   {
     path: '/',
     component: Layout,
@@ -88,13 +89,8 @@ export const constantRoutes = [
         component: () => import('@/views/profile/index.vue'),
       }
     ]
-  },
-  // {
-  //   path: '/test',
-  //   component: () => import('@/components/Test.vue'),
-  //   hidden: true
-  // }
-]
+  }
+] as MyRouteRecordRaw[]
 
 /**
  * asyncRoutes
@@ -174,24 +170,30 @@ export const asyncRoutes = [
         component: () => import('@/views/customer-list/index.vue'),
         name: 'CustomerList',
         meta: { title: '客户', roles: ['Admin', 'Waiter', 'Boss'] }
-      }
+      },
+      {
+        path: 'return-list',
+        component: () => import('@/views/order/wholesale/ReturnList.vue'),
+        name: 'ReturnList',
+        meta: { title: '退货', roles: ['Admin', 'Waiter', 'Boss'] }
+      },
     ]
   },
-  // {
-  //   path: '/wholesale/print',
-  //   component: () => import('@/views/order/wholesale/Print'),
-  //   meta: { title: '订货单打印', activeMenu: '/order/wholesale/print', roles: ['Admin', 'Waiter'] },
-  //   hidden: true
-  // },
+  {
+    path: '/wholesale/print',
+    component: () => import('@/views/order/wholesale/Print.vue'),
+    meta: { title: '订货单打印', activeMenu: '/order/wholesale/print', roles: ['Admin', 'Waiter'] },
+    hidden: true
+  },
   {
     path: '/retail',
     component: Layout,
-    meta: { title: '零售', icon: 'tab', roles: ['Admin', 'Waiter', 'Boss'] },
+    meta: { title: '零售', icon: 'ic:sharp-point-of-sale', roles: ['Admin', 'Waiter', 'Boss'] },
     children: [
       {
         path: 'test',
         component: () => import('@/views/order/retail/BarcodeTable.vue'),
-        name: 'Sell',
+        name: 'Test',
         meta: { title: '测试扫码', roles: ['Admin'] }
       },
       {
@@ -201,98 +203,102 @@ export const asyncRoutes = [
         meta: { title: '零售', roles: ['Admin', 'Waiter', 'Boss'] }
       },
       {
-        path: '/vip-list',
+        path: 'vip-list',
         component: () => import('@/views/vip-list/index.vue'),
         name: 'VipList',
         meta: { title: '会员列表', roles: ['Admin'] }
       }
     ]
   },
-  // {
-  //   path: '/retail/print',
-  //   component: () => import('@/views/order/retail/Print'),
-  //   meta: { title: '小票打印', activeMenu: '/order/retail/print', roles: ['Admin', 'Waiter'] },
-  //   hidden: true
-  // },
-  // {
-  //   path: '/size-group',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/size-group/index'),
-  //       name: 'SizeGroup',
-  //       meta: { title: '尺码组', icon: 'tab', roles: ['Admin', 'Boss'] }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/retail/print',
+    component: () => import('@/views/order/retail/Print.vue'),
+    meta: { title: '小票打印', activeMenu: '/order/retail/print', roles: ['Admin', 'Waiter'] },
+    hidden: true
+  },
+  {
+    path: '/size-group',
+    component: Layout,
+    meta: { title: '尺码组', icon: 'bx:font-size', roles: ['Admin', 'Boss'] },
+    redirect: '/size-group/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/size-group/index.vue'),
+        name: 'SizeGroup',
+      }
+    ]
+  },
   {
     path: '/size-group-list',
     component: Layout,
+    meta: { title: '尺码组table视图', icon: 'bx:font-size', roles: ['Admin'] },
+    redirect: '/size-group-list/index',
     children: [
       {
         path: 'index',
         component: () => import('@/views/size-group-list/index.vue'),
         name: 'SizeGroupList',
-        meta: { title: '尺码组table视图', icon: 'tab', roles: ['Admin'] }
       }
     ]
   },
   {
     path: '/user-list',
     component: Layout,
+    meta: { title: '员工管理', icon: 'clarity:employee-group-line', roles: ['Admin'] },
+    redirect: '/user-list/index',
     children: [
       {
         path: 'index',
         component: () => import('@/views/user-list/index.vue'),
         name: 'UserList',
-        meta: { title: '员工管理', icon: 'tab', roles: ['Admin'] }
       }
     ]
   },
   {
     path: '/dict-list',
     component: Layout,
+    meta: { title: '字典表', icon: 'fluent-mdl2:dictionary', roles: ['Admin', 'Boss'] },
+    redirect: '/dict-list/index',
     children: [
       {
         path: 'index',
         component: () => import('@/views/dict-list/index.vue'),
         name: 'DictList',
-        meta: { title: '字典表', icon: 'tab', roles: ['Admin', 'Boss'] }
       }
     ]
   },
-  // {
-  //   path: '/print',
-  //   component: Layout,
-  //   meta: { title: '打印', icon: 'tab', roles: ['Admin', 'Boss'] },
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: 'list',
-  //       name: 'TemplateList',
-  //       component: () => import('@/views/print/TSCDLL/List'),
-  //       meta: { title: '打印模板', roles: ['Admin', 'Boss'] }
-  //     },
-  //     {
-  //       path: 'edit',
-  //       name: 'TemplateEdit',
-  //       component: () => import('@/views/print/TSCDLL/Edit'),
-  //       hidden: true,
-  //       meta: { title: '模板编辑', noCache: true, activeMenu: '/print/list', roles: ['Admin', 'Boss'] }
-  //     },
-  //     {
-  //       path: 'Argox',
-  //       name: '立象',
-  //       component: () => import('@/views/print/argox'),
-  //       meta: { title: '立象', roles: ['Admin'] }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/print',
+    component: Layout,
+    meta: { title: '打印', icon: 'clarity:factory-line', roles: ['Admin', 'Boss'] },
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        name: 'TemplateList',
+        component: () => import('@/views/print/TSCDLL/List.vue'),
+        meta: { title: '打印模板', roles: ['Admin', 'Boss'] }
+      },
+      {
+        path: 'edit',
+        name: 'TemplateEdit',
+        component: () => import('@/views/print/TSCDLL/Edit.vue'),
+        hidden: true,
+        meta: { title: '模板编辑', noCache: true, activeMenu: '/print/list', roles: ['Admin', 'Boss'] }
+      },
+      {
+        path: 'Argox',
+        name: '立象',
+        component: () => import('@/views/print/argox.vue'),
+        meta: { title: '立象', roles: ['Admin'] }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '/:pathMatch(.*)*', redirect: '/404', hidden: true }
-]
+] as MyRouteRecordRaw[]
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -304,12 +310,18 @@ export default router
 
 type Meta = {
   title: string,
-  icon: string,
-  roles: string[]
+  icon?: string,
+  roles?: string[],
+  noCache?: boolean
+}
+
+export type RouteChild = RouteRecordRaw & {
+  hidden?: boolean,
+  meta?: Meta
 }
 
 export type MyRouteRecordRaw = RouteRecordRaw & {
   hidden?: boolean,
-  meta: Meta,
-  children: MyRouteRecordRaw[]
+  meta?: Meta,
+  children?: RouteChild[]
 }

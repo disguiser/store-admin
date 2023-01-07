@@ -6,7 +6,7 @@
       <div class="section3">
         <label>订单编号：{{ order.id }}</label>
         <label>下单时间：</label>
-        <span>{{ order.orderTime | timeFilter }}</span>
+        <span>{{ parseTime(order.orderTime) }}</span>
       </div>
       <span>**************************</span>
       <div class="section4">
@@ -18,7 +18,7 @@
               <div>金额</div>
             </div>
             <div v-for="(e, i) in list" :key="i">
-              <div>{{ e.name }} {{ colorObj[e.color] }} {{ sizeObj[e.size] }}</div>
+              <div>{{ e.name }} {{ colorMap.get(e.color) }} {{ sizeMap.get(e.size) }}</div>
               <div class="grid">
                 <div></div>
                 <div>{{ e.amount }}</div>
@@ -44,23 +44,31 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { getDetailByOrderId } from '@/api/order'
-import orderPrint from '../orderPrint'
-export default {
-  mixins: [orderPrint],
-  methods: {
-    async dealData() {
-      this.loading = true
-      let res = await getDetailByOrderId(this.order.id)
-      this.list = res.data.items
-      this.loading = false
-      this.$nextTick(() => {
-        window.print()
-        window.close()
-      })
-    }
-  }
+import { nextTick } from 'vue';
+import { parseTime } from '@/utils/index'
+import { useOrderPrint } from '../useOrderPrint'
+import { ref } from 'vue';
+import { OrderWithDetail } from '@/model/Order';
+
+const {
+  sizeMap,
+  colorMap,
+  userName,
+  loading,
+  order
+} = useOrderPrint()
+const list = ref<OrderWithDetail[]>()
+dealData()
+async function dealData() {
+  const res = await getDetailByOrderId(order.value.id)
+  list.value = res.data.items
+  loading.value = false
+  nextTick(() => {
+    window.print()
+    window.close()
+  })
 }
 </script>
 
@@ -90,8 +98,6 @@ ul {
 .print_container {
   width: 180px;
   font-size: 15px;
-}
-.section1 {
 }
 .section2 label {
   display: block;

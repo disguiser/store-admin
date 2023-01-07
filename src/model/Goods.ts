@@ -19,7 +19,7 @@ export class Goods implements IGoods {
   sku: string = ''
   preSku: string = ''
   name: string = ''
-  sizeGroup: number = 0
+  sizeGroup: number
   salePrice: number = 0
   costPrice: number = 0
   imgUrl: string = ''

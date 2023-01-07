@@ -1,17 +1,13 @@
 <template>
-  <div class="container">
-    <div class="left">
-      <sidebar />
+  <div class="left">
+    <sidebar />
+  </div>
+  <div class="right" :style="{ 'margin-left': marginLeft + 'px' }">
+    <div class="header">
+      <navbar />
+      <tags-view />
     </div>
-    <div class="right" :style="{ 'margin-left': marginLeft + 'px' }">
-      <div class="header">
-        <navbar />
-        <tags-view />
-      </div>
-      <div class="main">
-        <app-main />
-      </div>
-    </div>
+    <app-main style="flex:1" />
   </div>
 </template>
 
@@ -34,19 +30,13 @@ const versionStore = useVersionStore()
 await versionStore.checkVersion()
 </script>
 <style lang="scss" scoped>
-  .container {
-    width: 100%;
+  .left {
+    position: fixed;
+  }
+  .right {
     height: 100%;
-    .left {
-      position: fixed;
-    }
-    .right {
-      margin-left: 200px;
-      display: flex;
-      flex-direction: column;
-      .main {
-        flex: 1;
-      }
-    }
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
   }
 </style>

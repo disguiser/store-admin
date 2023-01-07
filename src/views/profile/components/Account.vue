@@ -19,7 +19,7 @@
       <my-input v-model="temp.newPassword2" type="password" trim />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit(formRef)">更新</el-button>
+      <el-button type="primary" @click="submit()">更新</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -29,18 +29,11 @@ import { checkUnique } from '@/api/user'
 import { useUserStore } from '@/store/user'
 import { ref } from 'vue'
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
+import { AccountInfo } from '@/model/User'
 
-type TempType = {
-  id: string | undefined,
-  userName: string | undefined,
-  accountName: string | undefined,
-  oldPassword: string | undefined,
-  newPassword: string | undefined,
-  newPassword2: string | undefined
-}
-const formRef = ref<FormInstance | null>(null)
+const formRef = ref<FormInstance>()
 
-const temp = ref<TempType>({
+const temp = ref<AccountInfo>({
   id: undefined,
   userName: undefined,
   accountName: undefined,
@@ -75,9 +68,6 @@ const rules: FormRules = {
       if (!value) {
         callback(new Error('请输入新密码'))
       } else {
-        if (temp.value.oldPassword) {
-          formRef.value?.clearValidate()
-        }
         callback()
       }
     },
@@ -97,9 +87,9 @@ const rules: FormRules = {
   }],
   oldPassword: [{ required: true, message: '未填写', trigger: 'blur' }]
 }
-async function submit(formEl: FormInstance | undefined) {
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
+async function submit() {
+  console.log(formRef)
+  await formRef.value.validate(async (valid, fields) => {
     if (valid) {
       loading.value = true
       try {
