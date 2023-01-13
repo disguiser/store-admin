@@ -8,7 +8,7 @@
   >
     <el-input
       :model-value="inputValue"
-      :placeholder="placeholder"
+      :placeholder="props.placeholder"
       @focus="dropdown1.handleOpen()"
       @click="dropdown1.handleOpen()"
       @update:model-value="valueChange"
@@ -28,7 +28,7 @@
   </el-dropdown>
   <div>
     <el-tag
-      v-for="item in chosen"
+      v-for="item in props.chosen"
       :key="item"
       type=""
       class="item-tag"

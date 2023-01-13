@@ -26,7 +26,7 @@
             <el-button size="small" style="margin-right: 5px" @click="element.hidden = !element.hidden">
               <svg-icon :icon-class="element.hidden ? 'eye' : 'eye-open'" />
             </el-button>
-            <el-button size="small" type="danger" icon="Delete" style="margin-left:0" @click="data.splice(index, 1)" />
+            <el-button size="small" type="danger" icon="Delete" style="margin-left:0" @click="props.data.splice(index, 1)" />
           </el-col>
         </el-row>
       </template>

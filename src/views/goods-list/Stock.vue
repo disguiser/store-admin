@@ -1,6 +1,6 @@
 <template>
   <el-table
-    :data="list"
+    :data="props.list"
     style="width: 100%"
   >
     <el-table-column label="颜色" prop="color" sortable>
@@ -42,7 +42,7 @@
           data-test="size"
         >
           <el-option
-            v-for="item in sizeGroupStore.sizeGroupMap.get(sizeGroup)"
+            v-for="item in sizeGroupStore.sizeGroupMap.get(props.sizeGroup)"
             :key="item"
             :value="item"
             :label="dictStore.sizeMap.get(item)"

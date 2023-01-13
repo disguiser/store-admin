@@ -1,6 +1,6 @@
 <template>
   <draggable
-    v-model="dynamicTags"
+    v-model="props.dynamicTags"
     item-key="id"
   >
     <template #item="{element}">

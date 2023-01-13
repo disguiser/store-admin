@@ -44,14 +44,25 @@
         </template>
       </el-table-column>
   
-      <el-table-column label="操作" align="center" width="120" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="125" class-name="small-padding fixed-width">
         <template #default="{row, $index}">
           <el-button type="primary" size="small" @click="goPrint(row)">
             打印
           </el-button>
-          <el-button size="small" type="danger" @click="handleRemove(row, $index)">
-            删除
-          </el-button>
+          <el-popconfirm
+            confirm-button-text="确认"
+            cancel-button-text="取消"
+            icon="el-icon-info"
+            icon-color="red"
+            title="确认删除?"
+            @confirm="handleRemove(row, $index)"
+          >
+            <template #reference>
+              <el-button size="small" type="danger">
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -105,14 +116,14 @@
 <script setup lang="ts">
 import TableContainer from '@/components/TableContainer.vue'
 import { findByPage as findOrders } from '@/api/order'
-import Pagination from '@/components/Pagination/index.vue'; // secondary package based on el-pagination
+import Pagination from '@/components/Pagination/index.vue' // secondary package based on el-pagination
 import { CategoryEnum, Order } from '@/model/Order'
 import { reactive } from 'vue'
 import Detail from '../Detail.vue'
 import GoodsTable from '../GoodsTable.vue'
 import dayjs from 'dayjs'
 import { useHook } from '../hook'
-import { useCheckPermission } from '@/hooks/useCheckPermission';
+import { useCheckPermission } from '@/hooks/useCheckPermission'
 const {
   list,
   total,
@@ -159,13 +170,16 @@ function handleFilter() {
 async function getList() {
   listLoading.value = true
   let data = {}
-  if (dateRange.value.length === 2) {
+  if (dateRange.value && dateRange.value[0] && dateRange.value[1]) {
     data = {
       startDate: dateRange.value[0].getTime(),
       endDate: dateRange.value[1].getTime(),
     }
   }
-  const response = await findOrders(listQuery, data)
+  const response = await findOrders({
+    ...listQuery,
+    ...data
+  })
   list.value = response.data.items
   total.value = response.data.total
   listLoading.value = false

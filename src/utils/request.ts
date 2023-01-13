@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/user'
+import qs from 'qs'
 // import { storeToRefs } from 'pinia'
 // const { token } = storeToRefs(useUserStore())
 
@@ -19,6 +20,11 @@ service.interceptors.request.use(
       config.headers['Authorization'] = 'Bearer ' + userStore.token
     }
     // config.data = unref(config.data)
+    if (config.method === 'get') {
+      config.paramsSerializer = (params: any) => {
+        return qs.stringify(params, { arrayFormat: 'repeat' })
+      }
+    }
     return config
   },
   error => {

@@ -18,7 +18,7 @@ export function useHook() {
   const btnLoading = ref(false)
   const temp = ref<IOrder>()
   const dialogVisible = ref(false)
-  const dateRange = ref<[Date, Date]>([null, null])
+  const dateRange = ref<[Date, Date]>(null)
   const pickerOptions = [{
     text: '最近一周',
     value: () => {
@@ -73,7 +73,7 @@ export function useHook() {
   }
   async function createData() {
     const arr: string[] = []
-    for (let e of temp.value.goodsList) {
+    for (let e of temp.value.itemList) {
       // 必填
       if (!e.preSku || !e.color || !e.size || !e.subtotalMoney || !e.amount) {
         ElMessageBox.alert('内容不能为空!')

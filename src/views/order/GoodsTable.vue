@@ -14,7 +14,7 @@
         </th>
       </thead>
       <tbody>
-        <tr v-for="(e, i) in temp.goodsList" :key="i">
+        <tr v-for="(e, i) in temp.itemList" :key="i">
           <td>
             <remote-sku v-model="e.preSku" @change="skuChange($event, i)" />
           </td>
@@ -53,10 +53,13 @@
       </tbody>
     </table>
     <div class="count-div">
-      <count-up :start-val="0" :end-val="temp.total" :duration="1000" :decimals="0" separator="," suffix=" 件" :autoplay="true" />
-      <count-up :start-val="0" :end-val="temp.totalMoney" :duration="1000" :decimals="0" separator="," prefix="¥ " suffix=" 元" :autoplay="true" />
-      <!-- <span>{{ temp.total }} 件</span>
-      <span>¥{{ temp.totalMoney }} 元</span> -->
+      <count-up :end-val="temp.total">
+        <template #suffix> 件</template>
+      </count-up>
+      <count-up :end-val="temp.totalMoney">
+        <template #prefix>¥ </template>
+        <template #suffix> 元</template>
+      </count-up>
     </div>
     <barcode-scan ref="barcodeScan" @scaned="scaned" />
   </div>
@@ -67,48 +70,44 @@ import { findOneBySku } from '@/api/goods'
 import { list as listStock } from '@/api/stock'
 import RemoteSku from './RemoteSku.vue'
 import CountUp from 'vue-countup-v3'
-import { IOrder, IOrderGoods, OrderGoods } from '@/model/Order';
+import { IOrder, IOrderGoodsStock, OrderGoodsStock } from '@/model/Order';
 import { useDictStore } from '@/store/dict';
 import { IStock } from '@/model/Stock';
 import { useUserStore } from '@/store/user';
 import { ElMessageBox } from 'element-plus';
-// import BarcodeScan from '@/components/BarcodeScan.vue'
-
-type _IOrderGoods = IOrderGoods & {
-  currentStock: number
-  stockId: number
-}
-type _IOrder = Omit<IOrder, 'goodsList'> & {
-  goodsList: _IOrderGoods[]
-}
+import { watchEffect, ref } from 'vue';
+import { useBarcodeScan } from '@/hooks/useBarcodeScan'
 
 const props = defineProps<{
   temp: IOrder
 }>()
 
-const temp = props.temp as _IOrder
+const temp = ref<IOrder>()
+watchEffect(() => {
+  temp.value = props.temp
+})
 
 const { sizeMap, colorMap } = useDictStore()
 const { deptId } = useUserStore()
 
-async function scaned({ sku, color, size }: _IOrderGoods) {
-  console.log('scaned')
+useBarcodeScan(scaned)
+
+async function scaned(sku: string, color: number, size: number) {
+  console.log('scaned', sku, color, size)
   let res = await findOneBySku(sku)
-  let items = temp.goodsList.filter(e => {
+  let item = temp.value.itemList.find((e: IOrderGoodsStock) => {
     return e.sku === sku &&
       e.color === color &&
       e.size === size
   })
-  let item
-  if (items.length > 0) {
-    item = items[0]
+  if (item) {
     item.amount += 1
     amountChange(item)
   } else {
     addGoods()
-    item = temp.goodsList[temp.goodsList.length - 1]
+    item = temp.value.itemList[temp.value.itemList.length - 1]
     item.preSku = res.data.preSku
-    await skuChange({ goodsId: res.data.id, sku }, temp.goodsList.length - 1)
+    await skuChange({ goodsId: res.data.id, sku }, temp.value.itemList.length - 1)
     item.color = color
     colorChange(color, item)
     item.size = size
@@ -116,34 +115,30 @@ async function scaned({ sku, color, size }: _IOrderGoods) {
   }
 }
 function addGoods() {
-  temp.goodsList.push({
-    ...new OrderGoods(),
-    currentStock: 0,
-    stockId: 0
-  })
+  temp.value.itemList.push(new OrderGoodsStock())
 }
 function removeGoods(i: number) {
-  temp.goodsList.splice(i, 1)
+  temp.value.itemList.splice(i, 1)
 }
-function sumTotal(item: _IOrderGoods) {
+function sumTotal(item: IOrderGoodsStock) {
   let total = 0
   let totalMoney = 0
   if (item.amount > 0 && item.salePrice > 0) {
     item.subtotalMoney = item.salePrice * item.amount
-    temp.goodsList.forEach(e => {
+    temp.value.itemList.forEach((e: IOrderGoodsStock) => {
       totalMoney += e.subtotalMoney
       total += e.amount
     })
-    temp.total = total
-    temp.totalMoney = totalMoney
+    temp.value.total = total
+    temp.value.totalMoney = totalMoney
   }
 }
 async function skuChange($event: any, i: number) {
   const { goodsId, sku } = $event
-  temp.goodsList[i].salePrice = 0
-  temp.goodsList[i].color = 0
-  temp.goodsList[i].size = 0
-  temp.goodsList[i].sku = sku
+  temp.value.itemList[i].salePrice = null
+  temp.value.itemList[i].color = null
+  temp.value.itemList[i].size = null
+  temp.value.itemList[i].sku = sku
   const res = await listStock({
     goodsId,
     deptId
@@ -171,13 +166,13 @@ async function skuChange($event: any, i: number) {
       })
     }
   })
-  temp.goodsList[i].colorOptions = arr
+  temp.value.itemList[i].colorOptions = arr
 }
-function colorChange(color: number, e: _IOrderGoods) {
+function colorChange(color: number, e: IOrderGoodsStock) {
   let choosen = e.colorOptions.filter(e => e.color === color)
   e.sizeOptions = choosen[0].sizes
 }
-function sizeChange(size: number, e: _IOrderGoods) {
+function sizeChange(size: number, e: IOrderGoodsStock) {
   let choosen = e.sizeOptions.filter(e => e.size === size)
   e.currentStock = choosen[0].currentStock
   e.stockId = choosen[0].stockId
@@ -186,7 +181,7 @@ function sizeChange(size: number, e: _IOrderGoods) {
     sumTotal(e)
   }
 }
-function amountChange(e: _IOrderGoods) {
+function amountChange(e: IOrderGoodsStock) {
   if (e.amount <= e.currentStock) {
     sumTotal(e)
   } else {

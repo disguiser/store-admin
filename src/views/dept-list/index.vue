@@ -1,7 +1,7 @@
 <template>
   <table-container>
     <template #filter-container>
-      <el-button v-if="!singleSelect" class="filter-item" type="primary" icon="Edit" @click="handleCreate">
+      <el-button v-if="!props.singleSelect" class="filter-item" type="primary" icon="Edit" @click="handleCreate">
         添加
       </el-button>
     </template>
@@ -12,7 +12,12 @@
       :highlight-current-row="props.singleSelect"
       @current-change="handleSingleSelect"
     >
-      <el-table-column prop="name" label="门店" align="center" />
+      <el-table-column prop="name" label="门店" align="center">
+        <template #default="{row}">
+          <el-input v-if="row.edit" v-model="temp.name" class="edit-input" size="small" />
+          <span v-else>{{ row.name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="!props.singleSelect" align="center" label="操作" width="200">
         <template #default="{row, $index}">
           <div>
@@ -26,7 +31,18 @@
               <el-divider direction="vertical" />
               <el-link type="warning" @click="handleEdit(row)">编辑</el-link>
               <el-divider direction="vertical" />
-              <el-link type="danger" @click="handleRemove(row, $index)">删除</el-link>
+              <el-popconfirm
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+                icon="el-icon-info"
+                icon-color="red"
+                title="确认删除?"
+                @confirm="handleRemove(row, $index)"
+              >
+                <template #reference>
+                  <el-link type="danger">删除</el-link>
+                </template>
+              </el-popconfirm>
             </template>
           </div>
         </template>
@@ -103,6 +119,7 @@ function cancelEdit(row: IDept) {
 function handleEdit(row: IDept) {
   row.edit = true
   temp.value.name = row.name
+  temp.value.id = row.id
 }
 async function confirmEdit(row: IDept) {
   if (temp.value.name) {
@@ -110,7 +127,7 @@ async function confirmEdit(row: IDept) {
     let func, message
     if (row.id) {
       func = update(temp.value)
-      message = 'Update success'
+      message = '更新成功'
     } else {
       func = new Promise((resolve, reject) => {
         create(temp.value).then(res => {
@@ -120,14 +137,14 @@ async function confirmEdit(row: IDept) {
           reject(err)
         })
       })
-      message = 'Create success'
+      message = '新增成功'
     }
     try {
       await func
       row.name = temp.value.name
       row.edit = false
       ElNotification({
-        title: 'Success',
+        title: '成功',
         message: message,
         type: 'success',
       })
@@ -144,8 +161,8 @@ async function handleRemove(row: IDept, index: number) {
     await remove(row.id!)
     list.value.splice(index, 1)
     ElNotification({
-      title: 'Success',
-      message: 'Delete success',
+      title: '成功',
+      message: '删除成功',
       type: 'success',
     })
   } catch (error) {

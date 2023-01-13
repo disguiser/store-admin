@@ -1,24 +1,24 @@
 <template>
   <el-dialog
-    v-model="dialog"
-    :title="title"
+    v-model="props.dialog"
+    :title="props.title"
     :close-on-click-modal="false"
     width="500px"
     @update:visible="close"
     append-to-body
   >
-    <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="temp">
-      <el-form-item v-if="title !== '新建'" label="款号" prop="sku">
-        <el-input :value="temp.sku" disabled />
+    <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="props.temp">
+      <el-form-item v-if="props.title !== '新建'" label="款号" prop="sku">
+        <el-input :value="props.temp.sku" disabled />
       </el-form-item>
       <el-form-item label="厂家款号" prop="preSku">
-        <el-input data-test="preSku" v-model="temp.preSku" />
+        <el-input data-test="preSku" v-model="props.temp.preSku" />
       </el-form-item>
       <el-form-item label="商品名称" prop="name">
-        <el-input data-test="name" v-model="temp.name" :disabled="temp.disabled" />
+        <el-input data-test="name" v-model="props.temp.name" :disabled="props.temp.disabled" />
       </el-form-item>
       <el-form-item label="尺码组" prop="sizeGroup">
-        <el-select data-test="sizeGroup" v-model="temp.sizeGroup">
+        <el-select data-test="sizeGroup" v-model="props.temp.sizeGroup">
           <el-option v-for="(item, i) in sizeGroupStore.sizeGroupList" :key="i" :label="item.name" :value="item.id!" />
         </el-select>
       </el-form-item>
@@ -26,10 +26,10 @@
         <cos-upload :img-url="temp.imgUrl" :disabled="temp.disabled" @handleImgVal="handleImgVal" />
       </el-form-item> -->
       <el-form-item label="售价" prop="salePrice">
-        <el-input-number v-model="temp.salePrice" data-test="salePrice" :disabled="temp.disabled" :min="0" :step="10" :precision="1" />
+        <el-input-number v-model="props.temp.salePrice" data-test="salePrice" :disabled="props.temp.disabled" :min="0" :step="10" :precision="1" />
       </el-form-item>
       <el-form-item v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice">
-        <el-input-number v-model="temp.costPrice" data-test="costPrice" :disabled="temp.disabled" :min="0" :step="10" :precision="1" />
+        <el-input-number v-model="props.temp.costPrice" data-test="costPrice" :disabled="props.temp.disabled" :min="0" :step="10" :precision="1" />
       </el-form-item>
       <!-- <el-form-item label="折扣" prop="discount">
         <el-slider v-model="temp.discount" :disabled="temp.disabled" :min="0.1" :max="1" :step="0.05" show-stops show-input />

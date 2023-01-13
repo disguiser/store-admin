@@ -196,13 +196,16 @@ function handleFilter() {
 async function getList() {
   listLoading.value = true
   let data = {}
-  if (dateRange.value[0] && dateRange.value[1]) {
+  if (dateRange.value && dateRange.value[0] && dateRange.value[1]) {
     data = {
       startDate: dateRange.value[0].getTime(),
       endDate: dateRange.value[1].getTime()
     }
   }
-  const response = await findOrders(listQuery, data)
+  const response = await findOrders({
+    ...listQuery,
+    ...data
+  })
   list.value = response.data.items
   total.value = response.data.total
   listLoading.value = false

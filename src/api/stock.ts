@@ -29,7 +29,7 @@ export function create(data: IStock) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update/${data.id}`,
+    url: `${preUrl}/${data.id}`,
     method: 'patch',
     data
   })
@@ -37,7 +37,7 @@ export function update(data: any) {
 
 export function remove(ids: number[]) {
   return request({
-    url: `${preUrl}/delete`,
+    url: `${preUrl}`,
     method: 'delete',
     data: ids
   })

@@ -1,10 +1,10 @@
 <template>
   <el-select
-    :value="props.modelValue"
+    :modelValue="props.modelValue"
     filterable
     remote
     default-first-option
-    :remote-method="remoteSku"
+    :remote-method="debounced"
     :loading="loading"
     placeholder="货号"
     @update:modelValue="handleInput"
@@ -25,6 +25,7 @@
 import { findByPage as findGoods } from '@/api/goods'
 import { IGoods } from '@/model/Goods';
 import { ref } from 'vue'
+import { debounce } from 'lodash-es';
 
 const loading = ref(false)
 const skuOptions = ref<IGoods[]>([])
@@ -36,30 +37,38 @@ const props = defineProps<{
 const emits = defineEmits(['change', 'update:modelValue'])
 
 function handleInput(sku: string) {
+  console.log('handleInput')
   let choosen = skuOptions.value.find(e => e.sku === sku)
   emits('change', { goodsId: choosen.id, salePrice: choosen.salePrice, sku: choosen.sku })
   emits('update:modelValue', choosen.preSku)
 }
-async function remoteSku(query: string) {
+function debounced(query: string) {
   if (query !== '') {
-    loading.value = true
-    try {
-      const res = await findGoods({
-        preSku: query
-      })
-      skuOptions.value = res.data.items.map((e: IGoods) => {
-        return {
-          id: e.id,
-          sku: e.sku,
-          preSku: e.preSku,
-          salePrice: e.salePrice
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    } finally {
-      loading.value = false
-    }
+    // console.log(query)
+    debounce(function() {
+      remoteSku(query)
+    }, 1000)()
+  }
+}
+async function remoteSku(query: string) {
+  console.log('getList')
+  loading.value = true
+  try {
+    const res = await findGoods({
+      preSku: query
+    })
+    skuOptions.value = res.data.items.map((e: IGoods) => {
+      return {
+        id: e.id,
+        sku: e.sku,
+        preSku: e.preSku,
+        salePrice: e.salePrice
+      }
+    })
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
   }
 }
 </script>

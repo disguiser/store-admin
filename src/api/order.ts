@@ -2,12 +2,11 @@ import request from '@/utils/request'
 
 let preUrl = '/order'
 
-export function findByPage(query: any, dateRange: any) {
+export function findByPage(query: any) {
   return request({
     url: `${preUrl}/findByPage`,
-    method: 'post',
-    params: query,
-    data: dateRange
+    method: 'get',
+    params: query
   })
 }
 
@@ -20,7 +19,7 @@ export function getDetailByOrderId(orderId: number) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
+    url: `${preUrl}`,
     method: 'post',
     data
   })
@@ -28,7 +27,21 @@ export function create(data: any) {
 
 export function remove(id: number) {
   return request({
-    url: `${preUrl}/delete/${id}`,
+    url: `${preUrl}/${id}`,
     method: 'delete'
+  })
+}
+
+export function dailyAmount(query: any) {
+  return request({
+    url: `${preUrl}/daily/amount`,
+    method: 'get',
+    params: query
+  })
+}
+export function dailyMoney() {
+  return request({
+    url: `${preUrl}/daily/money`,
+    method: 'get',
   })
 }

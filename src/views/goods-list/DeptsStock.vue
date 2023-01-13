@@ -5,9 +5,9 @@
       <el-tab-pane v-for="e in list" :name="e.name" :label="deptFilter(e.deptId)">
         <stock
           :list="e.list"
-          :goods-id="goodsId"
+          :goods-id="props.goodsId"
           :dept-id="e.deptId"
-          :size-group="sizeGroup"
+          :size-group="props.sizeGroup"
           @refresh="getStocks(e.deptId)"
         />
       </el-tab-pane>

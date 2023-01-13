@@ -13,7 +13,17 @@ export interface IOrderGoods {
   sizeOptions: any[]
 }
 
-export class OrderGoods implements IOrderGoods {
+export type TOrderGoodsStock = IOrderGoods & {
+  currentStock?: number
+  stockId?: number
+}
+
+export interface IOrderGoodsStock extends IOrderGoods {
+  currentStock: number
+  stockId: number
+}
+
+export class OrderGoodsStock implements IOrderGoodsStock {
   sku: string = ''
   preSku: string = ''
   name: string = ''
@@ -24,7 +34,9 @@ export class OrderGoods implements IOrderGoods {
   subtotalMoney: number = 0
   colorOptions: any[] = []
   sizeOptions: any[] = []
-  constructor(data?: IOrderGoods) {
+  currentStock: number = 0
+  stockId: number = 0
+  constructor(data?: IOrderGoodsStock) {
     if (data) {
       const {
         sku,
@@ -36,7 +48,9 @@ export class OrderGoods implements IOrderGoods {
         salePrice,
         subtotalMoney,
         colorOptions,
-        sizeOptions
+        sizeOptions,
+        currentStock,
+        stockId
       } = data
       if (sku) {
         this.sku = sku
@@ -68,6 +82,12 @@ export class OrderGoods implements IOrderGoods {
       if (sizeOptions) {
         this.sizeOptions = sizeOptions
       }
+      if (currentStock) {
+        this.currentStock = currentStock
+      }
+      if (stockId) {
+        this.stockId = stockId
+      }
     }
   }
 }
@@ -80,7 +100,7 @@ export interface IOrder extends Pick<
   totalMoney: number
   orderTime?: Date
   buyer: number
-  goodsList: IOrderGoods[]
+  itemList: IOrderGoodsStock[]
   deptId: number
   deptName: string
   category: 1 | 2
@@ -92,9 +112,9 @@ export class Order implements IOrder {
   total: number = 0
   totalMoney: number = 0
   orderTime?: Date
-  buyer: number = 0
-  goodsList: IOrderGoods[] = []
-  deptId: number = 0
+  buyer: number = null
+  itemList: IOrderGoodsStock[] = []
+  deptId: number = null
   deptName: string = ''
   category: CategoryEnum
   paymentStatus: PaymentStatusEnum = 1
@@ -114,7 +134,7 @@ export class Order implements IOrder {
         totalMoney,
         orderTime,
         buyer,
-        goodsList,
+        itemList,
         deptId,
         deptName,
         name,
@@ -140,8 +160,8 @@ export class Order implements IOrder {
       if (buyer) {
         this.buyer = buyer
       }
-      if (goodsList) {
-        this.goodsList = goodsList.map(e => new OrderGoods(e))
+      if (itemList) {
+        this.itemList = itemList.map(e => new OrderGoodsStock(e))
       }
       if (deptId) {
         this.deptId = deptId

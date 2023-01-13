@@ -21,13 +21,14 @@ export function useBarcodeScan(callback: Function) {
     document.onkeydown = null
   })
   async function add(barcode: string) {
+    // console.log(barcode)
     if (barcode.length >= 8) {
       if (barcode.startsWith('YQ')) {
         barcode = barcode.substring(2)
       }
       const sku = barcode.substring(0, 4)
-      const color = parseInt(barcode.substring(4, 2))
-      let size = parseInt(barcode.substring(6, 2))
+      const color = parseInt(barcode.substring(4, 6))
+      let size = parseInt(barcode.substring(6, 8))
       if ([63, 38, 39, 40, 41, 42, 43, 44, 45].includes(size)) {
         switch (size) {
           case 63:

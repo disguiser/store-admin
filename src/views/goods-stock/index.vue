@@ -27,7 +27,9 @@
         <el-radio label="gallery">画廊视图</el-radio>
       </el-radio-group> -->
       <div style="float:right;color:red;font-size:20px;">
-        <count-up :start-val="0" :end-val="totalAmount" :decimals="0" separator="," suffix=" 件" :autoplay="true" />
+        <count-up :end-val="totalAmount">
+          <template #suffix> 件</template>
+        </count-up>
       </div>
     </template>
     <el-table
@@ -91,7 +93,16 @@
           <el-button type="primary" size="small" @click="handleUpdate(row, $index)">
             编辑
           </el-button>
-          <el-button v-if="useCheckPermission(['Admin'])" size="small" type="danger" @click="handleRemove(row, $index, listQuery.deptId)">
+          <el-button type="warning" size="small" @click="handleUpdate(row, $index)">
+            盘点
+          </el-button>
+          <el-button
+            v-if="useCheckPermission(['Admin'])"
+            size="small"
+            type="danger"
+            @click="handleRemove(row, $index, listQuery.deptId)"
+            style="margin-top: 10px;"
+          >
             删除
           </el-button>
         </template>
