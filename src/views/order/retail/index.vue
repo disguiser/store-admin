@@ -38,13 +38,13 @@
       <el-table-column label="订单编号" prop="id" align="center" />
       <el-table-column label="总数量" prop="total" align="center" />
       <el-table-column label="总金额" prop="totalMoney" align="center" />
-      <el-table-column label="下单时间" prop="orderTime" align="center">
+      <el-table-column label="下单时间" prop="orderTime" width="120" align="center">
         <template #default="{row}">
           <span>{{ dayjs(row.orderTime).format('YYYY-MM-DD hh:mm') }}</span>
         </template>
       </el-table-column>
   
-      <el-table-column label="操作" align="center" width="125" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="120" class-name="small-padding fixed-width">
         <template #default="{row, $index}">
           <el-button type="primary" size="small" @click="goPrint(row)">
             打印
@@ -70,7 +70,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </template>
   </table-container>
-  <el-dialog title="下单" v-model="dialogVisible" width="90%" append-to-body>
+  <el-dialog title="下单" v-model="dialogVisible" width="90%" :close-on-click-modal="false" append-to-body>
     <!-- <fieldset>
       <legend>Vip信息</legend>
       <el-form ref="dataForm" label-position="right" :inline="true" label-width="100px" :model="temp">

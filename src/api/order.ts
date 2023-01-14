@@ -39,9 +39,25 @@ export function dailyAmount(query: any) {
     params: query
   })
 }
+
 export function dailyMoney() {
   return request({
     url: `${preUrl}/daily/money`,
+    method: 'get',
+  })
+}
+
+export function chartAmount(query: any) {
+  return request({
+    url: `${preUrl}/chart/amount`,
+    method: 'get',
+    params: query
+  })
+}
+
+export function chartMoney() {
+  return request({
+    url: `${preUrl}/chart/money`,
     method: 'get',
   })
 }
