@@ -46,6 +46,7 @@
     </template>
     <el-table
       v-if="view === 'table'"
+      ref="tableEl"
       v-loading="listLoading"
       :data="list"
       border
@@ -94,7 +95,16 @@
     </el-table>
     <gallery-view v-else :list="list" :total="total" :loading="listLoading" />
     <template #footer>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      <el-pagination
+        v-show="total>0"
+        :total="total"
+        v-model:current-page="listQuery.page"
+        v-model:page-size="listQuery.limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        :background="true"
+        @size-change="getList"
+        @current-change="getList"
+      />
     </template>
   </table-container>
 
@@ -109,7 +119,6 @@
 
 <script setup lang="ts" name="GoodsList">
 import { findByPage as findGoods } from '@/api/goods'
-import Pagination from '@/components/Pagination/index.vue'
 import TableContainer from '@/components/TableContainer.vue'
 import { useCheckPermission } from '@/hooks/useCheckPermission'
 import { useGoods } from '@/hooks/useGoods'
@@ -122,6 +131,7 @@ import GalleryView from './GalleryView.vue'
 import GoodsInfo from './GoodsInfo.vue'
 
 const {
+  tableEl,
   temp,
   list,
   infoVisible,
@@ -141,6 +151,7 @@ const {
 } = useGoods(getList)
 
 async function getList() {
+  tableEl.value?.setScrollTop(0)
   listLoading.value = true
   const response = await findGoods(listQuery)
   list.value = response.data.items

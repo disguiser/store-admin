@@ -54,7 +54,7 @@
       </el-table-column>
     </el-table>
     <template #footer>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" v-model:current-page="listQuery.page" v-model:page-size="listQuery.limit" @current-change="getList" @size-change="getList" />
     </template>
   </table-container>
   <el-dialog :title="dialogStatus" v-model="infoDialogVisible" :close-on-click-modal="false" append-to-body>

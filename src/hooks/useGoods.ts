@@ -4,6 +4,7 @@ import { ref, reactive } from 'vue'
 import { Goods, IGoods } from "@/model/Goods"
 
 export function useGoods(getList: Function) {
+  const tableEl = ref()
   const temp = ref<IGoods>(new Goods())
   const tempIndex = ref<number>()
   const list = ref<IGoods[]>()
@@ -132,6 +133,7 @@ export function useGoods(getList: Function) {
     })
   }
   return {
+    tableEl,
     temp,
     list,
     infoVisible,

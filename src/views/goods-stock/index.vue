@@ -34,6 +34,7 @@
     </template>
     <el-table
       v-if="view === 'table'"
+      ref="tableEl"
       v-loading="listLoading"
       :data="list"
       border
@@ -110,7 +111,16 @@
     </el-table>
     <gallery-view v-else :list="list" :total="total" :loading="listLoading" @loadMore="loadMore" />
     <template #footer>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+      <el-pagination
+        v-show="total>0"
+        :total="total"
+        v-model:current-page="listQuery.page"
+        v-model:page-size="listQuery.limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        :background="true"
+        @current-change="getList"
+        @size-change="getList"
+      />
     </template>
   </table-container>
   <goods-info
@@ -125,21 +135,21 @@
 
 <script setup lang="ts">
 import { findByDept as findGoods } from '@/api/goods'
-import { useCheckPermission } from '@/hooks/useCheckPermission'
-import CountUp from 'vue-countup-v3'
-import Pagination from '@/components/Pagination/index.vue'
 import TableContainer from '@/components/TableContainer.vue'
+import { useCheckPermission } from '@/hooks/useCheckPermission'
 import { useGoods } from '@/hooks/useGoods'
 import { IGoods } from '@/model/Goods'
 import { IStock, Stock } from '@/model/Stock'
 import { useDictStore } from '@/store/dict'
 import GoodsInfo from '@/views/goods-list/GoodsInfo.vue'
 import { reactive, ref } from 'vue'
+import CountUp from 'vue-countup-v3'
 import { useRoute } from 'vue-router'
 import DeptStock from './DeptStock.vue'
 import GalleryView from './GalleryView.vue'
 
 const {
+  tableEl,
   temp,
   list,
   infoVisible,
@@ -164,6 +174,7 @@ listQuery.deptId = parseInt(route.params?.id as string)
 getList()
 
 async function getList() {
+  tableEl.value?.setScrollTop(0)
   listLoading.value = true
   totalAmount.value = 0
   try {
