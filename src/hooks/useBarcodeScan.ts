@@ -21,7 +21,6 @@ export function useBarcodeScan(callback: Function) {
     document.onkeydown = null
   })
   async function add(barcode: string) {
-    // console.log(barcode)
     if (barcode.length >= 8) {
       if (barcode.startsWith('YQ')) {
         barcode = barcode.substring(2)

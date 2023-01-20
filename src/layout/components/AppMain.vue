@@ -1,9 +1,9 @@
 <template>
   <section class="app-main">
-    <router-view :key="key" v-slot="{Component}">
-      <keep-alive :include="cachedViews">
+    <router-view v-slot="{Component}">
+      <KeepAlive :include="cachedViews">
         <component :is="Component" :key="key" />
-      </keep-alive>
+      </KeepAlive>
     </router-view>
   </section>
 </template>

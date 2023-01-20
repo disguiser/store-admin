@@ -11,6 +11,7 @@
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
+        :clearable="false"
         :shortcuts="pickerOptions"
         style="margin: 0 10px;vertical-align: bottom;"
       />
@@ -29,7 +30,7 @@
       fit
       show-summary
       :summary-method="getSummaries"
-      style="width: 100%"
+      style="width: 100%;height: 100%;"
       @sort-change="sortChange"
     >
       <el-table-column type="expand">
@@ -42,18 +43,18 @@
           </suspense>
         </template>
       </el-table-column>
-      <el-table-column label="订单编号" prop="id" align="center" />
-      <el-table-column label="客户姓名" prop="name" align="center" />
+      <el-table-column label="订单编号" prop="id" align="center" width="80" />
+      <el-table-column label="客户姓名" prop="name" align="center" width="90" />
       <el-table-column label="地址" prop="address" align="center">
         <template #default="{row}">
           {{ addressFilter(row.address) }}{{ row.addressDetail }}
         </template>
       </el-table-column>
-      <el-table-column label="总数量" prop="total" align="center" />
-      <el-table-column label="总金额" prop="totalMoney" align="center" />
-      <el-table-column label="下单时间" width="120" align="center">
+      <el-table-column label="总数量" prop="total" align="center" width="70" />
+      <el-table-column label="总金额" prop="totalMoney" align="center" width="80" />
+      <el-table-column label="下单时间" width="130" align="center">
         <template #default="{row}">
-          <span>{{ dayjs(row.orderTime).format('YYYY-MM-DD hh:mm') }}</span>
+          <span>{{ dayjs(row.orderTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
   
@@ -135,7 +136,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="Order">
 import TableContainer from '@/components/TableContainer.vue'
 import { findByPage as findCustomers } from '@/api/customer'
 import { findByPage as findOrders } from '@/api/order'
@@ -150,6 +151,7 @@ import Detail from '../Detail.vue'
 import GoodsTable from '../GoodsTable.vue'
 
 import { ListItem, useHook } from '../hook'
+console.log('wholesale')
 const {
   list,
   total,

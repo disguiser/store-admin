@@ -4,7 +4,7 @@ const preUrl = '/dept'
 
 export function findAll(query: any) {
   return request({
-    url: `${preUrl}/find-all`,
+    url: `${preUrl}/all`,
     method: 'get',
     params: query
   })

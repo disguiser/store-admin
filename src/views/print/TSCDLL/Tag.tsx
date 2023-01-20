@@ -127,6 +127,7 @@ export default defineComponent({
               <div
                 class={_class}
                 style={style}
+                onMousedown={onMousedown}
               >
                 {itemContent}
               </div>

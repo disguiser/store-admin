@@ -163,7 +163,7 @@ export const asyncRoutes = [
         path: 'list',
         component: () => import('@/views/order/wholesale/index.vue'),
         name: 'Order',
-        meta: { title: '订单', roles: ['Admin', 'Waiter', 'Boss'] }
+        meta: { title: '订单', roles: ['Admin', 'Waiter', 'Boss'], keepAlive: true }
       },
       {
         path: 'customer-list',
@@ -197,10 +197,16 @@ export const asyncRoutes = [
         meta: { title: '测试扫码', roles: ['Admin'] }
       },
       {
-        path: 'list',
+        path: 'order-list',
         component: () => import('@/views/order/retail/index.vue'),
-        name: 'Sell',
-        meta: { title: '零售', roles: ['Admin', 'Waiter', 'Boss'] }
+        name: 'Retail',
+        meta: { title: '订单', roles: ['Admin', 'Waiter', 'Boss'] }
+      },
+      {
+        path: 'today-item-list',
+        component: () => import('@/views/order/retail/TodayItemList.vue'),
+        name: 'TodayItemList',
+        meta: { title: '单品列表', roles: ['Admin', 'Waiter', 'Boss'] }
       },
       {
         path: 'vip-list',
@@ -213,7 +219,13 @@ export const asyncRoutes = [
   {
     path: '/retail/print',
     component: () => import('@/views/order/retail/Print.vue'),
-    meta: { title: '小票打印', activeMenu: '/order/retail/print', roles: ['Admin', 'Waiter'] },
+    meta: { title: '小票打印', roles: ['Admin', 'Waiter'] },
+    hidden: true
+  },
+  {
+    path: '/retail/print/daily-item-list',
+    component: () => import('@/views/order/retail/ItemListPrint.vue'),
+    meta: { title: '当日销售单品打印', roles: ['Admin', 'Waiter'] },
     hidden: true
   },
   {

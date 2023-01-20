@@ -27,10 +27,10 @@ export class OrderGoodsStock implements IOrderGoodsStock {
   sku: string = ''
   preSku: string = ''
   name: string = ''
-  color: number = 0
-  size: number = 0
+  color: number = null
+  size: number = null
   amount: number = 0
-  salePrice: number = 0
+  salePrice: number = null
   subtotalMoney: number = 0
   colorOptions: any[] = []
   sizeOptions: any[] = []

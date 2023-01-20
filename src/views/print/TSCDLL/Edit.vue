@@ -82,15 +82,17 @@
             </el-form-item> -->
             <template v-if="temp.type === 'material'">
               <el-form-item :label="temp.lable" prop="value">
-                <el-button icon="Plus" @click="addFabric" style="margin-bottom: 10px" />
+                <div>
+                  <el-button icon="Plus" @click="addFabric" style="margin-bottom: 10px" />
+                </div>
                 <div v-for="(v, vi) in temp.value" :key="vi" class="fabric">
                   <el-select v-model="v.type">
                     <el-option v-for="(e, i) in fabricList" :key="i" :value="e.itemName" :label="e.itemName" />
                   </el-select>
                   <el-input v-model="v.percent">
-                    <template slot="append">%</template>
+                    <template #append>%</template>
                   </el-input>
-                  <el-button icon="el-icon-delete" type="danger" @click="removeFabric(vi)" />
+                  <el-button icon="Delete" type="danger" @click="removeFabric(vi)" />
                 </div>
               </el-form-item>
             </template>
@@ -220,9 +222,9 @@ const disabled = computed(() => {
 applyData()
 function handleChange(val: number, type: string) {
   if (type === 'size') {
-    temp.value = sizeMap.get(val)
+    temp.value.value = sizeMap.get(val)
   } else {
-    temp.value = colorMap.get(val)
+    temp.value.value = colorMap.get(val)
   }
   if (barcode.color && barcode.size) {
     barcode.data.value = `${currentGoods.sku}${_.padStart(barcode.color, 2, '0')}${_.padStart(barcode.size, 2, '0')}`
@@ -417,13 +419,13 @@ async function save() {
   }
 }
 function addFabric() {
-  temp.value.push({
+  temp.value.value.push({
     type: '',
     percent: 0
   })
 }
 function removeFabric(vi: number) {
-  temp.value.splice(vi, 1)
+  temp.value.value.splice(vi, 1)
 }
 function valueChange(formEl: FormInstance) {
   formEl.validate((valid) => {

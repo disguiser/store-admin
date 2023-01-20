@@ -26,21 +26,21 @@
           <bill :customer-id="row.id" @debt-change="debtChange(row)" />
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="name" align="center" sortable />
-      <el-table-column label="手机号码" prop="mobile" align="center" />
+      <el-table-column label="姓名" prop="name" align="center" width="100" sortable />
+      <el-table-column label="手机号码" prop="mobile" align="center" width="100" />
       <el-table-column label="地址" prop="address" align="center">
         <template #default="{row}">
-          <span>{{ addressFilter(row.address) }}</span>
+          <span>{{ addressFilter(row.address) }}{{ row.addressDetail }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="欠款" prop="debt" align="center" />
-      <el-table-column label="录入时间" prop="createTime" align="center" sortable>
+      <el-table-column label="欠款" prop="debt" align="center" width="100" />
+      <el-table-column label="录入时间" prop="createTime" align="center" width="130" sortable>
         <template #default="{row}">
-          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
   
-      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="130" class-name="small-padding fixed-width">
         <template #default="{row, $index}">
           <el-button type="primary" size="small" @click="handleUpdate(row, $index)">
             编辑
@@ -158,7 +158,7 @@ function sortChange(data: any) {
   handleFilter()
 }
 function handleCreate() {
-  formRef.value.resetFields()
+  formRef.value?.resetFields()
   temp.value = new Customer()
   dialogStatus.value = '新建'
   infoDialogVisible.value = true
@@ -192,7 +192,7 @@ function createData(formEl: FormInstance | undefined) {
   })
 }
 function handleUpdate(row: ICustomer, index: number) {
-  formRef.value.resetFields()
+  formRef.value?.resetFields()
   temp.value = new Customer(row)
   tempIndex.value = index
   dialogStatus.value = '编辑'

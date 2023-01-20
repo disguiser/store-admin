@@ -39,7 +39,7 @@
             </el-select>
           </td>
           <td>
-            <el-input-number v-model="e.salePrice" @change="sumTotal(e)" />
+            <el-input-number v-model="e.salePrice" :min="0" @change="sumSubtotal(e)" />
           </td>
           <td>
             <el-input-number v-model="e.amount" :min="0" :disabled="!e.currentStock" @change="amountChange(e)" />
@@ -56,7 +56,7 @@
       <count-up :end-val="temp.total">
         <template #suffix> 件</template>
       </count-up>
-      <count-up :end-val="temp.totalMoney">
+      <count-up :end-val="temp.totalMoney" :duration="1">
         <template #prefix>¥ </template>
         <template #suffix> 元</template>
       </count-up>
@@ -119,19 +119,23 @@ function addGoods() {
 }
 function removeGoods(i: number) {
   temp.value.itemList.splice(i, 1)
+  sumTotal()
 }
-function sumTotal(item: IOrderGoodsStock) {
+function sumSubtotal(item: IOrderGoodsStock) {
+  if (item.amount > 0 && item.salePrice >= 0) {
+    item.subtotalMoney = item.salePrice * item.amount
+    sumTotal()
+  }
+}
+function sumTotal() {
   let total = 0
   let totalMoney = 0
-  if (item.amount > 0 && item.salePrice > 0) {
-    item.subtotalMoney = item.salePrice * item.amount
-    temp.value.itemList.forEach((e: IOrderGoodsStock) => {
-      totalMoney += e.subtotalMoney
-      total += e.amount
-    })
-    temp.value.total = total
-    temp.value.totalMoney = totalMoney
-  }
+  temp.value.itemList.forEach((e: IOrderGoodsStock) => {
+    totalMoney += e.subtotalMoney
+    total += e.amount
+  })
+  temp.value.total = total
+  temp.value.totalMoney = totalMoney
 }
 async function skuChange($event: any, i: number) {
   const { goodsId, sku } = $event
@@ -178,12 +182,12 @@ function sizeChange(size: number, e: IOrderGoodsStock) {
   e.stockId = choosen[0].stockId
   if (e.amount === 0 && e.currentStock > 0) {
     e.amount = 1
-    sumTotal(e)
+    sumSubtotal(e)
   }
 }
 function amountChange(e: IOrderGoodsStock) {
   if (e.amount <= e.currentStock) {
-    sumTotal(e)
+    sumSubtotal(e)
   } else {
     setTimeout(() => {
       e.amount = e.currentStock

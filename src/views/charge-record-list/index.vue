@@ -22,7 +22,7 @@
       <el-table-column label="赠送金额" prop="giveAmount" align="center" />
       <el-table-column label="充值时间" prop="createTime" align="center">
         <template #default="{row}">
-          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
 

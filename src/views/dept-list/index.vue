@@ -172,7 +172,7 @@ async function handleRemove(row: IDept, index: number) {
   }
 }
 function showDetail(row: IDept) {
-  router.push(`/stock/goods/${row.id}`)
+  router.replace(`/stock/goods/${row.id}`)
 }
 </script>
 

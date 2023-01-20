@@ -1,8 +1,9 @@
 import { create, remove } from '@/api/order'
 import { IOrder } from "@/model/Order"
-import { DateModelType, ElMessageBox, ElNotification } from "element-plus"
+import { ElMessageBox, ElNotification } from "element-plus"
 import { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 import { ref } from "vue"
+import dayjs from 'dayjs'
 
 export type ListItem = IOrder & {
   loading?: boolean
@@ -18,7 +19,10 @@ export function useHook() {
   const btnLoading = ref(false)
   const temp = ref<IOrder>()
   const dialogVisible = ref(false)
-  const dateRange = ref<[Date, Date]>(null)
+  const dateRange = ref<[Date, Date]>([
+    dayjs(dayjs().format('YYYY-MM-DD')).toDate(),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')).toDate()
+  ])
   const pickerOptions = [{
     text: '最近一周',
     value: () => {

@@ -21,7 +21,7 @@
       <el-table-column label="消费金额" prop="consumeAmount" align="center" />
       <el-table-column label="消费时间" prop="createTime" align="center">
         <template #default="{row}">
-          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
 

@@ -1,5 +1,5 @@
 <template>
-  <div ref="mainRef" v-loading="loading" class="app-container">
+  <div ref="mainRef" v-loading="loading" class="print_container">
     <template v-if="!loading">
       <h3 style="margin: 0;font-weight:normal;margin-bottom: 10px">益谦服饰-出货单</h3>
       <div class="head" style="margin-bottom: 10px;text-align:left;">
@@ -86,7 +86,6 @@ function print() {
 
 function sizeFilter(val: string) {
   if (val) {
-    // console.log(val)
     return val.split('/').join('\n')
   } else {
     return ''
@@ -149,13 +148,13 @@ table {
     border-top: 1px solid #000;
   }
 }
-.app-container {
+.print_container {
   // display: flex;
   // flex-direction: column;
   // align-content: center;
-  padding: 20px;
+  padding: 10px;
   font-size: 10pt;
-  width: 20cm;
+  width: 22cm;
   text-align: center;
 }
 

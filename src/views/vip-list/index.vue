@@ -26,7 +26,7 @@
       <el-table-column label="终身折扣(%)" prop="vipDiscount" align="center" width="80" />
       <el-table-column label="注册时间" prop="createTime" align="center" width="140">
         <template #default="{row}">
-          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD hh:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
   

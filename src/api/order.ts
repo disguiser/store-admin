@@ -55,9 +55,10 @@ export function chartAmount(query: any) {
   })
 }
 
-export function chartMoney() {
+export function chartMoney(query: any) {
   return request({
     url: `${preUrl}/chart/money`,
     method: 'get',
+    params: query
   })
 }

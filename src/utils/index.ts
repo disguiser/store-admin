@@ -81,5 +81,65 @@ export function addressFilter(code: string[]) {
 // }
 import dayjs from 'dayjs'
 export function parseTime(time: string | Date) {
-  return dayjs(time).format('YYYY-MM-DD hh:mm')
+  return dayjs(time).format('YYYY-MM-DD HH:mm')
+}
+
+export const week = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+function generateXAxisData() {
+  const day = new Date().getDay()
+  let xAxisData = week.slice(day + 1).concat(week.slice(0, day + 1)).reverse()
+
+  xAxisData = xAxisData.map((d: string, index: number) => {
+    return `${d}(${dayjs().subtract(index, 'day').format('D')})`
+  })
+  return xAxisData.reverse()
+}
+export function initBarOption() {
+  const option: any = {
+    tooltip: {},
+    xAxis: {
+      data: generateXAxisData()
+    },
+    yAxis: {},
+    series: [
+      {
+        type: 'bar',
+        data: null
+      }
+    ]
+  }
+  return option
+}
+
+export function initStackOption() {
+  const option: any = {
+    tooltip: {},
+    xAxis: {
+      data: generateXAxisData()
+    },
+    yAxis: {},
+    series: [
+      {
+        type: 'bar',
+        stack: 'total',
+        data: null
+      }
+    ]
+  }
+  return option
+}
+
+export function transitionWeekData(resData: any) {
+  return resData.map((r: any) => {
+    // list to map
+    const dataMap = r.reduce((a: any, b: any) => {
+      a[b.orderTime] = b.total
+      return a
+    }, {})
+    // 不全的日期补0
+    return week.map((e: string, index: number) => {
+      const date = dayjs().subtract(7 - index - 1, 'day').format('YYYY-MM-DD')
+      return dataMap[date]?dataMap[date]:0
+    })
+  })
 }

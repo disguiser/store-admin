@@ -42,3 +42,17 @@ export function remove(ids: number[]) {
     data: ids
   })
 }
+
+export function wholeStock() {
+  return request({
+    url: `${preUrl}`,
+    method: 'get'
+  })
+}
+
+export function sumByDept() {
+  return request({
+    url: `${preUrl}/sum`,
+    method: 'get'
+  })
+}
