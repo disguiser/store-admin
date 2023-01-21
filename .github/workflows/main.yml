@@ -18,7 +18,7 @@ jobs:
       - name: build
         run: npm run build
       - name: copy dist file with scp
-        uses: appleboy/scp-action@v0.1.3
+        uses: siva1024/scp-deployer@latest
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
