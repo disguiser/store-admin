@@ -13,7 +13,6 @@ jobs:
         uses: actions/setup-node@v3.6.0
         with:
           node-version: "16.x"
-          NODE_OPTIONS: --max-old-space-size=32768
       - name: install dependency
         run: npm install
       - name: build
@@ -26,4 +25,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: "dist"
-          target: "store-admin"
+          target: "/home/ubuntu/store-admin"
