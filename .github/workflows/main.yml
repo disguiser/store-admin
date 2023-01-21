@@ -18,11 +18,10 @@ jobs:
       - name: build
         run: npm run build
       - name: copy dist file with scp
-        uses: horochx/deploy-via-scp@master
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
-          user: ${{ secrets.USER_NAME }}
+          username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          local: "README.md"
-          remote: "~/store-admin"
+          source: "dist"
+          target: "/home/ubuntu/store-admin"
