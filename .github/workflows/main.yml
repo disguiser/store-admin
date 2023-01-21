@@ -21,7 +21,7 @@ jobs:
         uses: horochx/deploy-via-scp@master
         with:
           host: ${{ secrets.HOST }}
-          user: ${{ secrets.USERNAME }}
+          user: ${{ secrets.USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           local: "README.md"
