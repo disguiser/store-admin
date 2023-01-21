@@ -26,14 +26,12 @@ export default ({ mode }) => {
       }
     },
     build: {
-      sourcemap: true,
-      minify: false
+      sourcemap: false
     },
     // esbuild: { loader: ['.js', '.jsx' ] },
     css: {
       preprocessorOptions: {
         scss: {
-          charset: false
           /*
             引入var.scss全局预定义变量，
             如果引入多个文件，
