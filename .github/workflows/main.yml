@@ -18,11 +18,11 @@ jobs:
       - name: build
         run: npm run build
       - name: copy dist file with scp
-        uses: siva1024/scp-deployer@latest
+        uses: horochx/deploy-via-scp@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "README.md"
-          target: "~/store-admin"
+          local: "README.md"
+          remote: "~/store-admin"
