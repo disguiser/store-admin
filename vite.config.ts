@@ -26,7 +26,8 @@ export default ({ mode }) => {
       }
     },
     build: {
-      sourcemap: true
+      sourcemap: true,
+      minify: false
     },
     // esbuild: { loader: ['.js', '.jsx' ] },
     css: {
