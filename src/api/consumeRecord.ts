@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-let preUrl = '/consumeRecord'
+let preUrl = '/consume-record'
 
 export function findByPage(query: any) {
   return request({
-    url: `${preUrl}/findByPage`,
+    url: `${preUrl}/page`,
     method: 'get',
     params: query
   })
@@ -12,23 +12,15 @@ export function findByPage(query: any) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
-    method: 'put',
-    data
-  })
-}
-
-export function update(data: any) {
-  return request({
-    url: `${preUrl}/update/${data.id}`,
-    method: 'patch',
+    url: `${preUrl}`,
+    method: 'post',
     data
   })
 }
 
 export function remove(id: string) {
   return request({
-    url: `${preUrl}/remove`,
+    url: `${preUrl}`,
     method: 'delete',
     data: id
   })

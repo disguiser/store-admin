@@ -26,13 +26,17 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const permissionStore = usePermissionStore()
       // determine whether the user has obtained his permission role through getInfo
-      const hasRoutes = permissionStore.routes
+      const hasRoutes = permissionStore.addRoutes
       if (!hasRoutes || hasRoutes.length === 0) {
         // generate accessible routes map based on role
         const accessRoutes: RouteRecordRaw[] = await permissionStore.generateRoutes(userStore.roles)
         // dynamically add accessible routes
         accessRoutes.forEach((e: RouteRecordRaw) => {
-          router.addRoute(e)
+          if (e.meta?.isFull) {
+            router.addRoute(e)
+          } else {
+            router.addRoute('layout', e)
+          }
         })
         // hack method to ensure that addRoutes is complete
         // set the replace: true, so the navigation will not leave a history record

@@ -5,15 +5,19 @@
       class="sidebar-menu"
       :collapse="!appStore.sidebar"
       router
+      background-color="#191a20"
+      text-color="#bdbdc0"
+      active-text-color="#ffffff"
+      :default-openeds="defaultOpens"
     >
-      <template v-for="route in permissionStore.routes.filter(e => !e.hidden)">
+      <template v-for="route in menus">
         <el-sub-menu
-          v-if="route.children?.length && route.children.filter((e: RouteChild) => !e.hidden).length > 1"
+          v-if="route.multiChild"
           :index="route.path"
         >
           <template #title>
             <el-icon>
-              <Icon :icon="route.meta.icon" />
+              <Icon :icon="route.meta?.icon" />
             </el-icon>
             <span>{{ route.meta.title }}</span>
           </template>
@@ -25,9 +29,9 @@
             {{ child.meta?.title }}
           </el-menu-item>
         </el-sub-menu>
-        <el-menu-item v-else :index="ifOnlyChild(route)" :data-test="ifOnlyChild(route)">
+        <el-menu-item v-else :index="route.index" :data-test="route.index">
           <el-icon>
-            <Icon :icon="route.meta.icon" />
+            <Icon :icon="route.meta?.icon" />
           </el-icon>
           <template #title>{{ route.meta?.title }}</template>
         </el-menu-item>
@@ -39,12 +43,43 @@
 import { usePermissionStore } from '@/store/permission'
 import { Icon } from '@iconify/vue';
 import { useAppStore } from '@/store/app'
-import { MyRouteRecordRaw, RouteChild } from '@/router';
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { RouteRecordRaw, useRoute } from 'vue-router';
 const appStore = useAppStore()
 
 const permissionStore = usePermissionStore()
+
+type MenuType = RouteRecordRaw & {
+  multiChild?: boolean,
+  index?: string
+}
+const menus: MenuType[] = []
+let index;
+const defaultOpens: string[] = []
+for (const route of permissionStore.addRoutes.filter(e => !e.meta?.hidden)) {
+  if (route.children?.length) {
+    const childrenLength = route.children.filter((e: RouteRecordRaw) => !e.meta?.hidden).length
+    if (childrenLength > 1) {
+      menus.push({
+        ...route,
+        multiChild: true
+      })
+      defaultOpens.push(route.path)
+      continue;
+    } else if (childrenLength === 1) {
+      if (route.path === '/') {
+        index = '/' + route.children[0].path
+      } else {
+        index = route.path + '/' + route.children[0].path
+      }
+    }
+  }
+  index = route.path
+  menus.push({
+    ...route,
+    index
+  })
+}
 
 const route = useRoute()
 
@@ -52,9 +87,9 @@ const activeIndex = ref(route.path)
 
 // activeIndex.value = '/' + route.path.split('/')[1]
 
-function ifOnlyChild(route: MyRouteRecordRaw) {
+function ifOnlyChild(route: RouteRecordRaw) {
   if (route.children) {
-    const children = route.children.filter((e: RouteChild) => !e.hidden)
+    const children = route.children.filter((e: RouteRecordRaw) => !e.meta?.hidden)
     if (children.length === 1) {
       if (route.path === '/') {
         return '/' + children[0].path

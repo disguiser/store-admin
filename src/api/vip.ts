@@ -4,7 +4,7 @@ let preUrl = '/vip'
 
 export function findByPage(query: any) {
   return request({
-    url: `${preUrl}/findByPage`,
+    url: `${preUrl}/page`,
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function findByPage(query: any) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
+    url: `${preUrl}`,
     method: 'put',
     data
   })
@@ -20,7 +20,7 @@ export function create(data: any) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update/${data.id}`,
+    url: `${preUrl}/${data.id}`,
     method: 'patch',
     data
   })
@@ -28,7 +28,7 @@ export function update(data: any) {
 
 export function remove(ids: number[]) {
   return request({
-    url: `${preUrl}/delete`,
+    url: `${preUrl}`,
     method: 'delete',
     data: ids
   })

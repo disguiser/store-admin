@@ -50,12 +50,17 @@ service.interceptors.response.use(
     return response
   },
   error => {
-    // 4001:非法的token; 4000:token不存在;  4001:Token 过期了;
+    // 401: 未认证; 403: 无权限访问;
     const res = error.response
     if (res) {
-      if (res.status === 401 || res.status === 402 || res.status === 403) {
+      if (res.status === 401) {
         const userStore = useUserStore()
         userStore.logout()
+      } else if (res.status === 403) {
+        ElMessage({
+          message: '访问被禁止',
+          type: 'error'
+        })
       } else {
         // console.log(res)
         ElMessage({

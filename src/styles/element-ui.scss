@@ -1,5 +1,7 @@
 // cover some element-ui styles
-
+.el-menu {
+  --el-menu-hover-bg-color: rgb(77, 77, 77) !important;
+}
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;

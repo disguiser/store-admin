@@ -3,5 +3,7 @@
 </template>
 
 <script setup lang="ts" name="NightShift">
-import { isDark, toggleDark } from '@/hooks/useMyDark'
+import { useAppStore } from '@/store/app';
+
+const { isDark, toggleDark } = useAppStore()
 </script>

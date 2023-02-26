@@ -1,6 +1,6 @@
 <template>
   <draggable
-    v-model="props.dynamicTags"
+    v-model="props.tags"
     item-key="id"
   >
     <template #item="{element}">
@@ -38,14 +38,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="DynamicTags">
 import { IDictItem } from '@/model/Dict';
 import { ElMessageBox } from 'element-plus';
 import { nextTick, ref, watchEffect } from 'vue';
 import draggable from 'vuedraggable-es'
 
 const props = defineProps<{
-  dynamicTags: IDictItem[],
+  tags: IDictItem[],
   paramName: string
 }>()
 
@@ -80,7 +80,7 @@ function handleClose(tag: IDictItem) {
     cancelButtonText: 'Cancel',
     type: 'warning'
   }).then(async() => {
-    props.dynamicTags.splice(props.dynamicTags.indexOf(tag), 1)
+    props.tags.splice(props.tags.indexOf(tag), 1)
   })
 }
 function handleClick(tag: IDictItem) {
@@ -97,7 +97,7 @@ watchEffect(() => {
 })
 function handleInputConfirm() {
   if (inputValue.value) {
-    props.dynamicTags.push({
+    props.tags.push({
       itemName: inputValue.value
     })
   }

@@ -5,7 +5,7 @@ let preUrl = '/goods'
 
 export function findByPage(query: any) {
   return request({
-    url: `${preUrl}/findByPage`,
+    url: `${preUrl}/page`,
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function findByPage(query: any) {
 
 export function findByDept(query: any) {
   return request({
-    url: `${preUrl}/findByDept`,
+    url: `${preUrl}/dept`,
     method: 'get',
     params: query
   })
@@ -21,14 +21,8 @@ export function findByDept(query: any) {
 // find Goods
 export function findOneBySku(sku: string) {
   return request({
-    url: `${preUrl}/findOneBySku/${sku}`,
+    url: `${preUrl}/sku/${sku}`,
     method: 'get'
-  })
-}
-
-export function findStockBySku(sku: string) {
-  return request({
-    url: `${preUrl}/findStockBySku/${sku}`
   })
 }
 

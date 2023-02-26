@@ -28,15 +28,15 @@ export function findAll(query: any) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
-    method: 'put',
+    url: `${preUrl}`,
+    method: 'post',
     data
   })
 }
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update/${data.id}`,
+    url: `${preUrl}/${data.id}`,
     method: 'patch',
     data
   })
@@ -44,7 +44,7 @@ export function update(data: any) {
 
 export function updateAvatar(data: any) {
   return request({
-    url: `${preUrl}/update-avatar/${data.id}`,
+    url: `${preUrl}/avatar/${data.id}`,
     method: 'patch',
     data
   })

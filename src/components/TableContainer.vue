@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container">
+  <div class="table-container el-card">
     <div class="filter-container">
       <slot name="filter-container"></slot>
     </div>

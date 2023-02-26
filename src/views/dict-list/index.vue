@@ -60,7 +60,7 @@
       </el-form-item>
       <el-form-item label="字典数据" prop="data">
         <list v-if="temp.moreOption" :data="temp.data" />
-        <dynamic-tag v-else :dynamic-tags="temp.data" param-name="itemName" />
+        <DynamicTags v-else :tags="temp.data" param-name="itemName" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -77,7 +77,7 @@
 <script lang="ts" setup name="DictList">
 import TableContainer from '@/components/TableContainer.vue'
 import { findAll, update, create, remove } from '@/api/dict'
-import DynamicTag from './DynamicTag.vue'
+import DynamicTags from './DynamicTags.vue'
 import List from './List.vue'
 import { reactive, ref } from 'vue';
 import { Dict, IDict } from '@/model/Dict';

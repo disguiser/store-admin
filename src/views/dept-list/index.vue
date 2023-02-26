@@ -27,8 +27,6 @@
               <el-link type="danger" @click="cancelEdit(row)">取消</el-link>
             </template>
             <template v-else>
-              <el-link type="primary" @click="showDetail(row)">明细</el-link>
-              <el-divider direction="vertical" />
               <el-link type="warning" @click="handleEdit(row)">编辑</el-link>
               <el-divider direction="vertical" />
               <el-popconfirm
@@ -76,9 +74,6 @@ function handleSingleSelect(row: IDept) {
   emit('singleChoose', row)
 }
 
-const userStore = useUserStore()
-const route = useRoute()
-const router = useRouter()
 const listLoading = ref(false)
 const list = ref(Array<any>())
 async function getList() {
@@ -92,11 +87,7 @@ async function getList() {
     listLoading.value = false
   }
 }
-if (userStore.roles.includes('Waiter') && route.path === '/stock/dept') {
-  router.replace(`/stock/goods/${userStore.deptId}`)
-} else {
-  getList()
-}
+getList()
 
 const temp = ref<IDept>({
   name: ''
@@ -170,9 +161,6 @@ async function handleRemove(row: IDept, index: number) {
   } finally {
     listLoading.value = false
   }
-}
-function showDetail(row: IDept) {
-  router.replace(`/stock/goods/${row.id}`)
 }
 </script>
 

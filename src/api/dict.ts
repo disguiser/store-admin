@@ -4,7 +4,7 @@ const preUrl = '/dict'
 
 export function findAll(query: any) {
   return request({
-    url: `${preUrl}/findAll`,
+    url: `${preUrl}/admin/all`,
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function findAll(query: any) {
 
 export function create(data: any) {
   return request({
-    url: `${preUrl}/create`,
+    url: `${preUrl}`,
     method: 'post',
     data
   })
@@ -20,7 +20,7 @@ export function create(data: any) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/update`,
+    url: `${preUrl}/admin`,
     method: 'patch',
     data
   })
@@ -28,7 +28,7 @@ export function update(data: any) {
 
 export function remove(id: number) {
   return request({
-    url: `${preUrl}/delete/${id}`,
+    url: `${preUrl}/admin/${id}`,
     method: 'delete'
   })
 }

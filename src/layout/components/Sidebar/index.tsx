@@ -1,9 +1,8 @@
 import { useAppStore } from "@/store/app";
 import { usePermissionStore } from "@/store/permission";
 import { defineComponent, ref } from "vue";
-import { useRoute } from "vue-router";
+import { RouteRecordRaw, useRoute } from "vue-router";
 import { Icon } from '@iconify/vue';
-import { RouteChild } from "@/router";
 
 export default defineComponent({
   setup(props, context) {
@@ -24,8 +23,8 @@ export default defineComponent({
           router
         >
           {
-            permissionStore.routes.filter(e => !e.hidden).map(route => {
-              if (route.children?.length && route.children.filter((e: RouteChild) => !e.hidden).length > 1) {
+            permissionStore.addRoutes.filter(e => !e.meta.hidden).map(route => {
+              if (route.children?.length && route.children.filter((e: RouteRecordRaw) => !e.meta.hidden).length > 1) {
                 return (
                   <el-sub-menu
                     v-slot={{

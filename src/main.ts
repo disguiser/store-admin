@@ -17,6 +17,7 @@ import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import "@/styles/element-dark.scss";
 import 'virtual:svg-icons-register'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
@@ -40,12 +41,8 @@ app.use(VXETable)
 
 import '@/styles/index.scss' // global css
 
-// import * as directives from './directive/index'
-// Object.keys(directives).forEach((key: string) => {
-//   app.directive(key, directives[key])
-// })
-import { focus } from './directive/index'
-app.directive('focus', focus)
+import directives from '@/directives/index'
+app.use(directives)
 
 import MyInput from '@/components/MyInput.vue'
 app.component('my-input', MyInput)

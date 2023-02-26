@@ -1,11 +1,11 @@
 <template>
-  <section class="app-main">
+  <div class="app-main">
     <router-view v-slot="{Component}">
       <KeepAlive :include="cachedViews">
         <component :is="Component" :key="key" />
       </KeepAlive>
     </router-view>
-  </section>
+  </div>
 </template>
 
 <script setup>
@@ -25,12 +25,10 @@ const key = computed(() => route.path)
   // min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
+  padding: 10px;
+  background-color: #f0f2f5;
   overflow: auto;
 }
-
-</style>
-
-<style lang="scss">
 // fix css style bug in open el-dialog
 .el-popup-parent--hidden {
   .fixed-header {

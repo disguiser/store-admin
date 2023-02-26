@@ -28,7 +28,7 @@
         </el-select>
         <span v-else>
           {{ dictStore.colorMap.get(row.color) }}
-          <el-button v-if="useCheckPermission(['Admin', 'Boss'])" type="warning" size="small" :disabled="btnDisabled" icon="CopyDocument" @click="handleCreate(row.color)" />
+          <el-button v-if="useCheckPermission(['Admin'])" type="warning" size="small" :disabled="btnDisabled" icon="CopyDocument" @click="handleCreate(row.color)" />
         </span>
       </template>
     </el-table-column>
@@ -66,7 +66,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column v-if="useCheckPermission(['Admin', 'boss'])" label="操作" align="center" class-name="small-padding fixed-width">
+    <el-table-column v-if="useCheckPermission(['Admin', 'Boss'])" label="操作" align="center" class-name="small-padding fixed-width">
       <template #header>
         <el-button
           v-loading="btnLoading"

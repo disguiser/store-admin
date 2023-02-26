@@ -88,7 +88,8 @@ import { h, onUnmounted, ref } from 'vue';
 import { Action, ElMessageBox, ElNotification } from 'element-plus';
 import { ISizeGroup } from '@/model/SizeGroup';
 import { IDictItem } from '@/model/Dict';
-import { isDark } from '@/hooks/useMyDark'
+import { useAppStore } from '@/store/app';
+const { isDark } = useAppStore()
 const { sizeGroupList } = useSizeGroupStore()
 const { sizeList, sizeMap } = useDictStore()
 

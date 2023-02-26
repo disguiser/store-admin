@@ -107,7 +107,7 @@
               <el-select
                 v-if="temp.label === '尺码'"
                 v-model="barcode.size"
-                @change="handleChange($event, 'size')"
+                @change="colorSizeChange($event, 'size')"
               >
                 <el-option
                   v-for="(e, i) in currentSizeList"
@@ -119,7 +119,7 @@
               <el-select
                 v-else-if="temp.label === '颜色'"
                 v-model="barcode.color"
-                @change="handleChange($event, 'color')"
+                @change="colorSizeChange($event, 'color')"
               >
                 <el-option
                   v-for="(c, ci) in currentColorList"
@@ -181,9 +181,13 @@ const tempIndex = ref<number>()
 const btnLoading = ref(false)
 const copy = ref(1)
 const scale = ref(5)
-const barcode = reactive({
-  size: '',
-  color: '',
+const barcode = reactive<{
+  size: number,
+  color: number,
+  data: string
+}>({
+  size: null,
+  color: null,
   data: null
 })
 const { currentGoods } = useGoodsStore()
@@ -213,21 +217,21 @@ const disabled = computed(() => {
       (printer.value === 'argox' && status.value !== '等待列印')
     ) {
       return true
-    } else if (barcode.data.value === 'XXX') {
+    } else if (barcode.data === 'XXX') {
       return true
     } else {
       return false
     }
 })
 applyData()
-function handleChange(val: number, type: string) {
+function colorSizeChange(val: number, type: string) {
   if (type === 'size') {
     temp.value.value = sizeMap.get(val)
   } else {
     temp.value.value = colorMap.get(val)
   }
   if (barcode.color && barcode.size) {
-    barcode.data.value = `${currentGoods.sku}${_.padStart(barcode.color, 2, '0')}${_.padStart(barcode.size, 2, '0')}`
+    barcode.data = `${currentGoods.sku}${_.padStart(barcode.color.toString(16), 2, '0')}${_.padStart(barcode.size.toString(16), 2, '0')}`
   }
 }
 function applyData() {

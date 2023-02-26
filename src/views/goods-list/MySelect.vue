@@ -77,7 +77,7 @@ const debounced = _.debounce(() => {
   list.value = props.list.filter((c: IDictItem) => {
     return c.itemName.includes(inputValue.value)
   })
-}, 500)
+}, 250)
 function valueChange(val: string) {
   inputValue.value = val
   debounced()

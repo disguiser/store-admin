@@ -4,7 +4,7 @@ let preUrl = '/order'
 
 export function findByPage(query: any) {
   return request({
-    url: `${preUrl}/findByPage`,
+    url: `${preUrl}/page`,
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function findByPage(query: any) {
 
 export function getDetailByOrderId(orderId: number) {
   return request({
-    url: `${preUrl}/getDetailByOrderId/${orderId}`,
+    url: `${preUrl}/details/${orderId}`,
     method: 'get'
   })
 }

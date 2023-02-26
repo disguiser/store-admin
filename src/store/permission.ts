@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import { MyRouteRecordRaw, asyncRoutes, constantRoutes, RouteChild } from '@/router'
+import { asyncRoutes, constantRoutes } from '@/router'
+import { RouteRecordRaw } from "vue-router";
 /**
  * Use meta.roles to determine if the current user has permission
  * @param roles
  * @param route
  */
- function hasPermission(roles: string[], route: MyRouteRecordRaw | RouteChild) {
+ function hasPermission(roles: string[], route: RouteRecordRaw) {
   if (roles && route.meta && route.meta.roles) {
     return (route.meta.roles as string[]).some(e => roles.includes(e))
   } else {
@@ -18,14 +19,14 @@ import { MyRouteRecordRaw, asyncRoutes, constantRoutes, RouteChild } from '@/rou
  * @param routes asyncRoutes
  * @param roles
  */
- export function filterAsyncRoutes(routes: MyRouteRecordRaw[], roles: string[]) {
-  const res: MyRouteRecordRaw[] = []
+ export function filterAsyncRoutes(routes: RouteRecordRaw[], roles: string[]) {
+  const res: RouteRecordRaw[] = []
 
   routes.forEach(route => {
     if (hasPermission(roles, route)) {
       if (route.children) {
-        const children: RouteChild[] = []
-        route.children.forEach((child: RouteChild) => {
+        const children: RouteRecordRaw[] = []
+        route.children.forEach((child: RouteRecordRaw) => {
           if (hasPermission(roles, child)) {
             children.push(child)
           }
@@ -43,15 +44,13 @@ export const usePermissionStore = defineStore({
   id: 'permission',
   state: () => {
     return {
-      routes: new Array<MyRouteRecordRaw>,
-      addRoutes: new Array<MyRouteRecordRaw>
+      addRoutes: new Array<RouteRecordRaw>
     }
   },
   actions: {
     generateRoutes(roles: string[]) {
       const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       this.addRoutes = accessedRoutes
-      this.routes = Array.prototype.concat(constantRoutes, accessedRoutes)
       return accessedRoutes
     }
   }
