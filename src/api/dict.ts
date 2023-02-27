@@ -4,7 +4,7 @@ const preUrl = '/dict'
 
 export function findAll(query: any) {
   return request({
-    url: `${preUrl}/admin/all`,
+    url: `${preUrl}/all`,
     method: 'get',
     params: query
   })
