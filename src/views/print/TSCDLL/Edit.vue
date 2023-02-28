@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main el-card">
     <div class="goods">
       <div>款号：{{ currentGoods.sku }}</div>
       <div>商品名称：{{ currentGoods.name }}</div>
@@ -184,7 +184,7 @@ const scale = ref(5)
 const barcode = reactive<{
   size: number,
   color: number,
-  data: string
+  data: any
 }>({
   size: null,
   color: null,
@@ -217,7 +217,7 @@ const disabled = computed(() => {
       (printer.value === 'argox' && status.value !== '等待列印')
     ) {
       return true
-    } else if (barcode.data === 'XXX') {
+    } else if (barcode.data.value === 'XXX') {
       return true
     } else {
       return false
@@ -231,7 +231,7 @@ function colorSizeChange(val: number, type: string) {
     temp.value.value = colorMap.get(val)
   }
   if (barcode.color && barcode.size) {
-    barcode.data = `${currentGoods.sku}${_.padStart(barcode.color.toString(16), 2, '0')}${_.padStart(barcode.size.toString(16), 2, '0')}`
+    barcode.data.value = `${currentGoods.sku}${_.padStart(barcode.color.toString(), 2, '0')}${_.padStart(barcode.size.toString(), 2, '0')}`
   }
 }
 function applyData() {

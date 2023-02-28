@@ -71,7 +71,7 @@
         </tr>
       </tbody>
     </table>
-    <el-button type="primary" :disabled="chosenColors.size === 0 || chosenSizes.length === 0" style="float:right;" @click="multiCreateStock()">
+    <el-button v-loading="loading" type="primary" :disabled="chosenColors.size === 0 || chosenSizes.length === 0" style="float:right;" @click="multiCreateStock()">
       确认
     </el-button>
   </div>
@@ -94,6 +94,7 @@ const props = defineProps<{
 }>()
 
 const checkAll = ref(false)
+const loading = ref(false)
 const isIndeterminate = ref(false)
 const chosenColors = ref<Set<number>>(new Set())
 const chosenSizes = ref<number[]>([])
@@ -158,10 +159,15 @@ function handleCheckedSizeChange(value: CheckboxValueType[]) {
 }
 const emit = defineEmits(['refresh'])
 async function multiCreateStock() {
-  await multiCreate(stockList.value)
-  chosenColors.value = new Set()
-  chosenSizes.value = []
-  emit('refresh')
+  try {
+    loading.value = true
+    await multiCreate(stockList.value)
+    chosenColors.value = new Set()
+    chosenSizes.value = []
+    emit('refresh')
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 

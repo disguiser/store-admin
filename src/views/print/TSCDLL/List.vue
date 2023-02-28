@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main el-card">
     <div
       v-for="(item, i) in list"
       :key="i"
