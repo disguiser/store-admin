@@ -284,6 +284,12 @@ export const asyncRoutes: RouteRecordRaw[] = [
     name: 'DeptList',
   },
   {
+    path: '/dict-list',
+    meta: { title: '字典表', icon: 'fluent-mdl2:dictionary', roles: ['Admin', 'Boss'] },
+    component: () => import('@/views/dict-list/index.vue'),
+    name: 'DictList',
+  },
+  {
     path: '/print',
     meta: {
       title: '打印',

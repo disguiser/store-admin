@@ -241,7 +241,7 @@ function applyData() {
     } else if (e.label === '款号') {
       e.value = currentGoods.preSku
     } else if (e.label === '售价') {
-      e.value = `￥${currentGoods.salePrice}.00`
+      e.value = `￥${currentGoods.salePrice}`
     }
     if (e.type === 'barcode') {
       e.value = 'XXX'

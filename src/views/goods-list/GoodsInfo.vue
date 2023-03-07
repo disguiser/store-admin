@@ -26,10 +26,10 @@
         <cos-upload :img-url="temp.imgUrl" :disabled="temp.disabled" @handleImgVal="handleImgVal" />
       </el-form-item> -->
       <el-form-item label="售价" prop="salePrice">
-        <el-input-number v-model="props.temp.salePrice" data-test="salePrice" :disabled="props.temp.disabled" :min="0" :step="10" :precision="1" />
+        <el-input-number v-model="props.temp.salePrice" data-test="salePrice" :disabled="props.temp.disabled" :min="0" :step="10" />
       </el-form-item>
       <el-form-item v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice">
-        <el-input-number v-model="props.temp.costPrice" data-test="costPrice" :disabled="props.temp.disabled" :min="0" :step="10" :precision="1" />
+        <el-input-number v-model="props.temp.costPrice" data-test="costPrice" :disabled="props.temp.disabled" :min="0" :step="10" />
       </el-form-item>
       <!-- <el-form-item label="折扣" prop="discount">
         <el-slider v-model="temp.discount" :disabled="temp.disabled" :min="0.1" :max="1" :step="0.05" show-stops show-input />
