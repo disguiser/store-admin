@@ -5,10 +5,8 @@
       class="sidebar-menu"
       :collapse="!appStore.sidebar"
       router
-      background-color="#191a20"
-      text-color="#bdbdc0"
-      active-text-color="#ffffff"
       :default-openeds="defaultOpens"
+      :collapse-transition="false"
     >
       <template v-for="route in menus">
         <el-sub-menu
@@ -105,5 +103,10 @@ function ifOnlyChild(route: RouteRecordRaw) {
 .sidebar-menu {
   width: 200px;
   min-height: 100vh;
+}
+.el-menu {
+  --el-menu-bg-color: #191a20;
+  --el-menu-text-color: #bdbdc0;
+  --el-menu-active-color: #ffffff;
 }
 </style>
