@@ -5,7 +5,7 @@ import { useDeptStore } from '@/store/dept'
 import { useDictStore } from '@/store/dict'
 import { ref } from 'vue'
 
-export const useVersionStore = defineStore('version', () => {
+export const useVersionStore = defineStore('Version', () => {
   const versionObj = ref()
   async function checkVersion() {
     const sizeGroupStore = useSizeGroupStore()
@@ -63,5 +63,7 @@ export const useVersionStore = defineStore('version', () => {
     clear
   }
 }, {
-  persist: true
+  persist: {
+    key: 'Version'
+  }
 })

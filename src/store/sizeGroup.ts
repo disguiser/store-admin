@@ -21,5 +21,7 @@ export const useSizeGroupStore = defineStore(SizeGroup.name, () => {
     fetchList
   }
 }, {
-  persist: true
+  persist: {
+    key: SizeGroup.name
+  }
 })

@@ -18,5 +18,7 @@ export const useDeptStore = defineStore(Dept.name, () => {
 
   return { dept, deptMap, fetchList }
 }, {
-  persist: true,
+  persist: {
+    key: Dept.name
+  }
 })

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue'
 
-export const useErrorLogStore = defineStore('error', () => {
+export const useErrorLogStore = defineStore('Error', () => {
   const logs = ref([])
   function addErrorLog(log: any) {
     logs.value.push(log)
@@ -15,5 +15,7 @@ export const useErrorLogStore = defineStore('error', () => {
     clearErrorLog
   }
 }, {
-  persist: true
+  persist: {
+    key: 'Error'
+  }
 })

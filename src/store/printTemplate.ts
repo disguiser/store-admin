@@ -18,5 +18,7 @@ export const usePrintTemplateStore = defineStore(PrintTemplate.name, () => {
     update
   }
 }, {
-  persist: true
+  persist: {
+    key: PrintTemplate.name
+  }
 })

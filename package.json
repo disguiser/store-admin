@@ -26,7 +26,7 @@
     "path-browserify": "^1.0.1",
     "path-to-regexp": "2.4.0",
     "pinia": "^2.0.32",
-    "pinia-plugin-persistedstate": "^2.2.0",
+    "pinia-plugin-persistedstate": "^3.1.0",
     "qs": "^6.11.0",
     "sortablejs": "^1.15.0",
     "sortablejs-vue3": "^1.2.2",

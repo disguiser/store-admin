@@ -4,7 +4,7 @@ const preUrl = '/version'
 
 export function getVersions() {
   return request({
-    url: `${preUrl}/findAll`,
+    url: `${preUrl}/all`,
     method: 'get'
   })
 }

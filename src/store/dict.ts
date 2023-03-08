@@ -72,5 +72,7 @@ export const useDictStore = defineStore(Dict.name, () => {
     fetchColor
   }
 }, {
-  persist: true
+  persist: {
+    key: Dict.name
+  }
 })

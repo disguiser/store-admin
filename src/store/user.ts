@@ -8,7 +8,7 @@ import { ref } from 'vue'
 export const TokenKey = 'Authorization'
 
 type LoginResponse = {
-  userId: string,
+  id: string,
   userName: string,
   accountName: string,
   deptId: string,
@@ -36,7 +36,7 @@ export const useUserStore = defineStore(User.name, () => {
   async function doLogin(data: LoginResponse) {
     Cookies.set(TokenKey, data.token)
     token.value = data.token
-    userId.value = data.userId
+    userId.value = data.id
     userName.value = data.userName
     accountName.value = data.accountName
     roles.value = data.roles
@@ -84,5 +84,7 @@ export const useUserStore = defineStore(User.name, () => {
     updateName
   }
 }, {
-  persist: true
+  persist: {
+    key: User.name
+  }
 })
