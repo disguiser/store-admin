@@ -1,9 +1,9 @@
+import { list } from '@/api/stock';
+import { IGoods } from "@/model/Goods";
 import { defineStore } from "pinia";
-import { list } from '@/api/stock'
-import { Goods, IGoods } from "@/model/Goods";
 import { ref } from "vue";
 
-export const useGoodsStore = defineStore(Goods.name, () => {
+export const useGoodsStore = defineStore('Goods', () => {
   const currentGoods = ref<IGoods>()
   async function setGoods(goods: IGoods) {
     const res = await list({ goodsId: goods.id })
@@ -16,7 +16,5 @@ export const useGoodsStore = defineStore(Goods.name, () => {
     setGoods
   }
 }, {
-  persist: {
-    key: Goods.name
-  }
+  persist: true
 })

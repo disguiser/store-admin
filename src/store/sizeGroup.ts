@@ -1,9 +1,9 @@
 import { findAll } from '@/api/sizeGroup'
-import { ISizeGroup, SizeGroup } from '@/model/SizeGroup'
+import { ISizeGroup } from '@/model/SizeGroup'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-export const useSizeGroupStore = defineStore(SizeGroup.name, () => {
+export const useSizeGroupStore = defineStore('SizeGroup', () => {
   const sizeGroupList = ref<ISizeGroup[]>()
   const sizeGroupMap = computed(() => {
     return sizeGroupList.value.reduce((a: Map<number, number[]>, b: ISizeGroup) => {
@@ -21,7 +21,5 @@ export const useSizeGroupStore = defineStore(SizeGroup.name, () => {
     fetchList
   }
 }, {
-  persist: {
-    key: SizeGroup.name
-  }
+  persist: true
 })

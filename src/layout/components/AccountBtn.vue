@@ -7,7 +7,7 @@
     />
     <template #dropdown>
       <el-dropdown-menu>
-        <router-link to="/profile/index">
+        <router-link to="/profile">
           <el-dropdown-item>账户信息</el-dropdown-item>
         </router-link>
         <el-dropdown-item divided command="logout">

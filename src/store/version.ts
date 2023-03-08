@@ -63,7 +63,5 @@ export const useVersionStore = defineStore('Version', () => {
     clear
   }
 }, {
-  persist: {
-    key: 'Version'
-  }
+  persist: true
 })

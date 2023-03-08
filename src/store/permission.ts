@@ -1,5 +1,5 @@
+import { asyncRoutes } from '@/router';
 import { defineStore } from "pinia";
-import { asyncRoutes, constantRoutes } from '@/router'
 import { RouteRecordRaw } from "vue-router";
 /**
  * Use meta.roles to determine if the current user has permission

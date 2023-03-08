@@ -1,5 +1,5 @@
 import { login as loginApi, update as updateApi, updateAvatar } from '@/api/user'
-import { AccountInfo, PasswordLoginInfo, User } from '@/model/User'
+import { AccountInfo, PasswordLoginInfo } from '@/model/User'
 import { useVersionStore } from '@/store/version'
 import Cookies from 'js-cookie'
 import { defineStore } from 'pinia'
@@ -17,7 +17,7 @@ type LoginResponse = {
   token: string
 }
 
-export const useUserStore = defineStore(User.name, () => {
+export const useUserStore = defineStore('User', () => {
   const token = ref(Cookies.get(TokenKey))
   const userId = ref()
   const userName = ref()
@@ -84,7 +84,5 @@ export const useUserStore = defineStore(User.name, () => {
     updateName
   }
 }, {
-  persist: {
-    key: User.name
-  }
+  persist: true
 })

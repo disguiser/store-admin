@@ -1,9 +1,9 @@
 import { update as updateApi } from '@/api/printTemplate'
-import { IPrintTemplate, PrintTemplate } from '@/model/PrintTemplate'
+import { IPrintTemplate } from '@/model/PrintTemplate'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const usePrintTemplateStore = defineStore(PrintTemplate.name, () => {
+export const usePrintTemplateStore = defineStore('PrintTemplate', () => {
   const currentTemplate = ref()
   function open(template: IPrintTemplate) {
     currentTemplate.value = template
@@ -18,7 +18,5 @@ export const usePrintTemplateStore = defineStore(PrintTemplate.name, () => {
     update
   }
 }, {
-  persist: {
-    key: PrintTemplate.name
-  }
+  persist: true
 })

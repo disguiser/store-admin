@@ -1,11 +1,11 @@
+import { findAll as findAllColor } from '@/api/color'
 import { findAll as findAllDict } from '@/api/dict'
 import { findAll as findAllSize } from '@/api/size'
-import { findAll as findAllColor } from '@/api/color'
-import { IDict, IDictItem, Dict } from '@/model/Dict'
+import { IDict, IDictItem } from '@/model/Dict'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-export const useDictStore = defineStore(Dict.name, () => {
+export const useDictStore = defineStore('Dict', () => {
   const dict = ref<IDict[]>([])
   const sizeList = ref<IDictItem[]>([])
   const colorList = ref<IDictItem[]>([])
@@ -72,7 +72,5 @@ export const useDictStore = defineStore(Dict.name, () => {
     fetchColor
   }
 }, {
-  persist: {
-    key: Dict.name
-  }
+  persist: true
 })

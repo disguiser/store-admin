@@ -22,7 +22,5 @@ export const useAppStore = defineStore('App', () => {
     toggleDark
   }
 }, {
-  persist: {
-    key: 'App'
-  }
+  persist: true
 })
