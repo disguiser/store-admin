@@ -27,9 +27,9 @@
       <el-table-column label="单价" prop="salePrice" sortable />
       <el-table-column label="数量" prop="amount" />
       <el-table-column label="小计" prop="subtotalMoney" />
-      <el-table-column label="下单时间" prop="orderTime" sortable width="130" align="center">
+      <el-table-column label="下单时间" prop="createTime" sortable width="130" align="center">
         <template #default="{row}">
-          <span>{{ dayjs(row.orderTime).format('YYYY-MM-DD HH:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
     </el-table>

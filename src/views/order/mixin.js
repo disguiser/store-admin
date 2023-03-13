@@ -115,7 +115,7 @@ export default {
       this.btnLoading = true
       try {
         let res = await create(this.temp)
-        this.temp.orderTime = new Date().getTime()
+        this.temp.createTime = new Date().getTime()
         this.temp.id = res.data
         this.list.unshift(this.temp)
         this.dialogVisible = false

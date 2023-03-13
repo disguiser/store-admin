@@ -19,7 +19,7 @@
           <td v-for="s in sizes" :key="s.id">{{ e[s.id] }}</td>
           <td>{{ e.salePrice }}</td>
           <td>{{ e.subtotalMoney }}</td>
-          <td>{{ dayjs(e.orderTime).format('HH:mm') }}</td>
+          <td>{{ dayjs(e.createTime).format('HH:mm') }}</td>
         </tr>
       </table>
       <div style="margin-top: 10px">

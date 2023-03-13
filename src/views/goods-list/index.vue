@@ -1,23 +1,15 @@
 <template>
   <table-container>
     <template #filter-container>
-      <!-- <el-input
+      <el-input
         v-model="listQuery.preSku"
         clearable
         placeholder="款号"
         style="width: 230px;margin-right:8px;"
         class="filter-item"
         @keyup.enter="handleFilter()"
-      /> -->
-      <input
-        type="text"
-        v-model="listQuery.preSku"
-        placeholder="款号"
-        style="width: 230px;margin-right:8px;"
-        class="filter-item"
-        @keyup.enter="handleFilter()"
-      >
-      <!-- <el-input v-model="listQuery.phone" clearable placeholder="手机号码" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
+        @clear="handleFilter"
+      />
       <el-button
         class="filter-item"
         type="primary"

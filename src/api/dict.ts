@@ -20,7 +20,7 @@ export function create(data: any) {
 
 export function update(data: any) {
   return request({
-    url: `${preUrl}/admin`,
+    url: `${preUrl}`,
     method: 'patch',
     data
   })
@@ -28,7 +28,7 @@ export function update(data: any) {
 
 export function remove(id: number) {
   return request({
-    url: `${preUrl}/admin/${id}`,
+    url: `${preUrl}/${id}`,
     method: 'delete'
   })
 }

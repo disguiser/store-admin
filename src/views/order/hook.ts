@@ -95,7 +95,7 @@ export function useHook() {
     btnLoading.value = true
     try {
       const res = await create(temp.value)
-      temp.value.orderTime = new Date()
+      temp.value.createTime = new Date()
       temp.value.id = res.data
       list.value.unshift(temp.value)
       dialogVisible.value = false

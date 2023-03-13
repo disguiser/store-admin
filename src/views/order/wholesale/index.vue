@@ -54,7 +54,7 @@
       <el-table-column label="总金额" prop="totalMoney" align="center" width="80" />
       <el-table-column label="下单时间" width="130" align="center">
         <template #default="{row}">
-          <span>{{ dayjs(row.orderTime).format('YYYY-MM-DD HH:mm') }}</span>
+          <span>{{ dayjs(row.createTime).format('YYYY-MM-DD HH:mm') }}</span>
         </template>
       </el-table-column>
   

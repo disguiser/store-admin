@@ -1,7 +1,8 @@
 import { ElLoading, ElMessageBox, ElNotification } from "element-plus"
 import { findByPage as findGoods, create, update, remove } from '@/api/goods'
-import { ref, reactive } from 'vue'
+import { ref, reactive, watchEffect } from 'vue'
 import { Goods, IGoods } from "@/model/Goods"
+import { useRoute } from 'vue-router'
 
 export function useGoods(getList: Function) {
   const tableEl = ref()
@@ -14,6 +15,7 @@ export function useGoods(getList: Function) {
   const view = ref('table')
   const total = ref(0)
   const listLoading = ref(true)
+  const route = useRoute()
   const listQuery = reactive({
     page: 1,
     limit: 20,
@@ -39,6 +41,10 @@ export function useGoods(getList: Function) {
     listQuery.page = 1
     getList()
   }
+
+  watchEffect(() => {
+    listQuery.preSku = route.query.preSku as string
+  })
 
   async function loadMore() {
     try {

@@ -99,14 +99,14 @@ function ifOnlyChild(route: RouteRecordRaw) {
   return route.path
 }
 </script>
-<style>
+<style scoped>
 .sidebar-menu {
-  width: 200px;
   min-height: 100vh;
 }
 .el-menu {
   --el-menu-bg-color: #191a20;
   --el-menu-text-color: #bdbdc0;
   --el-menu-active-color: #ffffff;
+  --el-menu-hover-bg-color: rgb(77, 77, 77);
 }
 </style>

@@ -133,7 +133,7 @@ export function transitionWeekData(resData: any) {
   return resData.map((r: any) => {
     // list to map
     const dataMap = r.reduce((a: any, b: any) => {
-      a[b.orderTime] = b.total
+      a[b.createTime] = b.total
       return a
     }, {})
     // 不全的日期补0

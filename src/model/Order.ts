@@ -98,7 +98,7 @@ export interface IOrder extends Pick<
   id?: number
   total: number
   totalMoney: number
-  orderTime?: Date
+  createTime?: Date
   buyer: number
   itemList: IOrderGoodsStock[]
   deptId: number
@@ -111,7 +111,7 @@ export class Order implements IOrder {
   id?: number | undefined
   total: number = 0
   totalMoney: number = 0
-  orderTime?: Date
+  createTime?: Date
   buyer: number = null
   itemList: IOrderGoodsStock[] = []
   deptId: number = null
@@ -132,7 +132,7 @@ export class Order implements IOrder {
         id,
         total,
         totalMoney,
-        orderTime,
+        createTime,
         buyer,
         itemList,
         deptId,
@@ -151,11 +151,11 @@ export class Order implements IOrder {
       if (totalMoney) {
         this.totalMoney = totalMoney
       }
-      if (orderTime) {
+      if (createTime) {
         this.totalMoney = totalMoney
       }
-      if (orderTime) {
-        this.orderTime = orderTime
+      if (createTime) {
+        this.createTime = createTime
       }
       if (buyer) {
         this.buyer = buyer

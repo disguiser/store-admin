@@ -5,7 +5,7 @@
     <div class="section3">
       <label>订单编号：{{ order.id }}</label>
       <label>下单时间：</label>
-      <span>{{ parseTime(order.orderTime) }}</span>
+      <span>{{ parseTime(order.createTime) }}</span>
     </div>
     <span>**************************</span>
     <div class="section4">

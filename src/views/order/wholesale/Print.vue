@@ -38,7 +38,7 @@
         </div>
         <div class="head-foot">
           <span>联系方式: 18553108836</span>
-          <span>下单时间:{{ parseTime(order.orderTime) }}</span>
+          <span>下单时间:{{ parseTime(order.createTime) }}</span>
         </div>
         <div v-if="debt" class="head-foot">
           <span class="debt">欠款：{{ debt }}</span>

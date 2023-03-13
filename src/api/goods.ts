@@ -48,3 +48,10 @@ export function remove(id: number, deptId?: number) {
     method: 'delete'
   })
 }
+
+export function checkPreSku(preSku: string) {
+  return request({
+    url: `${preUrl}/check/pre-sku/${preSku}`,
+    method: 'get'
+  })
+}

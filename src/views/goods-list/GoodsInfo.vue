@@ -4,7 +4,7 @@
     :title="props.title"
     :close-on-click-modal="false"
     width="500px"
-    @update:visible="close"
+    @update:model-value="close"
     append-to-body
   >
     <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="props.temp">
@@ -12,7 +12,7 @@
         <el-input :value="props.temp.sku" disabled />
       </el-form-item>
       <el-form-item label="厂家款号" prop="preSku">
-        <el-input data-test="preSku" v-model="props.temp.preSku" />
+        <el-input data-test="preSku" v-model="props.temp.preSku" @blur="handleCheckPreSku" />
       </el-form-item>
       <el-form-item label="商品名称" prop="name">
         <el-input data-test="name" v-model="props.temp.name" :disabled="props.temp.disabled" />
@@ -49,9 +49,11 @@
 <script setup lang="ts">
 import { useCheckPermission } from '@/hooks/useCheckPermission'
 import { IGoods } from '@/model/Goods';
+import { useRouter, useRoute } from 'vue-router';
 import { useSizeGroupStore } from '@/store/sizeGroup'
-import { FormInstance, FormRules } from 'element-plus';
+import { ElMessageBox, FormInstance, FormRules } from 'element-plus';
 import { ref } from 'vue';
+import { checkPreSku } from '@/api/goods';
 const sizeGroupStore = useSizeGroupStore()
 const props = withDefaults(
   defineProps<{
@@ -89,5 +91,28 @@ function confirm(formEl: FormInstance | undefined) {
 }
 function close() {
   emits('update:dialog', false)
+}
+const router = useRouter()
+const route = useRoute()
+async function handleCheckPreSku(event: Event) {
+  const preSku: string = (event.target as HTMLInputElement).value
+  if (preSku) {
+    const res = await checkPreSku(preSku)
+    if (res.data) {
+      ElMessageBox.confirm('款号已存在,是否帮你找出来', 'Warning', {
+        confirmButtonText: '是',
+        cancelButtonText: '不用',
+        type: 'warning'
+      }).then(async() => {
+        close()
+        router.replace({
+          path: route.path,
+          query: {
+            preSku
+          }
+        })
+      })
+    }
+  }
 }
 </script>

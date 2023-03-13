@@ -3,7 +3,7 @@ export interface IDict {
   dictName: string
   data: IDictItem[]
   moreOption: boolean
-  modifyTime: Date
+  updateTime: Date
 }
 export interface IDictItem {
   id?: number
@@ -17,7 +17,7 @@ export class Dict implements IDict {
   dictName: string
   data: IDictItem[]
   moreOption: boolean
-  modifyTime: Date
+  updateTime: Date
   constructor(_data?: IDict) {
     if (_data) {
       const {
@@ -25,7 +25,7 @@ export class Dict implements IDict {
         dictName,
         data,
         moreOption,
-        modifyTime
+        updateTime
       } = _data
       if (id) {
         this.id = id
@@ -39,8 +39,8 @@ export class Dict implements IDict {
       if (moreOption) {
         this.moreOption = moreOption
       }
-      if (modifyTime) {
-        this.modifyTime = modifyTime
+      if (updateTime) {
+        this.updateTime = updateTime
       }
     }
   }

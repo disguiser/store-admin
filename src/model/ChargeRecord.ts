@@ -3,7 +3,7 @@ export interface IChargeRecord {
   vipId: number
   chargeAmount: number
   giveAmount: number
-  creator: number
+  createBy: number
   createTime: Date
 }
 export class ChargeRecord implements IChargeRecord {
@@ -11,7 +11,7 @@ export class ChargeRecord implements IChargeRecord {
   vipId: number
   chargeAmount: number
   giveAmount: number
-  creator: number
+  createBy: number
   createTime: Date
   constructor(data?: Partial<IChargeRecord>) {
     if (data) {
@@ -20,7 +20,7 @@ export class ChargeRecord implements IChargeRecord {
         vipId,
         chargeAmount,
         giveAmount,
-        creator,
+        createBy,
         createTime
       } = data
       if (id) {
@@ -35,8 +35,8 @@ export class ChargeRecord implements IChargeRecord {
       if (giveAmount) {
         this.giveAmount = giveAmount
       }
-      if (creator) {
-        this.creator = creator
+      if (createBy) {
+        this.createBy = createBy
       }
       if (createTime) {
         this.createTime = createTime

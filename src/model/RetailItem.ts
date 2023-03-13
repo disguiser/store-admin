@@ -5,5 +5,5 @@ export interface IRetailItem {
   salePrice: number
   amount: number
   subtotalMoney: number
-  orderTime: Date
+  createTime: Date
 }

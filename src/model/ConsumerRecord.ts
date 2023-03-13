@@ -2,7 +2,7 @@ export interface IConsumerRecord {
   id?: number
   vipId: number
   consumeAmount: number
-  creator: number
+  createBy: number
   createTime: Date
 }
 
@@ -10,7 +10,7 @@ export class ConsumerRecord implements IConsumerRecord {
   id?: number
   vipId: number
   consumeAmount: number
-  creator: number
+  createBy: number
   createTime: Date
   constructor(data?: Partial<IConsumerRecord>) {
     if (data) {
@@ -18,7 +18,7 @@ export class ConsumerRecord implements IConsumerRecord {
         id,
         vipId,
         consumeAmount,
-        creator,
+        createBy,
         createTime
       } = data
       if (id) {
@@ -30,8 +30,8 @@ export class ConsumerRecord implements IConsumerRecord {
       if (consumeAmount) {
         this.consumeAmount = consumeAmount
       }
-      if (creator) {
-        this.creator = creator
+      if (createBy) {
+        this.createBy = createBy
       }
       if (createTime) {
         this.createTime = createTime
