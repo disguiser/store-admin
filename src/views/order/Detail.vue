@@ -40,7 +40,7 @@ const { sizeMap, colorMap } = useDictStore()
 const route = useRoute()
 
 const res = await getDetailByOrderId(orderId)
-const list: IOrderGoods[] = res.data.items
+const list: IOrderGoods[] = res.data
 function handleReturn(row: IOrderGoods, $index: number) {
 
 }

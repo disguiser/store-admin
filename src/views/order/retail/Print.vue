@@ -67,7 +67,7 @@ const list = ref<OrderWithDetail[]>()
 dealData()
 async function dealData() {
   const res = await getDetailByOrderId(order.value.id)
-  list.value = res.data.items
+  list.value = res.data
   loading.value = false
   // await nextTick()
   setTimeout(() => {

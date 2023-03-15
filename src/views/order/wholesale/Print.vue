@@ -100,7 +100,7 @@ async function dealData() {
   const { data } = await getDetailByOrderId(order.value.id)
   const preSku: any = {}
   const _sizes: any = []
-  for (let e of data.items) {
+  for (let e of data) {
     if (!preSku[e.preSku]) {
       preSku[e.preSku] = {}
     }
