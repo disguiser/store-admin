@@ -138,7 +138,12 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-dialog v-model="multiCreateDialog" append-to-body>
+  <el-dialog
+    v-model="multiCreateDialog"
+    append-to-body
+    :close-on-click-modal="false"
+    :destroy-on-close="true"
+  >
     <MultiCreateStock
       :goods-id="props.goodsId"
       :dept-id="props.deptId"

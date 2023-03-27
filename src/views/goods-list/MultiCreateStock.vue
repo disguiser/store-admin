@@ -71,9 +71,11 @@
         </tr>
       </tbody>
     </table>
-    <el-button v-loading="loading" type="primary" :disabled="chosenColors.size === 0 || chosenSizes.length === 0" style="float:right;" @click="multiCreateStock()">
-      确认
-    </el-button>
+    <div style="text-align: right;">
+      <el-button v-loading="loading" type="primary" :disabled="chosenColors.size === 0 || chosenSizes.length === 0" @click="multiCreateStock()">
+        确认
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -127,6 +129,8 @@ const stockList = computed<IStock[]>(() => {
 const dictStore = useDictStore()
 
 function pickColor(val: number | string) {
+  console.log('============')
+  console.log(val)
   if (typeof val === 'string') {
     ElMessageBox.confirm(`这是一个新颜色, 确认要添加 ${val} 吗?`, 'Warning', {
       confirmButtonText: '确定',

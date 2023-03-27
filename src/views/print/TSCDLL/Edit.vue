@@ -231,7 +231,7 @@ function colorSizeChange(val: number, type: string) {
     temp.value.value = colorMap.get(val)
   }
   if (barcode.color && barcode.size) {
-    barcode.data.value = `${currentGoods.sku}${_.padStart(barcode.color.toString(), 2, '0')}${_.padStart(barcode.size.toString(), 2, '0')}`
+    barcode.data.value = `${currentGoods.sku}-${barcode.color}-${barcode.size}-1`
   }
 }
 function applyData() {

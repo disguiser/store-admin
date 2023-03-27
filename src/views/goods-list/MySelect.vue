@@ -70,11 +70,13 @@ function handleEnter() {
   } else {
     emit('add', inputValue.value)
   }
+  inputValue.value = ''
 }
 const dropdown1 = ref()
 const debounced = _.debounce(() => {
   console.log(inputValue.value)
   list.value = props.list.filter((c: IDictItem) => {
+    dropdown1.value.handleOpen()
     return c.itemName.includes(inputValue.value)
   })
 }, 250)

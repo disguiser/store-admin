@@ -102,7 +102,6 @@ export interface IOrder extends Pick<
   buyer: number
   itemList: IOrderGoodsStock[]
   deptId: number
-  deptName: string
   category: 1 | 2
   paymentStatus: 0 | 1
 }
@@ -115,7 +114,6 @@ export class Order implements IOrder {
   buyer: number = null
   itemList: IOrderGoodsStock[] = []
   deptId: number = null
-  deptName: string = ''
   category: CategoryEnum
   paymentStatus: PaymentStatusEnum = 1
   name: string = ''
@@ -136,7 +134,6 @@ export class Order implements IOrder {
         buyer,
         itemList,
         deptId,
-        deptName,
         name,
         mobile,
         address,
@@ -165,9 +162,6 @@ export class Order implements IOrder {
       }
       if (deptId) {
         this.deptId = deptId
-      }
-      if (deptName) {
-        this.deptName = deptName
       }
       if (name) {
         this.name = name
