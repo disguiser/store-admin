@@ -22,12 +22,12 @@ export function useBarcodeScan(callback: Function) {
   })
   async function add(barcode: string) {
     if (barcode.length >= 8) {
-      let sku, color, size
+      let sku: string, color: number, size: number
       if (barcode.includes('-')) {
         const data = barcode.split('-')
         sku = data[0]
-        color = data[1]
-        size = data[2]
+        color = parseInt(data[1])
+        size = parseInt(data[2])
       } else {
         if (barcode.startsWith('YQ')) {
           barcode = barcode.substring(2)
