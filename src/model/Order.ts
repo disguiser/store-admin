@@ -1,7 +1,7 @@
 import { ICustomer } from "./Customer"
 
 export interface IOrderGoods {
-  sku: string
+  id: number
   preSku: string
   name: string
   color: number
@@ -24,7 +24,7 @@ export interface IOrderGoodsStock extends IOrderGoods {
 }
 
 export class OrderGoodsStock implements IOrderGoodsStock {
-  sku: string = ''
+  id: number = null
   preSku: string = ''
   name: string = ''
   color: number = null
@@ -39,7 +39,7 @@ export class OrderGoodsStock implements IOrderGoodsStock {
   constructor(data?: IOrderGoodsStock) {
     if (data) {
       const {
-        sku,
+        id,
         preSku,
         name,
         color,
@@ -52,8 +52,8 @@ export class OrderGoodsStock implements IOrderGoodsStock {
         currentStock,
         stockId
       } = data
-      if (sku) {
-        this.sku = sku
+      if (id) {
+        this.id = id
       }
       if (preSku) {
         this.preSku = preSku
@@ -190,7 +190,6 @@ export enum PaymentStatusEnum {
 }
 
 export type OrderWithDetail = {
-  sku: string,
   name: string,
   color: number,
   size: number,

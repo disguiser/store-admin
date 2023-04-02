@@ -1,7 +1,7 @@
 <template>
   <div class="main el-card">
     <div class="goods">
-      <div>款号：{{ currentGoods.sku }}</div>
+      <div>编号：{{ currentGoods.id }}</div>
       <div>商品名称：{{ currentGoods.name }}</div>
       <div>颜色：{{ currentColorList.map(e => colorMap.get(e)).join('，') }}</div>
       <div>尺码：{{ currentSizeList.map(e => sizeMap.get(e)).join('，') }}</div>
@@ -231,7 +231,7 @@ function colorSizeChange(val: number, type: string) {
     temp.value.value = colorMap.get(val)
   }
   if (barcode.color && barcode.size) {
-    barcode.data.value = `${currentGoods.sku}-${barcode.color}-${barcode.size}-1`
+    barcode.data.value = `${currentGoods.id.toString(32)}/${barcode.color.toString(32)}/${barcode.size.toString(32)}`
   }
 }
 function applyData() {

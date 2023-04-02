@@ -78,8 +78,7 @@ export function useGoods(getList: Function) {
     const loading = ElLoading.service()
     try {
       const res = await create(temp.value)
-      temp.value.id = res.data.id
-      temp.value.sku = res.data.sku
+      temp.value.id = res.data
       list.value.unshift(temp.value)
       infoVisible.value = false
       ElNotification({

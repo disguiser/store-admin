@@ -84,7 +84,7 @@ export function useHook() {
         return
       }
       // 选项防重复
-      let a = e.sku + e.color + e.size
+      let a = e.id.toString() + e.color.toString() + e.size.toString()
       if (!arr.includes(a)) {
         arr.push(a)
       } else {

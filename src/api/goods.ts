@@ -1,4 +1,3 @@
-import { IGoods } from '@/model/Goods'
 import request from '@/utils/request'
 
 let preUrl = '/goods'
@@ -19,9 +18,9 @@ export function findByDept(query: any) {
   })
 }
 // find Goods
-export function findOneBySku(sku: string) {
+export function findOneById(sku: number | string) {
   return request({
-    url: `${preUrl}/sku/${sku}`,
+    url: `${preUrl}/${sku}`,
     method: 'get'
   })
 }

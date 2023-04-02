@@ -8,8 +8,8 @@
     append-to-body
   >
     <el-form ref="formRef" :rules="rules" label-position="right" label-width="100px" :model="props.temp">
-      <el-form-item v-if="props.title !== '新建'" label="款号" prop="sku">
-        <el-input :value="props.temp.sku" disabled />
+      <el-form-item v-if="props.title !== '新建'" label="编号" prop="id">
+        <el-input :value="props.temp.id" disabled />
       </el-form-item>
       <el-form-item label="厂家款号" prop="preSku">
         <el-input data-test="preSku" v-model="props.temp.preSku" @blur="handleCheckPreSku" />
@@ -67,10 +67,6 @@ const props = withDefaults(
 )
 const emits = defineEmits(['update:dialog', 'confirm'])
 const rules: FormRules = {
-  // sku: [
-  //   { required: true, message: '必输项', trigger: 'blur' },
-  //   { validator: this.skuRepeat, trigger: 'change' }
-  // ],
   name: [{ required: true, message: '必输项', trigger: 'blur' }],
   sizeGroup: [{ required: true, message: '必输项', trigger: 'blur' }],
   preSku: [{ required: true, message: '必输项', trigger: 'blur' }]

@@ -1,7 +1,7 @@
 <template>
   <table-container>
     <template #filter-container>
-      <el-input v-model="barcode" clearable placeholder="手动输入编码" style="width: 200px;" class="filter-item" @keyup.enter.native="manualAdd" />
+      <el-input v-model="barcode" clearable placeholder="手动输入编号" style="width: 200px;" class="filter-item" @keyup.enter.native="manualAdd" />
     </template>
     <el-table
       :data="list"
@@ -9,7 +9,7 @@
       fit
       style="width: 100%;"
     >
-      <el-table-column label="款号" prop="barcode" align="center" />
+      <el-table-column label="编号" prop="id" align="center" />
       <el-table-column label="品名" prop="name" align="center" />
       <el-table-column label="颜色" prop="color" align="center" />
       <el-table-column label="尺码" prop="size" align="center" />
@@ -38,14 +38,14 @@
 </template>
 
 <script lang="ts" setup>
-import { findOneBySku } from '@/api/goods'
+import { findOneById } from '@/api/goods'
 import { useBarcodeScan } from '@/hooks/useBarcodeScan'
 import { IGoods } from '@/model/Goods';
 import { IStock } from '@/model/Stock';
 import { ref } from 'vue';
 import TableContainer from '@/components/TableContainer.vue';
 
-type GoodsStock = Pick<IGoods, 'sku' | 'name' | 'salePrice'> & 
+type GoodsStock = Pick<IGoods, 'id' | 'name' | 'salePrice'> & 
   Pick<IStock, 'color' | 'size'> &
   {
     amount: number
@@ -63,18 +63,18 @@ function manualAdd() {
 }
 
 useBarcodeScan(scaned)
-async function scaned(sku: string, color: number, size: number) {
-  let res = await findOneBySku(sku)
-  let item = list.value.filter(e => e.sku === barcode.value)
-  if (item.length > 0) {
-    item[0].amount += 1
+async function scaned(sku: number | string, color: number, size: number) {
+  const { data: { id, name, salePrice } } = await findOneById(sku)
+  const item = list.value.find(e => e.id.toString() === barcode.value)
+  if (item) {
+    item.amount += 1
   } else {
     list.value.push({
-      sku,
+      id,
       color,
       size,
-      name: res.data.name,
-      salePrice: res.data.salePrice,
+      name,
+      salePrice,
       amount: 1
     })
   }

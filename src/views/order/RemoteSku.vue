@@ -11,12 +11,12 @@
   >
     <el-option
       v-for="item in skuOptions"
-      :key="item.sku"
+      :key="item.id"
       :label="item.preSku"
-      :value="item.sku"
+      :value="item.id"
     >
       <span style="float: left">{{ item.preSku }}</span>
-      <span style="float: right">{{ item.sku }}</span>
+      <span style="float: right">{{ item.id }}</span>
     </el-option>
   </el-select>
 </template>
@@ -36,11 +36,11 @@ const props = defineProps<{
 
 const emits = defineEmits(['change', 'update:modelValue'])
 
-function handleInput(sku: string) {
+function handleInput(id: number) {
   console.log('handleInput')
-  let choosen = skuOptions.value.find(e => e.sku === sku)
-  emits('change', { goodsId: choosen.id, salePrice: choosen.salePrice, sku: choosen.sku })
-  emits('update:modelValue', choosen.preSku)
+  const { preSku } = skuOptions.value.find(e => e.id === id)
+  emits('change', id)
+  emits('update:modelValue', preSku)
 }
 function debounced(query: string) {
   if (query !== '') {
@@ -51,7 +51,6 @@ function debounced(query: string) {
   }
 }
 async function remoteSku(query: string) {
-  console.log('getList')
   loading.value = true
   try {
     const res = await findGoods({
@@ -60,7 +59,6 @@ async function remoteSku(query: string) {
     skuOptions.value = res.data.items.map((e: IGoods) => {
       return {
         id: e.id,
-        sku: e.sku,
         preSku: e.preSku,
         salePrice: e.salePrice
       }

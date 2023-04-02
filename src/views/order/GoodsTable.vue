@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { findOneBySku } from '@/api/goods'
+import { findOneById } from '@/api/goods'
 import { list as listStock } from '@/api/stock'
 import RemoteSku from './RemoteSku.vue'
 import CountUp from 'vue-countup-v3'
@@ -94,9 +94,9 @@ useBarcodeScan(scaned)
 
 async function scaned(sku: string, color: number, size: number) {
   console.log('scaned', sku, color, size)
-  let res = await findOneBySku(sku)
+  let { data: { preSku, id} } = await findOneById(sku)
   let item = temp.value.itemList.find((e: IOrderGoodsStock) => {
-    return e.sku === sku &&
+    return e.id === id &&
       e.color === color &&
       e.size === size
   })
@@ -106,8 +106,8 @@ async function scaned(sku: string, color: number, size: number) {
   } else {
     addGoods()
     item = temp.value.itemList[temp.value.itemList.length - 1]
-    item.preSku = res.data.preSku
-    await skuChange({ goodsId: res.data.id, sku }, temp.value.itemList.length - 1)
+    item.preSku = preSku
+    await skuChange(id, temp.value.itemList.length - 1)
     item.color = color
     colorChange(color, item)
     item.size = size
@@ -137,12 +137,11 @@ function sumTotal() {
   temp.value.total = total
   temp.value.totalMoney = totalMoney
 }
-async function skuChange($event: any, i: number) {
-  const { goodsId, sku } = $event
+async function skuChange(goodsId: number, i: number) {
   temp.value.itemList[i].salePrice = null
   temp.value.itemList[i].color = null
   temp.value.itemList[i].size = null
-  temp.value.itemList[i].sku = sku
+  temp.value.itemList[i].id = goodsId
   const res = await listStock({
     goodsId,
     deptId

@@ -2,7 +2,6 @@ import { IStock, Stock } from "./Stock"
 
 export interface IGoods {
   id?: number
-  sku: string
   preSku: string
   name: string
   sizeGroup: number
@@ -16,7 +15,6 @@ export interface IGoods {
 
 export class Goods implements IGoods {
   id?: number
-  sku: string = ''
   preSku: string = ''
   name: string = ''
   sizeGroup: number
@@ -29,7 +27,6 @@ export class Goods implements IGoods {
     if (data) {
       const {
         id,
-        sku,
         preSku,
         name,
         sizeGroup,
@@ -41,9 +38,6 @@ export class Goods implements IGoods {
       } = data
       if (id) {
         this.id = id
-      }
-      if (sku) {
-        this.sku = sku
       }
       if (preSku) {
         this.preSku = preSku

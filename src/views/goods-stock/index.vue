@@ -61,8 +61,8 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="货号" prop="sku" align="center" sortable width="90" />
-        <el-table-column label="厂家款号" prop="preSku" align="center" sortable width="100" />
+        <el-table-column label="编号" prop="id" align="center" sortable width="90" />
+        <el-table-column label="厂家货号" prop="preSku" align="center" sortable width="100" />
         <el-table-column label="商品名称" prop="name" align="center" sortable width="130" />
         <el-table-column v-if="showImg" label="图片" prop="imageUrl" align="center" width="220">
           <template #default="{row}">
@@ -202,7 +202,6 @@ async function getList() {
       if (!map.has(item.id)) {
         map.set(item.id, {
           id: item.id,
-          sku: item.sku,
           preSku: item.preSku,
           name: item.name,
           sizeGroup: item.sizeGroup,
