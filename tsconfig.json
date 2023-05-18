@@ -18,7 +18,12 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "types": ["vite-plugin-svg-icons/client", "element-plus/global", "vitest/globals"]
+    "types": [
+      "vite-plugin-svg-icons/client",
+      "element-plus/global",
+      "vitest/globals",
+      "vite/client"
+    ]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "tests/*.ts"],
   "exclude": ["node_modules", "dist"],

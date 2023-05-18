@@ -3,7 +3,7 @@ import App from './App.vue'
 const app = createApp(App)
 
 import router from './router/index'
-import '@/permission'
+import '@/router'
 app.use(router)
 
 import { createPinia } from 'pinia'
@@ -33,11 +33,6 @@ app.component('SvgIcon', SvgIcon)
 
 // import "@ui5/webcomponents/dist/Input";
 // app.config.compilerOptions.isCustomElement = tag => tag.startsWith('ui5-')
-
-import 'xe-utils'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/style.css'
-app.use(VXETable)
 
 import '@/styles/index.scss' // global css
 

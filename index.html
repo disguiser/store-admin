@@ -10,11 +10,12 @@
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
     <% if (VITE_ENV === 'prod') { %>
-    <script src="https://unpkg.com/vue@3.2.37/dist/vue.global.prod.js"></script>
-    <script src="https://unpkg.com/vue-router@4.0.12/dist/vue-router.global.prod.js"></script>
-    <script src="https://unpkg.com/axios@0.25.0/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/element-plus"></script>
-    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+    <script src="https://cdn.staticfile.org/vue/3.3.2/vue.global.prod.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/4.2.0/vue-router.global.prod.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/1.4.0/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/element-plus/2.3.4/index.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-plus/2.3.4/index.css" />
+    <script src="https://cdn.staticfile.org/echarts/5.4.2/echarts.min.js"></script>
     <% } %>
   </body>
 </html>

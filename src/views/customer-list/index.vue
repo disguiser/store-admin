@@ -100,7 +100,7 @@
 import TableContainer from '@/components/TableContainer.vue'
 import { findByPage, findOne, update, create, remove } from '@/api/customer'
 import Pagination from '@/components/Pagination/index.vue'
-import { addressOptions } from '@/utils/locations'
+import { addressOptions } from '@/utils'
 import { reactive, ref } from 'vue';
 import { addressFilter } from '@/utils/index'
 import dayjs from 'dayjs'

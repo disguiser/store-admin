@@ -1,16 +1,18 @@
-import { defineConfig, loadEnv } from 'vite'
+import { PluginOption, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
-
+import externalGlobals from "rollup-plugin-external-globals";
 import { createHtmlPlugin } from 'vite-plugin-html'
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
   return defineConfig({
     server: {
+      host: '0.0.0.0',
       port: 9529,
       proxy: {
         [`${loadEnv(mode, process.cwd()).VITE_APP_BASE_API}`]: {
@@ -26,7 +28,22 @@ export default ({ mode }) => {
       }
     },
     build: {
-      sourcemap: false
+      sourcemap: loadEnv(mode, process.cwd()).VITE_ENV !== 'prod',
+      rollupOptions: {
+        external: [
+          'vue',
+          'vue-router',
+          'element-plus',
+          'echarts'
+        ],
+        plugins: [
+          externalGlobals({
+	          vue: "Vue",
+	          "element-plus": "ElementPlus",
+            "vue-router": "VueRouter"
+	        })
+        ],
+      },
     },
     // esbuild: { loader: ['.js', '.jsx' ] },
     css: {
@@ -63,7 +80,10 @@ export default ({ mode }) => {
       }),
       vueJsx({
         // options are passed on to @vue/babel-plugin-jsx
-      })
+      }),
+      visualizer({
+        open: false
+      }) as PluginOption
     ]
   })
 }
