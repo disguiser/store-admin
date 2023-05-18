@@ -1,5 +1,5 @@
 <template>
-  <div class="left">
+  <div class="left" :style="{ width: appStore.sidebar ? '210px' : '65px' }">
     <sidebar />
   </div>
   <div class="right">
@@ -14,11 +14,32 @@
 <script setup lang="ts" name="Layout">
 import { useVersionStore } from '@/store/version';
 import { AppMain, Navbar, Sidebar, TagsView } from './components';
+import { onBeforeUnmount } from 'vue'
+import { useAppStore } from '@/store/app';
+import _ from 'lodash-es'
+
+const appStore = useAppStore()
+const listeningWindow = _.debounce(() => {
+  const screenWidth = document.body.clientWidth;
+  if (appStore.sidebar && screenWidth < 1200) {
+    appStore.toggleSideBar(false)
+  }
+  if (!appStore.sidebar && screenWidth > 1200) {
+    appStore.toggleSideBar(true)
+  }
+}, 100);
+window.addEventListener("resize", listeningWindow, false);
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", listeningWindow);
+});
 
 const versionStore = useVersionStore()
 await versionStore.checkVersion()
 </script>
 <style lang="scss" scoped>
+  .left {
+    transition: width 0.3s ease;
+  }
   .right {
     flex: 1;
     height: 100%;

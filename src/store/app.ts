@@ -4,8 +4,12 @@ import { ref, watchEffect } from 'vue'
 export const useAppStore = defineStore('App', () => {
   const sidebar = ref(true)
   const isDark = ref(false)
-  function toggleSideBar() {
-    sidebar.value = !sidebar.value
+  function toggleSideBar(val?: boolean) {
+    if (typeof val === 'boolean') {
+      sidebar.value = val
+    } else {
+      sidebar.value = !sidebar.value
+    }
   }
   function toggleDark() {
     isDark.value = !isDark.value

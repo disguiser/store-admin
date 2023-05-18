@@ -1,4 +1,4 @@
-import { asyncRoutes } from '@/router';
+import { dynamicRouter } from '@/router/modules/dynamicRouter';
 import { defineStore } from "pinia";
 import { RouteRecordRaw } from "vue-router";
 /**
@@ -16,10 +16,10 @@ import { RouteRecordRaw } from "vue-router";
 
 /**
  * Filter asynchronous routing tables by recursion
- * @param routes asyncRoutes
+ * @param routes dynamicRouter
  * @param roles
  */
- export function filterAsyncRoutes(routes: RouteRecordRaw[], roles: string[]) {
+ export function filterDynamicRouter(routes: RouteRecordRaw[], roles: string[]) {
   const res: RouteRecordRaw[] = []
 
   routes.forEach(route => {
@@ -49,7 +49,7 @@ export const usePermissionStore = defineStore({
   },
   actions: {
     generateRoutes(roles: string[]) {
-      const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      const accessedRoutes = filterDynamicRouter(dynamicRouter, roles)
       this.addRoutes = accessedRoutes
       return accessedRoutes
     }
