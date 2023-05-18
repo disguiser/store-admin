@@ -13,7 +13,7 @@ export function useBarcodeScan(callback: Function) {
         flag = true
         setTimeout(() => {
           flag = false
-        }, 150)
+        }, 250)
       }
     }
   })
