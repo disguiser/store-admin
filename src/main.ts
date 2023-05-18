@@ -34,6 +34,11 @@ app.component('SvgIcon', SvgIcon)
 // import "@ui5/webcomponents/dist/Input";
 // app.config.compilerOptions.isCustomElement = tag => tag.startsWith('ui5-')
 
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+app.use(VXETable)
+
 import '@/styles/index.scss' // global css
 
 import directives from '@/directives/index'
