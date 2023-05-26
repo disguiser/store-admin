@@ -40,7 +40,8 @@ export default ({ mode }) => {
           externalGlobals({
 	          vue: "Vue",
 	          "element-plus": "ElementPlus",
-            "vue-demi": "VueDemi"
+            "vue-demi": "VueDemi",
+            "echarts":  "echarts"
 	        })
         ],
       },
@@ -82,7 +83,7 @@ export default ({ mode }) => {
         // options are passed on to @vue/babel-plugin-jsx
       }),
       visualizer({
-        open: true
+        open: false
       }) as PluginOption
     ]
   })
