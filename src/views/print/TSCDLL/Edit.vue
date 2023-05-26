@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import Tag from './Tag.js'
-import _ from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { print as printApi } from '@/api/printTemplate'
 import { computed, reactive, ref } from 'vue';
 import { useGoodsStore } from '@/store/goods';
@@ -255,7 +255,7 @@ async function print() {
     btnLoading.value = true
     let list: any[] = []
     currentTemplate.data.map((e: any) => {
-      let _e = _.cloneDeep(e)
+      let _e = cloneDeep(e)
       if (e.type === 'material') {
         let first = _e.value.splice(0, 1)
         first = _e.label + '：' + first[0].type + (first[0].percent ? '：' + first[0].percent + '%' : '')

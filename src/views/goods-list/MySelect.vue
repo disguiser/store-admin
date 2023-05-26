@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { IDictItem } from '@/model/Dict';
-import _ from 'lodash-es';
+import { debounce } from 'lodash-es';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
@@ -73,7 +73,7 @@ function handleEnter() {
   inputValue.value = ''
 }
 const dropdown1 = ref()
-const debounced = _.debounce(() => {
+const debounced = debounce(() => {
   console.log(inputValue.value)
   list.value = props.list.filter((c: IDictItem) => {
     dropdown1.value.handleOpen()

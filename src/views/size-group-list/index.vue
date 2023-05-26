@@ -63,7 +63,6 @@
   import { useDictStore } from '@/store/dict';
   import { computed } from '@vue/reactivity';
   import { ElNotification, FormInstance } from 'element-plus';
-  import _ from 'lodash'
   import { reactive, ref } from 'vue';
 
   const list = ref([])

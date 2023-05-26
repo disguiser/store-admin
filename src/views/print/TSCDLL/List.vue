@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { findAll, create, update, remove as removeApi } from '@/api/printTemplate'
 import Tag from './Tag.js'
-import _ from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { ref } from 'vue';
 import { ElLoading, ElMessageBox } from 'element-plus';
 import { IPrintTemplate } from '@/model/PrintTemplate';
@@ -48,7 +48,7 @@ function copy(item: IPrintTemplate, index: number) {
   }).then(async() => {
     const loading = ElLoading.service()
     try {
-      let _item = _.cloneDeep(item)
+      let _item = cloneDeep(item)
       delete _item.id
       let res = await create(_item)
       _item.id = res.data

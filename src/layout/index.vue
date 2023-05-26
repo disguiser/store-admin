@@ -16,10 +16,10 @@ import { useVersionStore } from '@/store/version';
 import { AppMain, Navbar, Sidebar, TagsView } from './components';
 import { onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/app';
-import _ from 'lodash-es'
+import { debounce } from 'lodash-es'
 
 const appStore = useAppStore()
-const listeningWindow = _.debounce(() => {
+const listeningWindow = debounce(() => {
   const screenWidth = document.body.clientWidth;
   if (appStore.sidebar && screenWidth < 1200) {
     appStore.toggleSideBar(false)

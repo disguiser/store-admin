@@ -42,6 +42,7 @@
         :height="100"
         value="Simple QR code"
       /> -->
+      <!-- <Barcode value="0371-34-4-1" :height="10" :scale="10" style="transform: rotate(90deg);" /> -->
       <img src="/weixin-qrcode.png" style="width: 100px;height: 100px;">
     </div>
     <span>**************************</span>
@@ -55,6 +56,7 @@ import { useOrderPrint } from '../useOrderPrint'
 import { ref } from 'vue';
 import { OrderWithDetail } from '@/model/Order';
 // import QRCodeVue3 from "qrcode-vue3";
+// import Barcode from '@/views/print/TSCDLL/Barcode.vue'
 
 const {
   sizeMap,
