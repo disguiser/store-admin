@@ -32,15 +32,15 @@ export default ({ mode }) => {
       rollupOptions: {
         external: [
           'vue',
-          'vue-router',
           'element-plus',
+          'vue-demi',
           'echarts'
         ],
         plugins: [
           externalGlobals({
 	          vue: "Vue",
 	          "element-plus": "ElementPlus",
-            "vue-router": "VueRouter"
+            "vue-demi": "VueDemi"
 	        })
         ],
       },
@@ -82,7 +82,7 @@ export default ({ mode }) => {
         // options are passed on to @vue/babel-plugin-jsx
       }),
       visualizer({
-        open: false
+        open: true
       }) as PluginOption
     ]
   })

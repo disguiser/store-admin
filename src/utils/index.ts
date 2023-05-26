@@ -23,21 +23,21 @@ export default function getPageTitle(pageTitle: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-export let addressOptions: any = localStorage.getItem('addressOptions')
+export let addressOptions: any = JSON.parse(localStorage.getItem('addressOptions'))
 if (!addressOptions) {
   fetch("https://store.zhoumingshuai.top/cdn/locations.json")
   .then((response) => response.json())
   .then((data) => {
       addressOptions = data
-      localStorage.setItem('addressOptions', addressOptions)
+      localStorage.setItem('addressOptions', JSON.stringify(addressOptions))
   })
 }
 export function addressFilter(code: string[]) {
   let address = ''
   if (code?.length > 0) {
-    let data: any
+    let data: any = addressOptions
     code.forEach((e: string) => {
-      data = addressOptions.find((p: any) => p.code === e)
+      data = data.find((p: any) => p.code === e)
       address += data.name
       data = data.children
     })

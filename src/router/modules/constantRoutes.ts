@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
+import Layout from '@/layout/index.vue'
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -35,7 +36,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/layout',
     name: 'layout',
-    component: import("@/layout/index.vue"),
+    component: Layout,
     redirect: '/dashboard',
     children: []
   }

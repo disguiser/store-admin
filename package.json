@@ -29,13 +29,13 @@
     "vue-countup-v3": "^1.0.14",
     "vue-hooks-plus": "^1.1.7",
     "vue-image-crop-upload": "^3.0.3",
-    "vuedraggable-es": "^4.1.1"
+    "vuedraggable-es": "^4.1.1",
+    "vue-router": "^4.2.0"
   },
   "devDependencies": {
-    "echarts": "^5.3.3",
-    "element-plus": "^2.2.32",
     "vue": "^3.3.2",
-    "vue-router": "^4.2.0",
+    "element-plus": "^2.2.32",
+    "echarts": "^5.3.3",
     "rollup-plugin-external-globals": "^0.8.0",
     "@iconify/vue": "^4.0.2",
     "@types/echarts": "^4.9.16",
