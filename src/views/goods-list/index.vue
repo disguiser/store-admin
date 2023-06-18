@@ -109,7 +109,7 @@
   />
 </template>
 
-<script setup lang="ts" name="GoodsList">
+<script setup lang="ts">
 import { findByPage as findGoods } from '@/api/goods'
 import TableContainer from '@/components/TableContainer.vue'
 import { useCheckPermission } from '@/hooks/useCheckPermission'
@@ -121,6 +121,10 @@ import { useRouter } from 'vue-router'
 import DeptsStock from './DeptsStock.vue'
 import GalleryView from './GalleryView.vue'
 import GoodsInfo from './GoodsInfo.vue'
+
+defineOptions({
+  name: 'GoodsList'
+})
 
 const {
   tableEl,

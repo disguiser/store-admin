@@ -84,7 +84,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts" name="Retail">
+<script setup lang="ts">
 import TableContainer from '@/components/TableContainer.vue'
 import { findByPage as findOrders } from '@/api/order'
 import Pagination from '@/components/Pagination/index.vue' // secondary package based on el-pagination
@@ -95,6 +95,10 @@ import GoodsTable from '../GoodsTable.vue'
 import dayjs from 'dayjs'
 import { useHook } from '../hook'
 import { useCheckPermission } from '@/hooks/useCheckPermission'
+
+defineOptions({
+  name: 'Retail'
+})
 
 const {
   list,

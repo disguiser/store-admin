@@ -4,8 +4,10 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Admin">
-
+<script setup lang="ts">
+defineOptions({
+  name: 'Admin'
+})
 </script>
 
 <style scoped>

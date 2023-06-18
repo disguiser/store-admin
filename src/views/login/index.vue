@@ -31,7 +31,6 @@
         </el-tooltip>
         <el-form-item prop="phoneCode">
           <span class="svg-container">
-            <svg-icon icon-class="password" />
           </span>
           <el-input
             ref="phoneCode"
@@ -47,7 +46,7 @@
   </div>
 </template>
 
-<script setup name="Login" lang="ts">
+<script setup lang="ts">
 // import { sendPhoneCode } from '@/api/user'
 // import { v4 as uuid } from 'uuid'
 // import QRCode from 'qrcode'
@@ -55,6 +54,10 @@ import { useVersionStore } from '@/store/version'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import Password from './Password.vue'
+
+defineOptions({
+  name: 'Login'
+})
 
 const router = useRouter()
 

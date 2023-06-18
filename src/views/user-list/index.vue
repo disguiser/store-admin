@@ -87,7 +87,7 @@
   </el-dialog>
 </template>
 
-<script lang="ts" setup name="UserList">
+<script lang="ts" setup>
 import { findByPage, update, create, checkUnique } from '@/api/user'
 import TableContainer from '@/components/TableContainer.vue'
 import Pagination from '@/components/Pagination/index.vue'
@@ -96,6 +96,11 @@ import { IUser, User, UserStatus } from '@/model/User'
 import { ElMessage, ElNotification, FormInstance, FormRules } from 'element-plus';
 import { useDictStore } from '@/store/dict';
 import { useDeptStore } from '@/store/dept';
+
+defineOptions({
+  name: 'UserList'
+})
+
 const statusMap = {
   Enabled: 'success',
   Disabled: 'info'

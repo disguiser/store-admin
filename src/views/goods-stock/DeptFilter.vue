@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="DeptFilter">
+<script setup lang="ts">
 import { ref } from 'vue'
 import { findAll } from '@/api/dept'
 import { IDept } from '@/model/Dept';

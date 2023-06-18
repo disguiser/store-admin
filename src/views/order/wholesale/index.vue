@@ -136,7 +136,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts" name="Order">
+<script setup lang="ts">
 import TableContainer from '@/components/TableContainer.vue'
 import { findByPage as findCustomers } from '@/api/customer'
 import { findByPage as findOrders } from '@/api/order'
@@ -151,7 +151,11 @@ import Detail from '../Detail.vue'
 import GoodsTable from '../GoodsTable.vue'
 
 import { ListItem, useHook } from '../hook'
-console.log('wholesale')
+
+defineOptions({
+  name: 'Wholesale'
+})
+
 const {
   list,
   total,

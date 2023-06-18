@@ -63,13 +63,17 @@
   </div>
 </template>
 
-<script setup lang="ts" name="ChargeRecordList">
+<script setup lang="ts">
 import { create, findByPage } from '@/api/chargeRecord';
 import Pagination from '@/components/Pagination/index.vue';
 import { ChargeRecord, IChargeRecord } from '@/model/ChargeRecord';
 import dayjs from 'dayjs';
 import { ElNotification, FormInstance, FormRules } from 'element-plus';
 import { reactive, ref } from 'vue';
+
+defineOptions({
+  name: 'ChargeRecordList'
+})
 
 const props = defineProps<{
   vipId: number

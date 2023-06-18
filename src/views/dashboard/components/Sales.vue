@@ -11,11 +11,15 @@
   </CardPanel>
 </template>
 
-<script setup lang="ts" name="Sales">
+<script setup lang="ts">
 import { chartMoney } from '@/api/order'
 import { CategoryEnum } from '@/model/Order';
 import CardPanel from './CardPanel.vue'
 import { initStackOption, transitionWeekData } from '@/utils/index'
+
+defineOptions({
+  name: 'Sales'
+})
 
 const props = defineProps<{
   totalMoney: number

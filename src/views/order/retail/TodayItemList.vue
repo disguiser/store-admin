@@ -36,7 +36,7 @@
   </table-container>
 </template>
 
-<script setup lang="ts" name="TodayItemList">
+<script setup lang="ts">
 import { findToday } from '@/api/orderGoods'
 import TableContainer from '@/components/TableContainer.vue'
 import { useDictStore } from '@/store/dict'

@@ -37,12 +37,17 @@
     </el-menu>
   </el-scrollbar>
 </template>
-<script lang="ts" setup name="Sidebar">
+<script lang="ts" setup>
 import { usePermissionStore } from '@/store/permission'
 import { Icon } from '@iconify/vue';
 import { useAppStore } from '@/store/app'
 import { ref } from 'vue';
 import { RouteRecordRaw, useRoute } from 'vue-router';
+
+defineOptions({
+  name: 'Sidebar'
+})
+
 const appStore = useAppStore()
 
 const permissionStore = usePermissionStore()

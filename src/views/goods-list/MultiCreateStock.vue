@@ -79,7 +79,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="MultiCreateStock">
+<script setup lang="ts">
 import { create } from '@/api/color';
 import { multiCreate } from '@/api/stock';
 import { IStock, Stock } from '@/model/Stock';

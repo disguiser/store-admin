@@ -74,7 +74,7 @@
   </el-dialog>
 </template>
 
-<script lang="ts" setup name="DictList">
+<script lang="ts" setup>
 import TableContainer from '@/components/TableContainer.vue'
 import { findAll, update, create, remove } from '@/api/dict'
 import DynamicTags from './DynamicTags.vue'
@@ -82,6 +82,10 @@ import List from './List.vue'
 import { reactive, ref } from 'vue';
 import { Dict, IDict } from '@/model/Dict';
 import { ElNotification, FormInstance, FormRules } from 'element-plus';
+
+defineOptions({
+  name: 'DictList'
+})
 
 const list = ref<IDict[]>()
 const listLoading = ref(false)

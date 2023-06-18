@@ -19,9 +19,13 @@
   </el-col>
 </template>
 
-<script setup lang="ts" name="CardPanel">
+<script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import CountUp from 'vue-countup-v3'
+
+defineOptions({
+  name: 'CardPanel'
+})
 
 const props = defineProps<{
   icon: string,

@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import externalGlobals from "rollup-plugin-external-globals";
 import { createHtmlPlugin } from 'vite-plugin-html'
 import { visualizer } from "rollup-plugin-visualizer";
@@ -72,7 +71,6 @@ export default ({ mode }) => {
       createHtmlPlugin({
         minify: true,
       }),
-      vueSetupExtend(),
       createSvgIconsPlugin({
         // Specify the icon folder to be cached
         iconDirs: [resolve(process.cwd(), 'src/icons')],

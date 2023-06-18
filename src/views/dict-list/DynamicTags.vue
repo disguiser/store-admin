@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script lang="ts" setup name="DynamicTags">
+<script lang="ts" setup>
 import { IDictItem } from '@/model/Dict';
 import { ElMessageBox } from 'element-plus';
 import { nextTick, ref, watchEffect } from 'vue';

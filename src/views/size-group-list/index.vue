@@ -56,7 +56,7 @@
   </el-dialog>
 </template>
 
-<script lang="ts" setup name="SizeGroupList">
+<script lang="ts" setup>
   import TableContainer from '@/components/TableContainer.vue'
   import { findAll, update, create, remove } from '@/api/sizeGroup'
   import { ISizeGroup } from '@/model/SizeGroup';
@@ -64,6 +64,10 @@
   import { computed } from '@vue/reactivity';
   import { ElNotification, FormInstance } from 'element-plus';
   import { reactive, ref } from 'vue';
+
+  defineOptions({
+    name: 'SizeGroupList'
+  })
 
   const list = ref([])
   const listLoading = ref(false)

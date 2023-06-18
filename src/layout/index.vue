@@ -11,13 +11,16 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Layout">
+<script setup lang="ts">
 import { useVersionStore } from '@/store/version';
 import { AppMain, Navbar, Sidebar, TagsView } from './components';
 import { onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/app';
 import { debounce } from 'lodash-es'
 
+defineOptions({
+  name: 'Layout'
+})
 const appStore = useAppStore()
 const listeningWindow = debounce(() => {
   const screenWidth = document.body.clientWidth;

@@ -100,7 +100,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts" name="VipList">
+<script setup lang="ts">
 import TableContainer from '@/components/TableContainer.vue'
 import { create, findByPage, remove, update } from '@/api/vip';
 import Pagination from '@/components/Pagination/index.vue'; // secondary package based on el-pagination
@@ -111,95 +111,98 @@ import ConsumeRecordList from '@/views/consume-record-list/index.vue';
 import { ElMessageBox, ElNotification, FormInstance, FormRules } from 'element-plus';
 import { reactive, ref } from 'vue';
 
-  const list = ref<IVip[]>([])
-  const total = ref<number>(0)
-  const listLoading = ref(true)
-  const listQuery = reactive({
-    page: 1,
-    limit: 20,
-    name: undefined,
-    phone: undefined,
-    sort: undefined
-  })
-  const temp = ref<IVip>(new Vip())
-  const tempIndex = ref<number>()
-  const infoDialogVisible = ref(false)
-  const chargeDialogVisible = ref(false)
-  const consumeDialogVisible = ref(false)
-  const currentVipId = ref()
-  const btnLoading = ref(false)
-  const dialogStatus = ref('')
-  const rules: FormRules = {
-    name: [{ required: true, message: '必输项', trigger: 'blur' }],
-    phone: [
-      { required: true, message: '必输项', trigger: 'blur' },
-      { type: 'string', pattern: /^(13[0-9]|14[5-9]|15[0-3,5-9]|16[2,5,6,7]|17[0-8]|18[0-9]|19[1,3,5,8,9])\d{8}$/, message: '格式错误', trigger: 'blur' }
-    ],
-    birthday: [{ required: true, message: '必输项', trigger: 'blur' }],
-    birthDiscount: [{ required: true, message: '必输项', trigger: 'blur' }],
-    vipDiscount: [{ required: true, message: '必输项', trigger: 'blur' }]
-  }
-  const formRef = ref<FormInstance>()
-  // const { proxy } = getCurrentInstance();
-  // const getNewData =  () => {
-  //   proxy.$refs['uploadRef'].clearImg();
-  // }
-  getList()
-  async function getList() {
-    listLoading.value = true
-    const response = await findByPage(listQuery)
-    list.value = response.data.items
-    total.value = response.data.total
-    listLoading.value = false
-  }
-  function handleFilter() {
-    listQuery.page = 1
-    getList()
-  }
-  function sortChange(data: any) {
-    const { prop, order } = data
-    if (order === 'ascending') {
-      listQuery.sort = prop
-    } else if (order === 'descending') {
-      listQuery.sort = '-' + prop
-    } else {
-      listQuery.sort = ''
-    }
-    handleFilter()
-  }
-  function handleCreate(formEl: FormInstance) {
-    // console.log('handleCreate')
-    temp.value = new Vip()
-    dialogStatus.value = '新建'
-    infoDialogVisible.value = true
-    // console.log(formRef)
-    formEl?.resetFields()
-  }
-  function createData(formEl: FormInstance) {
-    formEl.validate(async (valid) => {
-    if (valid) {
-      btnLoading.value = true
-      try {
-        const res = await create(temp.value)
-        temp.value.id = res.data
-        temp.value.balance = 0
-        temp.value.createTime = new Date()
-        list.value.unshift(temp.value)
-        infoDialogVisible.value = false
-        btnLoading.value = false
-        ElNotification({
-          title: '成功',
-          message: '新建成功',
-          type: 'success',
-          duration: 2000
-        })
-      } catch (error) {
-        console.error(error)
-        btnLoading.value = false
-      }
-    }
-  })
+defineOptions({
+  name: 'VipList'
+})
+
+const list = ref<IVip[]>([])
+const total = ref<number>(0)
+const listLoading = ref(true)
+const listQuery = reactive({
+  page: 1,
+  limit: 20,
+  name: undefined,
+  phone: undefined,
+  sort: undefined
+})
+const temp = ref<IVip>(new Vip())
+const tempIndex = ref<number>()
+const infoDialogVisible = ref(false)
+const chargeDialogVisible = ref(false)
+const consumeDialogVisible = ref(false)
+const currentVipId = ref()
+const btnLoading = ref(false)
+const dialogStatus = ref('')
+const rules: FormRules = {
+  name: [{ required: true, message: '必输项', trigger: 'blur' }],
+  phone: [
+    { required: true, message: '必输项', trigger: 'blur' },
+    { type: 'string', pattern: /^(13[0-9]|14[5-9]|15[0-3,5-9]|16[2,5,6,7]|17[0-8]|18[0-9]|19[1,3,5,8,9])\d{8}$/, message: '格式错误', trigger: 'blur' }
+  ],
+  birthday: [{ required: true, message: '必输项', trigger: 'blur' }],
+  birthDiscount: [{ required: true, message: '必输项', trigger: 'blur' }],
+  vipDiscount: [{ required: true, message: '必输项', trigger: 'blur' }]
 }
+const formRef = ref<FormInstance>()
+// const { proxy } = getCurrentInstance();
+// const getNewData =  () => {
+//   proxy.$refs['uploadRef'].clearImg();
+// }
+getList()
+async function getList() {
+  listLoading.value = true
+  const response = await findByPage(listQuery)
+  list.value = response.data.items
+  total.value = response.data.total
+  listLoading.value = false
+}
+function handleFilter() {
+  listQuery.page = 1
+  getList()
+}
+function sortChange(data: any) {
+  const { prop, order } = data
+  if (order === 'ascending') {
+    listQuery.sort = prop
+  } else if (order === 'descending') {
+    listQuery.sort = '-' + prop
+  } else {
+    listQuery.sort = ''
+  }
+  handleFilter()
+}
+function handleCreate(formEl: FormInstance) {
+  // console.log('handleCreate')
+  temp.value = new Vip()
+  dialogStatus.value = '新建'
+  infoDialogVisible.value = true
+  // console.log(formRef)
+  formEl?.resetFields()
+}
+function createData(formEl: FormInstance) {
+  formEl.validate(async (valid) => {
+  if (valid) {
+    btnLoading.value = true
+    try {
+      const res = await create(temp.value)
+      temp.value.id = res.data
+      temp.value.balance = 0
+      temp.value.createTime = new Date()
+      list.value.unshift(temp.value)
+      infoDialogVisible.value = false
+      btnLoading.value = false
+      ElNotification({
+        title: '成功',
+        message: '新建成功',
+        type: 'success',
+        duration: 2000
+      })
+    } catch (error) {
+      console.error(error)
+      btnLoading.value = false
+    }
+  }
+})
 function handleUpdate(row: IVip, index: number, formEl: FormInstance) {
   temp.value = new Vip(row)
   tempIndex.value = index
