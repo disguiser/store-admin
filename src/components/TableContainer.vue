@@ -11,7 +11,9 @@
 </template>
 
 <script setup lang="ts">
-
+defineOptions({
+  name: 'TableContainer'
+})
 </script>
 
 <style scoped>

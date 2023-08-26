@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import externalGlobals from "rollup-plugin-external-globals";
 import { createHtmlPlugin } from 'vite-plugin-html'
 import { visualizer } from "rollup-plugin-visualizer";
+import { ViteCodeInspectorPlugin } from 'vite-code-inspector-plugin'
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -82,7 +83,8 @@ export default ({ mode }) => {
       }),
       visualizer({
         open: false
-      }) as PluginOption
+      }) as PluginOption,
+      ViteCodeInspectorPlugin()
     ]
   })
 }

@@ -258,14 +258,14 @@ async function print() {
       let _e = cloneDeep(e)
       if (e.type === 'material') {
         let first = _e.value.splice(0, 1)
-        first = _e.label + '：' + first[0].type + (first[0].percent ? '：' + first[0].percent + '%' : '')
+        first = _e.label + '：' + first[0].type + (first[0].percent ? first[0].percent + '%' : '')
         _e.value.map((v: any, vi: number) => {
           list.push({
             x: _e.x + _e.fontheight * 3,
             y: _e.fontheight * (vi + 1) + _e.y,
             type: 'text',
             label: '',
-            value: v.type + (v.percent ? '：' + v.percent + '%' : ''),
+            value: v.type + (v.percent ? v.percent + '%' : ''),
             fontstyle: 'Normal',
             fontheight: _e.fontheight
           })

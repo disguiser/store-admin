@@ -181,28 +181,29 @@ function handleCreate(formEl: FormInstance) {
 }
 function createData(formEl: FormInstance) {
   formEl.validate(async (valid) => {
-  if (valid) {
-    btnLoading.value = true
-    try {
-      const res = await create(temp.value)
-      temp.value.id = res.data
-      temp.value.balance = 0
-      temp.value.createTime = new Date()
-      list.value.unshift(temp.value)
-      infoDialogVisible.value = false
-      btnLoading.value = false
-      ElNotification({
-        title: '成功',
-        message: '新建成功',
-        type: 'success',
-        duration: 2000
-      })
-    } catch (error) {
-      console.error(error)
-      btnLoading.value = false
+    if (valid) {
+      btnLoading.value = true
+      try {
+        const res = await create(temp.value)
+        temp.value.id = res.data
+        temp.value.balance = 0
+        temp.value.createTime = new Date()
+        list.value.unshift(temp.value)
+        infoDialogVisible.value = false
+        btnLoading.value = false
+        ElNotification({
+          title: '成功',
+          message: '新建成功',
+          type: 'success',
+          duration: 2000
+        })
+      } catch (error) {
+        console.error(error)
+        btnLoading.value = false
+      }
     }
-  }
-})
+  })
+}
 function handleUpdate(row: IVip, index: number, formEl: FormInstance) {
   temp.value = new Vip(row)
   tempIndex.value = index
@@ -252,7 +253,3 @@ function handleShowConsume(vip: IVip) {
   consumeDialogVisible.value = true
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
