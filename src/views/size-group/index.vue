@@ -15,7 +15,7 @@
           <template #item="{element, index}">
             <div class="item">
               <el-checkbox v-model="element.checked"></el-checkbox>
-              <span>{{ element.id + ' ' + element.itemName }}</span>
+              <span>{{ element.itemName }}</span>
               <div class="operation">
                 <a @click="editSize(element)">
                   <el-icon><Edit /></el-icon>
@@ -83,7 +83,7 @@ import draggable from 'vuedraggable-es'
 import { update as updateSizeGroupApi, create as createSizeGroup, remove as removeSizeGroupApi } from '@/api/sizeGroup'
 import { create as createSize, update as updateSizeApi, remove as removeSizeApi } from '@/api/size'
 import { useSizeGroupStore } from '@/store/sizeGroup';
-import { useDictStore } from '@/store/dict';
+import { useDictStore, sizeSort } from '@/store/dict';
 import { h, onUnmounted, ref } from 'vue';
 import { Action, ElMessageBox, ElNotification } from 'element-plus';
 import { ISizeGroup } from '@/model/SizeGroup';
@@ -99,7 +99,8 @@ const searchText = ref('')
 const _sizeList = ref<_SizeType[]>(sizeList)
 function handleFilter() {
   if (searchText.value) {
-    _sizeList.value = sizeList.filter(e => new RegExp(searchText.value, 'i').test(e.itemName))
+    _sizeList.value = sizeList
+    .filter(e => new RegExp(searchText.value, 'i').test(e.itemName))
   } else {
     _sizeList.value = sizeList
   }
@@ -120,6 +121,13 @@ async function addSize() {
       itemName: value.trim(),
       checked: false
     })
+    sizeList.push({
+      id: res.data,
+      itemName: value.trim(),
+      checked: false
+    })
+    _sizeList.value.sort(sizeSort)
+    sizeList.sort(sizeSort)
   } catch (error) {
     console.error(error)
   }
@@ -147,6 +155,9 @@ async function editSize(s: _SizeType) {
 async function removeSize(id: number, si: number) {
   await removeSizeApi(id)
   _sizeList.value.splice(si)
+  sizeList.splice(si)
+  _sizeList.value.sort(sizeSort)
+  sizeList.sort(sizeSort)
 }
 async function addSizeGroup() {
   const { value } = await ElMessageBox.prompt('请输入新尺码组名称', '新增', {

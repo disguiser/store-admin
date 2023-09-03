@@ -5,6 +5,10 @@ import { IDict, IDictItem } from '@/model/Dict'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+export function sizeSort (a: IDictItem,b: IDictItem):number {
+  return a.itemName < b.itemName ? -1 : 1
+}
+
 export const useDictStore = defineStore('Dict', () => {
   const dict = ref<IDict[]>([])
   const sizeList = ref<IDictItem[]>([])
@@ -50,7 +54,7 @@ export const useDictStore = defineStore('Dict', () => {
   }
   async function fetchSize() {
     const res = await findAllSize({})
-    sizeList.value = res.data
+    sizeList.value = res.data.sort(sizeSort)
   }
   async function fetchColor() {
     const res = await findAllColor({})
