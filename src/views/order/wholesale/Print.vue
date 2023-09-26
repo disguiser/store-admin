@@ -2,7 +2,7 @@
   <div ref="mainRef" v-loading="loading" class="print_container">
     <template v-if="!loading">
       <h3 style="margin: 0;font-weight:normal;margin-bottom: 10px">益谦服饰-出货单</h3>
-      <div class="head" style="margin-bottom: 10px;text-align:left;">
+      <div v-if="order.buyer" class="head" style="margin-bottom: 10px;text-align:left;">
         <span>接收方名称：{{ order.name }}</span>
         <span style="margin-left: 10px">手机号：{{ order.mobile }}</span>
         <span style="margin-left: 10px">地址：{{ addressFilter(order.address) }}{{ order.addressDetail }}</span>
@@ -69,10 +69,12 @@ const {
 const debt = ref(false)
 
 onMounted(async() => {
-  let {
-    data
-  } = await findOne(order.value.buyer)
-  debt.value = data.debt
+  if (order.value.buyer) {
+    let {
+      data
+    } = await findOne(order.value.buyer)
+    debt.value = data.debt
+  }
 })
 
 const mainRef = ref()
