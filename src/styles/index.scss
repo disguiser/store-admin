@@ -176,3 +176,38 @@ div:focus {
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 5px;
 }
+
+.layout {
+  .left-sidebar {
+    .el-menu,
+    .el-menu--popup {
+      --el-menu-bg-color: #191a20;
+      --el-menu-text-color: #bdbdc0;
+      --el-menu-active-color: #ffffff;
+      --el-menu-hover-bg-color: rgb(77, 77, 77);
+      .el-menu-item {
+        &.is-active {
+          background: #060708;
+          &::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 4px;
+            content: "";
+            background: var(--el-color-primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+// * 当前页面最大化 css
+.main-maximize {
+	.navbar,
+  .left-sidebar,
+	.tabs-menu {
+		display: none !important;
+	}
+}

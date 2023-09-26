@@ -1,5 +1,3 @@
-import { RouteRecordRaw } from 'vue-router'
-
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -14,18 +12,18 @@ import { RouteRecordRaw } from 'vue-router'
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
     icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+    isKeepAlive: true            if set true, the page will no be cached(default is true)
+    closeable: true              if set true, the tab can not close
+    isHide: false                 if set false, the item will hidden in sidebar(default is false)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-    isFull: true                 不套布局组件,独立全屏,实现逻辑在permission.ts
+    isFull: false                 不套布局组件,独立全屏,实现逻辑在permission.ts
   }
  */
 
 /**
  * the routes that need to be dynamically loaded based on user roles
  */
-export const dynamicRouter: RouteRecordRaw[] = [
+export const dynamicRouter: Menu.MenuOptions[] = [
   {
     path: '/dashboard',
     component: () => import('@/views/dashboard/index.vue'),
@@ -33,15 +31,16 @@ export const dynamicRouter: RouteRecordRaw[] = [
     meta: {
       title: '总览',
       icon: 'ant-design:dashboard-outlined',
-      affix: true
+      closeable: false
     },
   },
   {
     path: '/profile',
+    name: 'Profile',
     meta: {
       title: 'Profile',
-      hidden: true,
-      noCache: true
+      isHide: true,
+      isKeepAlive: false
     },
     component: () => import('@/views/profile/index.vue')
   },
@@ -75,7 +74,6 @@ export const dynamicRouter: RouteRecordRaw[] = [
     name: 'GoodStock',
     meta: {
       title: '门店库存',
-      noCache: true,
       icon: 'healthicons:stock-out-outline',
       activeMenu: '/stock/dept',
       roles: ['Admin', 'Boss', 'Waiter'],
@@ -107,7 +105,6 @@ export const dynamicRouter: RouteRecordRaw[] = [
         meta: {
           title: '订单',
           roles: ['Admin', 'Waiter', 'Boss'],
-          keepAlive: true
         }
       },
       {
@@ -137,7 +134,7 @@ export const dynamicRouter: RouteRecordRaw[] = [
       title: '订货单打印',
       activeMenu: '/order/wholesale/print',
       roles: ['Admin', 'Waiter'],
-      hidden: true,
+      isHide: true,
       isFull: true
     }
   },
@@ -193,7 +190,7 @@ export const dynamicRouter: RouteRecordRaw[] = [
     meta: {
       title: '小票打印',
       roles: ['Admin', 'Waiter'],
-      hidden: true,
+      isHide: true,
       isFull: true
     }
   },
@@ -203,7 +200,7 @@ export const dynamicRouter: RouteRecordRaw[] = [
     meta: {
       title: '当日销售单品打印',
       roles: ['Admin', 'Waiter'],
-      hidden: true,
+      isHide: true,
       isFull: true
     },
   },
@@ -243,7 +240,7 @@ export const dynamicRouter: RouteRecordRaw[] = [
       title: '打印',
       icon: 'clarity:factory-line',
       roles: ['Admin', 'Boss'],
-      hidden: true
+      isHide: true
     },
     children: [
       {
@@ -261,10 +258,10 @@ export const dynamicRouter: RouteRecordRaw[] = [
         component: () => import('@/views/print/TSCDLL/Edit.vue'),
         meta: {
           title: '模板编辑',
-          noCache: true,
+          isKeepAlive: false,
           activeMenu: '/print/list',
           roles: ['Admin', 'Boss'],
-          hidden: true
+          isHide: true
         }
       },
       {

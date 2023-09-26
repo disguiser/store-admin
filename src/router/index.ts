@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { constantRoutes } from './modules/constantRoutes'
 import NProgress from '@/utils/nprogress'
 import getPageTitle from '@/utils/index'
-import { usePermissionStore } from '@/store/permission'
 import { useUserStore } from '@/store/user'
+import { useAuthStore } from '@/store/auth'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -28,10 +28,25 @@ router.beforeEach(async(to, from, next) => {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
-      NProgress.done()
     } else {
-      const permissionStore = usePermissionStore()
+      const authStore = useAuthStore();
+      authStore.setRouteName(to.name as string);
+      if (!authStore.authMenuListGet.length) {
+        await authStore.getAuthMenuList(userStore.roles);
+        authStore.authMenuList.forEach((e: any) => {
+          if (e.meta?.isFull) {
+            router.addRoute(e)
+          } else {
+            router.addRoute('layout', e)
+          }
+        })
+        return next({ ...to, replace: true });
+      } else {
+        next()
+      }
+      /*
       // determine whether the user has obtained his permission role through getInfo
+      const permissionStore = usePermissionStore()
       const hasRoutes = permissionStore.addRoutes
       if (!hasRoutes || hasRoutes.length === 0) {
         // generate accessible routes map based on role
@@ -50,6 +65,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         next()
       }
+      */
     }
   } else {
     /* has no token*/
@@ -61,7 +77,6 @@ router.beforeEach(async(to, from, next) => {
       // other pages that do not have permission to access are redirected to the login page.
       // next(`/login?redirect=${encodeURIComponent(to.fullPath)}`)
       next('/login')
-      NProgress.done()
     }
   }
 })

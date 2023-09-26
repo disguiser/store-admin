@@ -1,22 +1,37 @@
 <template>
+  <navbar />
+  <tabs />
+  <maximize v-if="appStore.maximize" />
   <div class="app-main">
-    <router-view v-slot="{Component}">
-      <KeepAlive :include="cachedViews">
-        <component :is="Component" :key="key" />
+    <router-view v-slot="{ Component, route }">
+      <KeepAlive :include="keepAliveStore.keepAliveName">
+        <component :is="Component" :key="route.path" v-if="!appStore.refreshing" />
       </KeepAlive>
     </router-view>
   </div>
 </template>
 
-<script setup>
-import { useTagsViewStore } from '@/store/tagsView';
-import { computed } from '@vue/reactivity';
-import { useRoute } from 'vue-router';
-const route = useRoute()
+<script setup lang="ts">
+import { useKeepAliveStore } from '@/store/keepAlive';
+import { watch } from 'vue';
+import { useAppStore } from '@/store/app';
+import Navbar from './Navbar.vue';
+import Tabs from './Tabs/index.vue'
+import Maximize from './Maximize.vue';
 
-const tagsViewStore = useTagsViewStore()
-const cachedViews = computed(() => tagsViewStore.cachedViews)
-const key = computed(() => route.path)
+const keepAliveStore = useKeepAliveStore()
+
+const appStore = useAppStore()
+// 监听当前页是否最大化，动态添加 class
+watch(
+	() => appStore.maximize,
+	() => {
+		const app = document.getElementById("app") as HTMLElement;
+		if (appStore.maximize) app.classList.add("main-maximize");
+		else app.classList.remove("main-maximize");
+	},
+	{ immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -28,6 +43,7 @@ const key = computed(() => route.path)
   padding: 10px;
   background-color: #f0f2f5;
   overflow: auto;
+  flex: 1;
 }
 // fix css style bug in open el-dialog
 .el-popup-parent--hidden {

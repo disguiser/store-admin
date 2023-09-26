@@ -1,19 +1,18 @@
 <template>
-  <div class="left" :style="{ width: appStore.sidebar ? '210px' : '65px' }">
-    <sidebar />
-  </div>
-  <div class="right">
-    <div class="header">
-      <navbar />
-      <tags-view />
+  <el-container class="layout">
+    <div class="left-sidebar" :style="{ width: appStore.sidebar ? '210px' : '65px' }">
+      <sidebar />
     </div>
-    <app-main style="flex:1" />
-  </div>
+    <div class="main-area">
+      <app-main />
+    </div>
+  </el-container>
 </template>
 
 <script setup lang="ts">
 import { useVersionStore } from '@/store/version';
-import { AppMain, Navbar, Sidebar, TagsView } from './components';
+import AppMain from './components/AppMain.vue';
+import Sidebar from './components/Sidebar/index.vue';
 import { onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/app';
 import { debounce } from 'lodash-es'
@@ -40,10 +39,10 @@ const versionStore = useVersionStore()
 await versionStore.checkVersion()
 </script>
 <style lang="scss" scoped>
-  .left {
+  .left-sidebar {
     transition: width 0.3s ease;
   }
-  .right {
+  .main-area {
     flex: 1;
     height: 100%;
     display: flex;

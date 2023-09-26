@@ -1,12 +1,12 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar style="height: 100%;">
     <el-menu
       :default-active="activeIndex"
-      class="sidebar-menu"
       :collapse="!appStore.sidebar"
       router
       :default-openeds="defaultOpens"
       :collapse-transition="false"
+      style="min-height: 100vh;"
     >
       <template v-for="route in menus">
         <el-sub-menu
@@ -38,30 +38,28 @@
   </el-scrollbar>
 </template>
 <script lang="ts" setup>
-import { usePermissionStore } from '@/store/permission'
 import { Icon } from '@iconify/vue';
 import { useAppStore } from '@/store/app'
 import { ref } from 'vue';
-import { RouteRecordRaw, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/store/auth';
 
 defineOptions({
   name: 'Sidebar'
 })
 
 const appStore = useAppStore()
-
-const permissionStore = usePermissionStore()
-
-type MenuType = RouteRecordRaw & {
+const authStore = useAuthStore()
+type MenuType = Menu.MenuOptions & {
   multiChild?: boolean,
   index?: string
 }
 const menus: MenuType[] = []
 let index;
 const defaultOpens: string[] = []
-for (const route of permissionStore.addRoutes.filter(e => !e.meta?.hidden)) {
+for (const route of authStore.authMenuList.filter(e => !e.meta?.isHide)) {
   if (route.children?.length) {
-    const childrenLength = route.children.filter((e: RouteRecordRaw) => !e.meta?.hidden).length
+    const childrenLength = route.children.filter((e: Menu.MenuOptions) => !e.meta?.isHide).length
     if (childrenLength > 1) {
       menus.push({
         ...route,
@@ -90,28 +88,6 @@ const activeIndex = ref(route.path)
 
 // activeIndex.value = '/' + route.path.split('/')[1]
 
-function ifOnlyChild(route: RouteRecordRaw) {
-  if (route.children) {
-    const children = route.children.filter((e: RouteRecordRaw) => !e.meta?.hidden)
-    if (children.length === 1) {
-      if (route.path === '/') {
-        return '/' + children[0].path
-      } else {
-        return route.path + '/' + children[0].path
-      }
-    }
-  }
-  return route.path
-}
 </script>
-<style scoped>
-.sidebar-menu {
-  min-height: 100vh;
-}
-.el-menu {
-  --el-menu-bg-color: #191a20;
-  --el-menu-text-color: #bdbdc0;
-  --el-menu-active-color: #ffffff;
-  --el-menu-hover-bg-color: rgb(77, 77, 77);
-}
+<style lang="scss">
 </style>

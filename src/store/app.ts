@@ -2,8 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 
 export const useAppStore = defineStore('App', () => {
+  const maximize = ref(false)
   const sidebar = ref(true)
   const isDark = ref(false)
+  const refreshing = ref(false)
   function toggleSideBar(val?: boolean) {
     if (typeof val === 'boolean') {
       sidebar.value = val
@@ -23,7 +25,9 @@ export const useAppStore = defineStore('App', () => {
     sidebar,
     toggleSideBar,
     isDark,
-    toggleDark
+    toggleDark,
+    maximize,
+    refreshing
   }
 }, {
   persist: true
