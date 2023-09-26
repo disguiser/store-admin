@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container el-card">
     <div class="left">
       <div class="search">
         <el-input v-model="searchText" placeholder="搜索" style="margin:5px;width:189px" @keyup.enter="handleFilter" @blur="handleFilter"></el-input>
@@ -62,7 +62,7 @@
               <el-tag
                 closable
                 size="large"
-                :effect="isDark?'plain':'dark'"
+                :effect="appStore.isDark?'plain':'dark'"
                 style="margin: 5px 5px 0 0"
                 @close="handleClose(sg, index)"
               >{{ sizeMap.get(element) }}</el-tag>
@@ -89,7 +89,7 @@ import { Action, ElMessageBox, ElNotification } from 'element-plus';
 import { ISizeGroup } from '@/model/SizeGroup';
 import { IDictItem } from '@/model/Dict';
 import { useAppStore } from '@/store/app';
-const { isDark } = useAppStore()
+const appStore = useAppStore()
 const { sizeGroupList } = useSizeGroupStore()
 const { sizeList, sizeMap } = useDictStore()
 
@@ -250,7 +250,6 @@ onUnmounted(() => {
   height: 100%;
   width: 100%;
   display: flex;
-  border: 1px solid #e5e5e5;
   .left {
     .search {
       height: 50px;
@@ -261,7 +260,7 @@ onUnmounted(() => {
         padding: 0 10px;
         height: 50px;
         line-height: 50px;
-        border-bottom: 1px solid #d6d6d6;
+        border-bottom: 1px solid var(--el-card-border-color);
         cursor: pointer;
         white-space: nowrap;
         .operation {
@@ -274,12 +273,13 @@ onUnmounted(() => {
       }
       .item:hover {
         background-color: #dddddd;
+        color: black;
         .operation {
           visibility: visible;
         }
       }
       .item:first{
-        border-top: 1px solid #e5e5e5;
+        border-top: 1px solid var(--el-card-border-color);
       }
     }
     .footer {
@@ -288,9 +288,9 @@ onUnmounted(() => {
       align-items: center;
       justify-content: center;
       width: 100%;
-      border-top: 1px solid #e5e5e5;
+      border-top: 1px solid var(--el-card-border-color);
     }
-    border-right: 1px solid #e5e5e5;
+    border-right: 1px solid var(--el-card-border-color);
     width: 200px;
     height: 100%;
   }
