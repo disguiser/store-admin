@@ -1,5 +1,5 @@
 <template>
-  <el-button text @click="toggleDark()" :icon="isDark ? 'Sunny' : 'Moon'"></el-button>
+  <el-button text @click="appStore.toggleDark()" :icon="appStore.isDark ? 'Sunny' : 'Moon'"></el-button>
 </template>
 
 <script setup lang="ts">
@@ -9,5 +9,5 @@ defineOptions({
   name: 'NightShift'
 })
 
-const { isDark, toggleDark } = useAppStore()
+const appStore = useAppStore()
 </script>
