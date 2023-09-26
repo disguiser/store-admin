@@ -14,6 +14,7 @@
       :data="list"
       border
       fit
+      style="width: 100%;height: 100%;"
       @sort-change="sortChange"
     >
       <el-table-column type="expand">
@@ -231,7 +232,7 @@ function handleRemove(row: ICustomer, index: number) {
   }).then(async() => {
     btnLoading.value = true
     try {
-      await remove([row.id])
+      await remove(row.id)
       ElNotification({
         title: '成功',
         message: '删除成功',

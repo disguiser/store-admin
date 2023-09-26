@@ -33,11 +33,10 @@ export function update(data: any) {
   })
 }
 
-export function remove(ids: number[]) {
+export function remove(id: number) {
   return request({
-    url: `${preUrl}`,
-    method: 'delete',
-    data: ids
+    url: `${preUrl}/${id}`,
+    method: 'delete'
   })
 }
 
