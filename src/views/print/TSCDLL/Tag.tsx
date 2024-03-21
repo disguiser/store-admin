@@ -115,7 +115,7 @@ export default defineComponent({
                     style={{
                       fontSize: item.fontheight * props.scale + 'px'
                     }}
-                    innerHTML={`${vi === 0 ? `${item.label}：` : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}${v.type}${v.percent}%`}
+                    innerHTML={`${vi === 0 ? `${item.label}：` : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}${v.type}${v.percent?v.percent+'%':''}`}
                   />
                 )
               })

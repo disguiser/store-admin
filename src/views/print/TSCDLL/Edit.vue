@@ -25,7 +25,7 @@
         <fieldset>
           <legend>打印机操作</legend>
           <el-button :loading="btnLoading" type="primary" :disabled="disabled" @click="print">打印</el-button>
-          <el-select v-model="printer" placeholder="选择打印机" @change="printerSwitch" style="width:120px">
+          <el-select v-model="printer" placeholder="选择打印机" style="width:120px">
             <el-option value="argox" label="Argox"></el-option>
             <el-option value="tsc" label="TSC"></el-option>
           </el-select>
@@ -164,7 +164,7 @@
 import Tag from './Tag.js'
 import { cloneDeep } from 'lodash-es'
 import { print as printApi } from '@/api/printTemplate'
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useGoodsStore } from '@/store/goods';
 import { useSizeGroupStore } from '@/store/sizeGroup';
 import { useDictStore } from '@/store/dict';
@@ -298,15 +298,15 @@ async function print() {
     })
   }
 }
-function printerSwitch(val: string) {
-  if (val === 'argox') {
+watch(printer, (newVal) => {
+  if (newVal === 'argox') {
     if (!ws) {
       connection()
     } else {
       getStatus()
     }
   }
-}
+}, { immediate: true })
 function getStatus() {
   console.log('获取状态')
   ws.send('B_EnumUSB')
@@ -377,9 +377,9 @@ async function argoxPrint(data: any) {
     ws.send('B_CreateUSBPort|1')
     ws.send('B_Set_Direction|B')
     data.list.forEach((item: any, i: number) => {
-      if (item.type === 'text') {
+      if (item.type === 'text' || item.type === 'material') {
         // console.log(`B_Prn_Text_TrueType|${Math.round(item.x*scale)}|${Math.round(item.y*scale)}|${Math.round(item.fontheight*scale)}|黑体|1|400|0|0|0|${i}|${item.value}`)
-        ws.send(`B_Prn_Text_TrueType|${Math.round(item.x * scale)}|${Math.round(item.y * scale)}|${Math.round(item.fontheight * scale)}|黑体|1|400|0|0|0|${i}|${item.value}`)
+        ws.send(`B_Prn_Text_TrueType|${Math.round(item.x * scale)}|${Math.round(item.y * scale)}|${Math.round(item.fontheight * scale)}|黑体|1|600|0|0|0|${i}|${item.value}`)
       } else if (item.type === 'barcode') {
         // console.log(`B_Prn_Barcode|${Math.round(item.x*scale)}|${Math.round(item.y*scale)}|0|1E|2|6|${Math.round(item.height*scale)}|B|${item.value}`)
         ws.send(`B_Prn_Barcode|${Math.round(item.x * scale)}|${Math.round(item.y * scale)}|0|1E|2|6|${Math.round(item.height * scale)}|B|${item.value}`)
@@ -429,7 +429,9 @@ function addFabric() {
   })
 }
 function removeFabric(vi: number) {
-  temp.value.value.splice(vi, 1)
+  if (temp.value.value.length > 1) {
+    temp.value.value.splice(vi, 1)
+  }
 }
 function valueChange(formEl: FormInstance) {
   formEl.validate((valid) => {
