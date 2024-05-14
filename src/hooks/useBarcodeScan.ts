@@ -20,7 +20,7 @@ export function useBarcodeScan(callback: Function) {
   onUnmounted(() => {
     document.onkeydown = null
   })
-  async function add(barcode: string) {
+  function add(barcode: string) {
     let sku: string, color: number, size: number
     if (barcode.includes('-')) {
       const data = barcode.split('-')

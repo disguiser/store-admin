@@ -38,8 +38,8 @@ const emits = defineEmits(['change', 'update:modelValue'])
 
 function handleInput(id: number) {
   console.log('handleInput')
-  const { preSku } = skuOptions.value.find(e => e.id === id)
-  emits('change', id)
+  const { preSku, wholesalePrice } = skuOptions.value.find(e => e.id === id)
+  emits('change', { id, wholesalePrice })
   emits('update:modelValue', preSku)
 }
 function debounced(query: string) {
@@ -60,7 +60,7 @@ async function remoteSku(query: string) {
       return {
         id: e.id,
         preSku: e.preSku,
-        salePrice: e.salePrice
+        wholesalePrice: e.wholesalePrice
       }
     })
   } catch (error) {

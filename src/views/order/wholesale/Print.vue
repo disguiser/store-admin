@@ -41,7 +41,7 @@
           <span>下单时间:{{ parseTime(order.createTime) }}</span>
         </div>
         <div v-if="debt" class="head-foot">
-          <span class="debt">欠款：{{ debt }}</span>
+          <span class="debt">累计货款：{{ debt }}</span>
           <!-- <span class="debt-input">欠款：<input v-model="debt"></span> -->
         </div>
       </div>

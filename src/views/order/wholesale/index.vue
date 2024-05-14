@@ -150,7 +150,7 @@ import { reactive, ref } from 'vue'
 import Detail from '../Detail.vue'
 import GoodsTable from '../GoodsTable.vue'
 
-import { ListItem, useHook } from '../hook'
+import { useHook } from '../hook'
 
 defineOptions({
   name: 'Wholesale'

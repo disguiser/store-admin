@@ -28,9 +28,12 @@
       <el-form-item label="售价" prop="salePrice">
         <el-input-number v-model="props.temp.salePrice" data-test="salePrice" :disabled="props.temp.disabled" :min="0" :step="10" />
       </el-form-item>
-      <el-form-item v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice">
-        <el-input-number v-model="props.temp.costPrice" data-test="costPrice" :disabled="props.temp.disabled" :min="0" :step="10" />
+      <el-form-item label="批发价" prop="wholesalePrice">
+        <el-input-number v-model="props.temp.wholesalePrice" data-test="wholesalePrice" :disabled="props.temp.disabled" :min="0" :step="10" />
       </el-form-item>
+      <!-- <el-form-item v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice">
+        <el-input-number v-model="props.temp.costPrice" data-test="costPrice" :disabled="props.temp.disabled" :min="0" :step="10" />
+      </el-form-item> -->
       <!-- <el-form-item label="折扣" prop="discount">
         <el-slider v-model="temp.discount" :disabled="temp.disabled" :min="0.1" :max="1" :step="0.05" show-stops show-input />
       </el-form-item> -->
@@ -47,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCheckPermission } from '@/hooks/useCheckPermission'
+// import { useCheckPermission } from '@/hooks/useCheckPermission'
 import { IGoods } from '@/model/Goods';
 import { useRouter, useRoute } from 'vue-router';
 import { useSizeGroupStore } from '@/store/sizeGroup'

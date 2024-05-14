@@ -5,6 +5,7 @@
         <th>货号</th>
         <th>颜色</th>
         <th>尺码</th>
+        <th>批发价</th>
         <th>单价</th>
         <th>数量</th>
         <th>当前库存</th>
@@ -16,7 +17,7 @@
       <tbody>
         <tr v-for="(e, i) in temp.itemList" :key="i">
           <td>
-            <remote-sku v-model="e.preSku" @change="skuChange($event, i)" />
+            <remote-sku v-model="e.preSku" @change="skuChange($event.id, i, $event.wholesalePrice)" />
           </td>
           <td>
             <el-select v-model="e.color" placeholder="颜色" :disabled="e.colorOptions.length == 0" @change="colorChange($event, e)">
@@ -38,6 +39,7 @@
               />
             </el-select>
           </td>
+          <td>¥ {{ e.wholesalePrice }}</td>
           <td>
             <el-input-number v-model="e.salePrice" :min="0" @change="sumSubtotal(e)" />
           </td>
@@ -94,7 +96,7 @@ useBarcodeScan(scaned)
 
 async function scaned(sku: string, color: number, size: number) {
   console.log('scaned', sku, color, size)
-  let { data: { preSku, id} } = await findOneById(sku)
+  let { data: { preSku, id, wholesalePrice } } = await findOneById(sku)
   let item = temp.value.itemList.find((e: IOrderGoodsStock) => {
     return e.id === id &&
       e.color === color &&
@@ -107,7 +109,7 @@ async function scaned(sku: string, color: number, size: number) {
     addGoods()
     item = temp.value.itemList[temp.value.itemList.length - 1]
     item.preSku = preSku
-    await skuChange(id, temp.value.itemList.length - 1)
+    await skuChange(id, temp.value.itemList.length - 1, wholesalePrice)
     item.color = color
     colorChange(color, item)
     item.size = size
@@ -137,11 +139,12 @@ function sumTotal() {
   temp.value.total = total
   temp.value.totalMoney = totalMoney
 }
-async function skuChange(goodsId: number, i: number) {
+async function skuChange(goodsId: number, i: number, wholesalePrice: number) {
   temp.value.itemList[i].salePrice = null
   temp.value.itemList[i].color = null
   temp.value.itemList[i].size = null
   temp.value.itemList[i].id = goodsId
+  temp.value.itemList[i].wholesalePrice = wholesalePrice
   const res = await listStock({
     goodsId,
     deptId

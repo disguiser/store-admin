@@ -208,6 +208,7 @@ async function getList() {
           imgUrl: item.imgUrl,
           salePrice: item.salePrice,
           costPrice: item.costPrice,
+          wholesalePrice: item.wholesalePrice,
           discount: item.discount,
           stocks: [
             new Stock({

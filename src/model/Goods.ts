@@ -6,6 +6,7 @@ export interface IGoods {
   name: string
   sizeGroup: number
   salePrice: number
+  wholesalePrice: number
   costPrice: number
   imgUrl: string
   discount: number
@@ -19,6 +20,7 @@ export class Goods implements IGoods {
   name: string = ''
   sizeGroup: number
   salePrice: number = 0
+  wholesalePrice: number = 0
   costPrice: number = 0
   imgUrl: string = ''
   discount: number = 1
@@ -31,6 +33,7 @@ export class Goods implements IGoods {
         name,
         sizeGroup,
         salePrice,
+        wholesalePrice,
         costPrice,
         imgUrl,
         discount,
@@ -50,6 +53,9 @@ export class Goods implements IGoods {
       }
       if (salePrice) {
         this.salePrice = salePrice
+      }
+      if (wholesalePrice) {
+        this.wholesalePrice = wholesalePrice
       }
       if (costPrice) {
         this.costPrice = costPrice

@@ -8,6 +8,7 @@ export interface IOrderGoods {
   size: number
   amount: number
   salePrice: number
+  wholesalePrice: number
   subtotalMoney: number
   colorOptions: any[]
   sizeOptions: any[]
@@ -30,6 +31,7 @@ export class OrderGoodsStock implements IOrderGoodsStock {
   color: number = null
   size: number = null
   amount: number = 0
+  wholesalePrice: number = 0
   salePrice: number = null
   subtotalMoney: number = 0
   colorOptions: any[] = []
@@ -46,6 +48,7 @@ export class OrderGoodsStock implements IOrderGoodsStock {
         size,
         amount,
         salePrice,
+        wholesalePrice,
         subtotalMoney,
         colorOptions,
         sizeOptions,
@@ -72,6 +75,9 @@ export class OrderGoodsStock implements IOrderGoodsStock {
       }
       if (salePrice) {
         this.salePrice = salePrice
+      }
+      if (wholesalePrice) {
+        this.wholesalePrice = wholesalePrice
       }
       if (subtotalMoney) {
         this.subtotalMoney = subtotalMoney

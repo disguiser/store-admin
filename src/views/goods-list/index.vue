@@ -69,7 +69,8 @@
         </template>
       </el-table-column>
       <el-table-column label="售价" prop="salePrice" align="center" sortable />
-      <el-table-column v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice" align="center" sortable />
+      <el-table-column label="批发价" prop="wholesalePrice" align="center" />
+      <!-- <el-table-column v-if="useCheckPermission(['Admin', 'Boss'])" label="进价" prop="costPrice" align="center" sortable /> -->
 
       <el-table-column label="操作" align="center" width="220" class-name="small-padding fixed-width">
         <template #default="{row, $index}">
