@@ -32,7 +32,7 @@ function generate() {
   JsBarcode(barcode.value, props.value, {
     height: props.height * props.scale,
     displayValue: true,
-    width: 0.3 * props.scale,
+    width: 0.25 * props.scale,
     margin: 0
   })
 }
